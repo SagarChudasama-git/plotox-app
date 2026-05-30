@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Plotox — Instantly Generate Professional Charts</title>
+  <meta name="description"
+    content="Transform your CSV data into stunning interactive charts instantly. Upload, configure, export — all in your browser.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/favicon.ico">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet">
+
+  <!-- ECharts CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+
+  <!-- jsPDF CDN for client-side PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="assets/css/loader.css">
+  <link rel="stylesheet" href="assets/css/design-system.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+  <style>
+    .sidebar-history-dropdown {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      padding-left: 36px;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-history-dropdown.open {
+      display: flex;
+    }
+
+    .sidebar-history-btn {
+      padding: 6px 10px;
+      border-radius: var(--radius-md);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-secondary-text);
+      background: transparent;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      transition: background-color var(--transition-fast), color var(--transition-fast);
+      font-family: var(--font-main);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      align-items: flex-start;
+      width: 100%;
+    }
+
+    .sidebar-history-btn:hover {
+      background-color: var(--color-surface-low);
+      color: var(--color-primary);
+    }
+
+    .sidebar-history-btn .history-meta {
+      font-size: 9px;
+      color: var(--color-outline);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+    }
+
+    .sidebar-history-btn .history-title {
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    // Add loading class instantly to prevent white flash of app content during loading
+    document.documentElement.classList.add('loading-active');
+    document.body.classList.add('loading-active');
+  </script>
+
+  <!-- PREMIUM FULL-SCREEN LOADING SCREEN -->
+  <div id="plotox-loader">
+    <div class="loader-content">
+      <h2 class="loader-heading">Experience Data Visualization</h2>
+      <div class="loader-subheading">With</div>
+      <div class="loader-brand-wrapper">
+        <div class="giant-text-word" aria-label="plotox">
+          <span class="gt-letter gt-letter-p">p</span><span class="gt-letter gt-letter-l">l</span><span
+            class="gt-letter gt-letter-o1">o</span><span class="gt-letter gt-letter-t">t</span><span
+            class="gt-letter gt-letter-o2 gt-rising">o</span><span class="gt-letter gt-letter-x gt-rising">x</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="app-topbar">
+    <div class="topbar-left-wrapper" style="display: flex; align-items: center; gap: 12px;">
+      <button id="btn-sidebar-toggle" class="sidebar-toggle-btn" aria-label="Toggle Navigation" title="Toggle navigation menu">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+      <a href="index.html" class="topbar-logo">plot<span class="logo-rising-o">o</span><span class="logo-rising-x">x</span></a>
+    </div>
+
+    <div class="topbar-right">
+      <!-- Theme Toggle Button -->
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark mode" title="Switch theme">
+        <span class="material-symbols-outlined">dark_mode</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Sidebar Drawer Mobile Backdrop Overlay -->
+  <div class="sidebar-drawer-overlay" id="sidebar-drawer-overlay"></div>
+
+  <!-- APP BODY CONTAINER -->
+  <div class="app-body">
+
+    <!-- LEFT SIDEBAR NAVIGATION -->
+    <aside class="app-sidebar-nav">
+      <div class="sidebar-nav-top">
+
+        <!-- NEW VISUAL BUTTON -->
+        <button class="sidebar-new-btn" id="new-action-btn" title="Upload a new CSV file"
+          style="margin-bottom: 12px; margin-top: 4px;">
+          <span class="material-symbols-outlined">add</span>
+          <span>New Chart</span>
+        </button>
+
+        <div class="sidebar-menu">
+          <!-- Views/Navigation Group -->
+          <div class="sidebar-section-title"
+            style="font-size: 10px; font-weight: 600; color: var(--color-outline); text-transform: uppercase; letter-spacing: 0.05em; margin: 8px 10px 4px 10px;">
+            Navigation</div>
+
+          <button class="sidebar-menu-item active" id="nav-workspace-btn">
+            <span class="material-symbols-outlined">space_dashboard</span>
+            <span>Workspace</span>
+          </button>
+
+          <button class="sidebar-menu-item" id="nav-history-btn">
+            <span class="material-symbols-outlined">history</span>
+            <span>History Archive</span>
+          </button>
+
+          <!-- Chart Types Group -->
+          <div class="sidebar-section-title"
+            style="font-size: 10px; font-weight: 600; color: var(--color-outline); text-transform: uppercase; letter-spacing: 0.05em; margin: 16px 10px 4px 10px;">
+            Chart Types</div>
+
+          <button class="sidebar-menu-item type-grid-btn active" data-type="line">
+            <span class="material-symbols-outlined">show_chart</span>
+            <span>Line Chart</span>
+          </button>
+          <button class="sidebar-menu-item type-grid-btn" data-type="bar">
+            <span class="material-symbols-outlined">bar_chart</span>
+            <span>Bar Chart</span>
+          </button>
+          <button class="sidebar-menu-item type-grid-btn" data-type="scatter">
+            <span class="material-symbols-outlined">scatter_plot</span>
+            <span>Scatter Plot</span>
+          </button>
+          <button class="sidebar-menu-item type-grid-btn" data-type="area">
+            <span class="material-symbols-outlined">area_chart</span>
+            <span>Area Chart</span>
+          </button>
+          <button class="sidebar-menu-item type-grid-btn" data-type="pie">
+            <span class="material-symbols-outlined">pie_chart</span>
+            <span>Pie Chart</span>
+          </button>
+          <button class="sidebar-menu-item type-grid-btn" data-type="histogram">
+            <span class="material-symbols-outlined">equalizer</span>
+            <span>Histogram</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- RIGHT CONTENT AREA -->
+    <div class="app-content-area">
+
+
+
+      <!-- MAIN WORKSPACE -->
+      <main class="app-main">
+        <div class="main-container">
+
+          <!-- SIMPLE PAGE HEADER -->
+          <div class="page-header">
+            <h1 class="page-title" id="page-title">CSV to Line Chart</h1>
+            <p class="page-desc" id="page-desc">Simply upload your CSV dataset, configure your X and Y parameters, and
+              allow plotox to automatically generate a dynamic line chart, export it on excellent quality.</p>
+          </div>
+
+          <!-- MAIN WORKSPACE VIEW PANEL -->
+          <div id="workspace-view-panel">
+
+            <!-- 1. DATA INGESTION CARD -->
+            <div class="workspace-card" id="workspace-card">
+              <!-- Header -->
+              <div class="upload-header">
+                <div class="upload-header-left">
+                  <div class="file-icon-box">
+                    <span class="material-symbols-outlined">description</span>
+                  </div>
+                  <div class="upload-header-text">
+                    <h3 class="upload-header-title">Upload CSV or drag & drop</h3>
+                    <p class="upload-header-sub">Select a CSV file or paste raw data below.</p>
+                  </div>
+                </div>
+                <button class="how-to-use-btn" id="how-to-use-btn" title="How to use Plotox">
+                  <span class="material-symbols-outlined">help</span>
+                  <span>How to use this tool</span>
+                </button>
+              </div>
+
+              <!-- Toolbar Row -->
+              <div class="toolbar-row">
+                <label class="toolbar-btn toolbar-btn-primary" for="file-input">
+                  <span class="material-symbols-outlined">upload</span>
+                  Select File
+                </label>
+                <input type="file" id="file-input" class="upload-input" accept=".csv,.tsv,.txt">
+
+                <select id="delimiter-select" style="display: none;">
+                  <option value=",">Comma ( , )</option>
+                  <option value="&#9;">Tab</option>
+                  <option value=";">Semicolon ( ; )</option>
+                  <option value="|">Pipe ( | )</option>
+                </select>
+
+                <button class="toolbar-btn toolbar-btn-outline" id="load-sample-btn">
+                  Load Sample
+                </button>
+
+                <div id="active-sample-indicator" style="display: none; align-items: center; gap: 8px;">
+                  <span class="inspector-badge" id="active-sample-name"
+                    style="background-color: var(--color-surface-low); color: var(--color-primary); font-weight: 600; padding: 9px 16px; display: inline-flex; align-items: center; border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: 13px;">Sample:
+                    Loaded</span>
+                  <button class="toolbar-btn toolbar-btn-outline" id="clear-sample-btn"
+                    style="color: var(--color-error); border-color: var(--color-error);">
+                    <span class="material-symbols-outlined" style="font-size: 14px;">close</span>
+                    Clear
+                  </button>
+                </div>
+              </div>
+
+              <!-- Tabs row -->
+              <div class="data-tabs-row">
+                <button class="data-tab active" id="btn-preview-tab">Preview</button>
+                <button class="data-tab" id="btn-columns-tab">Grid View</button>
+              </div>
+
+              <!-- Paste / Drop Area -->
+              <div id="drop-zone" class="paste-area">
+                <textarea id="paste-text" class="paste-input"
+                  placeholder="Paste or drag and drop CSV here..."></textarea>
+              </div>
+
+              <!-- Workspace Spreadsheet Grid Container -->
+              <div id="workspace-grid-container" class="workspace-grid-container" style="display: none;"></div>
+
+              <!-- Edit Data action bar (shown once data is loaded) -->
+              <div class="edit-data-bar" id="edit-data-bar">
+                <div class="edit-data-bar-left">
+                  <span class="inspector-badge" id="data-meta-badge">0 columns · 0 rows</span>
+                </div>
+                <div class="edit-data-bar-right">
+                  <button class="edit-data-btn" id="edit-data-btn" title="Edit data in spreadsheet view">
+                    <span class="material-symbols-outlined">edit_note</span>
+                    Edit Data
+                  </button>
+                  <button class="clear-data-btn" id="clear-data-btn" title="Clear all loaded data">
+                    <span class="material-symbols-outlined">delete_sweep</span>
+                    Clear Data
+                  </button>
+                  <button class="generate-btn disabled" id="generate-btn" disabled>
+                    Generate Chart
+                    <span class="material-symbols-outlined">auto_awesome</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. CHART CONFIGURATION CARD -->
+            <div class="workspace-card hidden-section" id="config-section">
+              <div class="config-card-header">
+                <span class="material-symbols-outlined config-header-icon">settings</span>
+                <div class="config-header-text">
+                  <h3 class="config-header-title">Chart Configuration</h3>
+                  <p class="config-header-desc">Map axes and customize chart options.</p>
+                </div>
+              </div>
+
+              <!-- Axis Mappings -->
+              <div class="columns-config">
+                <!-- Left Pane: Axis Mappings -->
+                <div class="config-pane-left">
+                  <div class="config-axes-row">
+                    <div class="col-config-group">
+                      <label class="col-config-label">X-Axis Column</label>
+                      <select id="x-axis-select" class="select-control" style="display: none;"></select>
+                      <div class="x-pills-container" id="x-axis-pills"></div>
+                    </div>
+                    <div class="axes-pills-separator"
+                      style="height: 1px; background-color: var(--color-border); margin: 16px 0; opacity: 0.7;"></div>
+                    <div class="col-config-group">
+                      <label class="col-config-label">Y-Axis Column(s)</label>
+                      <div class="y-checklist-container" id="y-axis-checklist"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Right Pane: Titles, Styling, Options, & Toggles -->
+                <div class="config-pane-right">
+                  <!-- Titles & Labels Section -->
+                  <div
+                    style="font-size: 12px; font-weight: 600; color: var(--color-outline); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 6px 0;">
+                    Labels & Inputs</div>
+                  <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 16px;">
+                    <input type="hidden" id="config-chart-title">
+                    <div class="col-config-group">
+                      <label class="col-config-label">X-Axis Label</label>
+                      <input type="text" id="config-x-label" class="select-control"
+                        style="width: 100%; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 7px 10px; font-size: 12px; background: var(--color-surface-low); color: var(--color-primary); background-image: none;"
+                        placeholder="Auto Label">
+                    </div>
+                    <div class="col-config-group">
+                      <label class="col-config-label">Y-Axis Label</label>
+                      <input type="text" id="config-y-label" class="select-control"
+                        style="width: 100%; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 7px 10px; font-size: 12px; background: var(--color-surface-low); color: var(--color-primary); background-image: none;"
+                        placeholder="Auto Label">
+                    </div>
+                  </div>
+
+                  <!-- Styles & Layouts Section -->
+                  <div
+                    style="font-size: 12px; font-weight: 600; color: var(--color-outline); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 6px 0;">
+                    Style & Advanced Layout</div>
+                  <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 12px;">
+                    <div class="col-config-group">
+                      <label class="col-config-label">Color Palette</label>
+                      <select id="config-color-palette" class="select-control">
+                        <option value="classic" selected>Classic</option>
+                        <option value="vibrant">Vibrant</option>
+                        <option value="orange">Orange</option>
+                        <option value="forest">Forest Green</option>
+                        <option value="ocean">Ocean</option>
+                        <option value="monochrome">Monochrome</option>
+                      </select>
+                    </div>
+                    <div class="col-config-group">
+                      <label class="col-config-label">X-Axis Rotation</label>
+                      <select id="config-x-rotation" class="select-control">
+                        <option value="0" selected>0° (Horizontal)</option>
+                        <option value="15">15°</option>
+                        <option value="30">30°</option>
+                        <option value="45">45°</option>
+                        <option value="90">90° (Vertical)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- Dynamic Option Selectors -->
+                  <div class="col-config-group" id="bar-mode-group"
+                    style="display: none; margin-top: 6px; margin-bottom: 12px;">
+                    <label class="col-config-label">Bar Mode</label>
+                    <select id="bar-mode-select" class="select-control">
+                      <option value="group">Grouped</option>
+                      <option value="stack">Stacked</option>
+                    </select>
+                  </div>
+
+                  <div class="col-config-group" id="pie-options-group"
+                    style="display: none; margin-top: 6px; margin-bottom: 12px;">
+                    <label class="col-config-label">Pie Style</label>
+                    <select id="pie-style-select" class="select-control">
+                      <option value="pie">Standard Pie</option>
+                      <option value="donut">Donut Chart</option>
+                    </select>
+                  </div>
+
+                  <div class="col-config-group" id="histogram-options-group"
+                    style="display: none; margin-top: 6px; margin-bottom: 12px;">
+                    <label class="col-config-label">Histogram Binning</label>
+                    <select id="histogram-bins-select" class="select-control">
+                      <option value="auto">Auto Bins</option>
+                      <option value="5">5 Bins</option>
+                      <option value="10">10 Bins</option>
+                      <option value="15">15 Bins</option>
+                      <option value="20">20 Bins</option>
+                    </select>
+                  </div>
+
+                  <div class="col-config-group" id="scatter-options-group"
+                    style="display: none; margin-top: 6px; margin-bottom: 12px;">
+                    <label class="col-config-label">Scatter Point Size</label>
+                    <select id="scatter-size-select" class="select-control">
+                      <option value="8">Small (8px)</option>
+                      <option value="12" selected>Medium (12px)</option>
+                      <option value="16">Large (16px)</option>
+                      <option value="20">Extra Large (20px)</option>
+                    </select>
+                  </div>
+
+                  <!-- Toggle Layouts -->
+                  <div class="col-config-toggles"
+                    style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--color-border);">
+                    <!-- Hidden inputs for compatibility -->
+                    <input type="checkbox" id="show-grid-check" checked style="display: none;">
+                    <input type="checkbox" id="show-legend-check" checked style="display: none;">
+
+                    <button class="config-pill-btn active" id="pill-x-grid" data-config="showXGrid"
+                      title="Toggle X-Axis gridlines">
+                      <span class="pill-check-indicator"></span>
+                      X-Gridlines
+                    </button>
+                    <button class="config-pill-btn active" id="pill-y-grid" data-config="showYGrid"
+                      title="Toggle Y-Axis gridlines">
+                      <span class="pill-check-indicator"></span>
+                      Y-Gridlines
+                    </button>
+                    <button class="config-pill-btn active" id="pill-tooltip" data-config="showTooltip"
+                      title="Toggle tooltips">
+                      <span class="pill-check-indicator"></span>
+                      Tooltips
+                    </button>
+                    <!-- Hidden checkboxes for JS compatibility -->
+                    <input type="checkbox" id="show-x-grid-check" checked style="display: none;">
+                    <input type="checkbox" id="show-y-grid-check" checked style="display: none;">
+                    <input type="checkbox" id="show-tooltip-check" checked style="display: none;">
+                    <input type="checkbox" id="line-smooth-check" style="display: none;">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. GENERATED CHART OUTPUT -->
+            <div class="workspace-card hidden-section" id="chart-section">
+              <!-- Hidden input to keep JS binding 100% functional -->
+              <input type="hidden" id="chart-title-input" value="">
+
+              <!-- Chart Output -->
+              <div class="chart-output-body"
+                style="padding: 16px 16px 0; display: flex; flex-direction: column; flex: 1;">
+                <!-- Canvas Wrapper -->
+                <div class="chart-canvas-wrapper"
+                  style="flex: 1; display: flex; flex-direction: column; position: relative;">
+                  <!-- Editable Chart Title Bar (Header) -->
+                  <div class="chart-canvas-title-bar" id="chart-canvas-title-bar">
+                    <!-- Left: Custom Legend Container -->
+                    <div class="chart-canvas-legend-left" id="chart-canvas-legend-left"></div>
+
+                    <!-- Center: Editable Chart Title -->
+                    <div class="chart-canvas-title-center">
+                      <span class="chart-canvas-title-display" id="chart-canvas-title-display"
+                        title="Click to edit chart name">Interactive Chart</span>
+                      <div class="chart-canvas-title-edit" id="chart-canvas-title-edit" style="display: none;">
+                        <input type="text" class="chart-canvas-title-input" id="chart-canvas-title-input"
+                          placeholder="Enter chart name..." spellcheck="false" />
+                      </div>
+                    </div>
+
+                    <!-- Right: Spacer (to balance alignment) -->
+                    <div class="chart-canvas-header-right-spacer"
+                      style="flex: 1; display: flex; justify-content: flex-end;"></div>
+                  </div>
+
+                  <!-- Chart Canvas Options Toolbar -->
+                  <div class="chart-canvas-toolbar" id="chart-canvas-toolbar" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center;">
+                    <!-- Hidden checkboxes for backward compatibility -->
+                    <input type="checkbox" id="check-publication" style="display: none;">
+                    <input type="checkbox" id="check-logy" style="display: none;">
+                    <input type="checkbox" id="check-points" style="display: none;">
+                    <input type="checkbox" id="check-minmax" style="display: none;">
+                    <input type="checkbox" id="check-gridlines-toolbar" style="display: none;" checked>
+                    <input type="checkbox" id="check-smooth-toolbar" style="display: none;">
+
+                    <!-- Dynamic Controls Mountpoint -->
+                    <div id="dynamic-toolbar-controls" style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center;"></div>
+
+                    <!-- Permanent Style Popover Button -->
+                    <button class="toolbar-toggle-pill" id="btn-chart-style" title="Customize chart title appearance">
+                      <span class="material-symbols-outlined" style="font-size: 16px;">palette</span>
+                      <span>Style</span>
+                    </button>
+                  </div>
+
+                  <!-- Legend Color Picker Popover -->
+                  <div class="legend-color-popover" id="legend-color-popover" style="display: none;">
+                    <div class="legend-color-popover-header">
+                      <span class="legend-color-series-name" id="legend-color-series-name">Series</span>
+                      <button class="legend-color-close" id="legend-color-close">
+                        <span class="material-symbols-outlined" style="font-size: 14px;">close</span>
+                      </button>
+                    </div>
+                    <div class="legend-color-grid" id="legend-color-grid"></div>
+                    <div class="legend-color-custom-row">
+                      <input type="color" id="legend-color-custom" class="legend-color-custom-input" value="#6366f1">
+                      <span class="legend-color-custom-label">Custom</span>
+                    </div>
+                  </div>
+
+                  <!-- Chart Title Style Editor Popover -->
+                  <div class="chart-style-popover" id="chart-style-popover" style="display: none;">
+                    <div class="chart-style-popover-header">
+                      <span class="chart-style-title">Title Style Editor</span>
+                      <button class="chart-style-close" id="chart-style-close">
+                        <span class="material-symbols-outlined" style="font-size: 14px;">close</span>
+                      </button>
+                    </div>
+
+                    <div class="chart-style-body">
+                      <!-- 1. Typography Row: Weight & Style -->
+                      <div class="style-control-row">
+                        <div class="style-control-col">
+                          <label class="style-control-label">Font Weight</label>
+                          <select id="style-title-weight" class="style-select-control">
+                            <option value="400">Regular (400)</option>
+                            <option value="500">Medium (500)</option>
+                            <option value="600" selected>Semi-Bold (600)</option>
+                            <option value="700">Bold (700)</option>
+                          </select>
+                        </div>
+                        <div class="style-control-col">
+                          <label class="style-control-label">Font Style</label>
+                          <select id="style-title-style" class="style-select-control">
+                            <option value="normal" selected>Normal</option>
+                            <option value="italic">Italic</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <!-- 2. Size (Full width group) -->
+                      <div class="style-control-group">
+                        <label class="style-control-label">Font Size</label>
+                        <select id="style-title-size" class="style-select-control">
+                          <option value="12px">Small (12px)</option>
+                          <option value="16px" selected>Medium (16px)</option>
+                          <option value="20px">Large (20px)</option>
+                          <option value="24px">Extra Large (24px)</option>
+                        </select>
+                      </div>
+
+                      <!-- 3. Color Selection -->
+                      <div class="style-control-group">
+                        <label class="style-control-label">Text Color</label>
+                        <div class="style-color-presets">
+                          <!-- Preset colors -->
+                          <button class="style-color-preset active" data-color="var(--color-primary)"
+                            style="background-color: var(--color-primary); border: 1px solid var(--color-border);"
+                            title="Default Color"></button>
+                          <button class="style-color-preset" data-color="#6366f1" style="background-color: #6366f1;"
+                            title="Indigo"></button>
+                          <button class="style-color-preset" data-color="#10b981" style="background-color: #10b981;"
+                            title="Emerald"></button>
+                          <button class="style-color-preset" data-color="#ea580c" style="background-color: #ea580c;"
+                            title="Orange"></button>
+                          <button class="style-color-preset" data-color="#3b82f6" style="background-color: #3b82f6;"
+                            title="Blue"></button>
+                          <button class="style-color-preset" data-color="#ec4899" style="background-color: #ec4899;"
+                            title="Pink"></button>
+                          <button class="style-color-preset" data-color="#8b5cf6" style="background-color: #8b5cf6;"
+                            title="Purple"></button>
+                        </div>
+                        <div class="style-color-custom-row">
+                          <input type="color" id="style-title-color-custom" class="legend-color-custom-input"
+                            value="#000000">
+                          <span class="legend-color-custom-label">Custom Color</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="chart-container" style="flex: 1; width: 100%; height: 100%;"></div>
+                </div>
+              </div>
+
+              <!-- Export Footer (Moved to card level as direct child) -->
+              <div class="chart-export-footer">
+                <div class="export-controls-group">
+                  <span class="material-symbols-outlined export-icon">download</span>
+                  <span class="export-label">Format:</span>
+                  <select id="export-format-select" class="toolbar-select">
+                    <option value="png">PNG Image</option>
+                    <option value="jpg">JPG Image</option>
+                    <option value="svg">SVG Vector Graphics</option>
+                    <option value="pdf">PDF Document</option>
+                    <option value="html">Interactive HTML Page</option>
+                    <option value="json">Chart Config (JSON)</option>
+                  </select>
+                </div>
+                <button class="generate-btn" id="export-download-btn">
+                  <span class="material-symbols-outlined">download</span>
+                  Download
+                </button>
+              </div>
+            </div>
+
+            <!-- Empty state for right column -->
+            <div class="right-col-empty-state" id="right-col-empty" style="display: none;"></div>
+          </div>
+
+          <!-- HISTORY ARCHIVE PANEL -->
+          <div id="workspace-history-panel" style="display: none;">
+            <div class="history-archive-header">
+              <div class="history-archive-title-container">
+                <h1 class="history-archive-title">History</h1>
+                <p class="history-archive-desc">Your recent CSVs – click Import to load one back with a pre-filled dataset.</p>
+              </div>
+              <button class="history-clear-all-btn" id="clear-history-btn">
+                <span class="material-symbols-outlined" style="font-size: 16px;">delete</span>
+                Clear all
+              </button>
+            </div>
+            <div class="history-grid-container" id="history-grid-container">
+              <!-- History entries will be rendered dynamically as a beautiful structured list table -->
+            </div>
+          </div>
+
+        </div>
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Hidden elements for compatibility -->
+  <input type="range" id="chart-height-slider" style="display:none" min="300" max="700" step="50" value="450">
+  <span id="chart-height-value" style="display:none">450px</span>
+
+  <!-- EDIT DATA MODAL OVERLAY -->
+  <div class="edit-data-overlay" id="edit-data-overlay">
+    <div class="edit-data-modal" id="edit-data-modal">
+      <!-- Modal Header -->
+      <div class="edm-header">
+        <div class="edm-header-left">
+          <span class="material-symbols-outlined edm-header-icon">edit_note</span>
+          <h2 class="edm-title">Edit data</h2>
+          <span class="edm-badge" id="edm-badge">0 × 0</span>
+        </div>
+        <div class="edm-header-right">
+          <button class="edm-collapse-btn" id="edm-collapse-btn" title="Collapse">
+            Collapse
+            <span class="material-symbols-outlined">close_fullscreen</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Toolbar -->
+      <div class="edm-toolbar">
+        <button class="edm-tool-btn" id="edm-add-row-btn" title="Add row">
+          <span class="material-symbols-outlined">add</span> Add Row
+        </button>
+        <button class="edm-tool-btn" id="edm-add-col-btn" title="Add column">
+          <span class="material-symbols-outlined">view_column</span> Add Column
+        </button>
+        <div class="edm-toolbar-divider"></div>
+        <button class="edm-tool-btn" id="edm-swap-btn" title="Swap rows and columns">
+          <span class="material-symbols-outlined">swap_horiz</span> Swap rows and columns
+        </button>
+        <button class="edm-tool-btn edm-tool-danger" id="edm-clear-btn" title="Clear table">
+          <span class="material-symbols-outlined">delete_sweep</span> Clear table
+        </button>
+      </div>
+
+      <!-- Spreadsheet Grid -->
+      <div class="edm-grid-wrapper">
+        <div class="edm-grid-scroll" id="edm-grid-scroll">
+          <table class="edm-table" id="edm-table">
+            <thead id="edm-thead"></thead>
+            <tbody id="edm-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="edm-footer">
+        <div class="edm-footer-left">
+          <span class="material-symbols-outlined edm-footer-icon">info</span>
+          <span class="edm-footer-hint">Click any cell to edit. Double-click headers to rename.</span>
+        </div>
+        <div class="edm-footer-actions">
+          <button class="edm-btn edm-btn-ghost" id="edm-cancel-btn">Cancel</button>
+          <button class="edm-btn edm-btn-primary" id="edm-apply-btn">
+            <span class="material-symbols-outlined">check</span> Apply Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW TO USE MODAL OVERLAY -->
+  <div class="how-to-use-overlay" id="how-to-use-overlay">
+    <div class="how-to-use-modal">
+      <!-- Modal Header -->
+      <div class="htu-header">
+        <div class="htu-header-left">
+          <span class="material-symbols-outlined htu-header-icon">help</span>
+          <h2 class="htu-title">How to use Plotox</h2>
+        </div>
+        <button class="htu-close-btn" id="htu-close-btn" title="Close modal">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <!-- Modal Content -->
+      <div class="htu-content">
+        <div class="htu-step">
+          <span class="htu-step-number">1</span>
+          <div class="htu-step-text">
+            <h3>Upload CSV Data</h3>
+            <p>Select a CSV/TSV/TXT file from your local machine, drag & drop a file, or paste raw text data directly
+              into the input area. You can also click <strong>Load Sample</strong> to test with a pre-configured
+              dataset.</p>
+          </div>
+        </div>
+        <div class="htu-step">
+          <span class="htu-step-number">2</span>
+          <div class="htu-step-text">
+            <h3>Inspect & Edit Grid</h3>
+            <p>Switch between the <strong>Preview</strong> and <strong>Grid View</strong> tabs to inspect your columns.
+              Click <strong>Edit Data</strong> to add, delete, or modify rows/columns in our spreadsheet editor before
+              plotting.</p>
+          </div>
+        </div>
+        <div class="htu-step">
+          <span class="htu-step-number">3</span>
+          <div class="htu-step-text">
+            <h3>Configure Axes & Styles</h3>
+            <p>Select your X-Axis column and checklist one or more Y-Axis columns. Customize the chart title, labels,
+              legend positions, axis rotation, line smoothing, gridlines, and theme colors.</p>
+          </div>
+        </div>
+        <div class="htu-step">
+          <span class="htu-step-number">4</span>
+          <div class="htu-step-text">
+            <h3>Generate & Export</h3>
+            <p>Click <strong>Generate Chart</strong> to render. Fine-tune thickness, scale, points, and publication
+              mode, then select your format (PNG, JPG, SVG, PDF, HTML, JSON) and click <strong>Download File</strong>.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="htu-footer">
+        <button class="htu-btn htu-btn-primary" id="htu-ok-btn">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CUSTOM CLEAR CONFIRMATION MODAL OVERLAY -->
+  <div class="confirm-modal-overlay" id="confirm-modal-overlay">
+    <div class="confirm-modal-card">
+      <div class="confirm-modal-header">
+        <span class="material-symbols-outlined confirm-modal-icon">warning</span>
+        <h3 class="confirm-modal-title">Clear History</h3>
+      </div>
+      <div class="confirm-modal-body">
+        <p>Are you sure you want to clear all your saved sessions? This action is permanent and cannot be undone.</p>
+      </div>
+      <div class="confirm-modal-footer">
+        <button class="confirm-btn confirm-btn-cancel" id="confirm-cancel-btn">Cancel</button>
+        <button class="confirm-btn confirm-btn-danger" id="confirm-approve-btn">Clear All</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEW CHART SELECTION MODAL OVERLAY -->
+  <div class="new-chart-overlay" id="new-chart-overlay">
+    <div class="new-chart-modal">
+      <!-- Modal Header -->
+      <div class="ncm-header">
+        <div class="ncm-header-left">
+          <span class="material-symbols-outlined ncm-header-icon">add_chart</span>
+          <h2 class="ncm-title">Choose Chart Type</h2>
+        </div>
+        <button class="ncm-close-btn" id="ncm-close-btn" title="Close modal">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      
+      <!-- Modal Content -->
+      <div class="ncm-content">
+        <p class="ncm-subtitle">Select the visualization structure for your dataset. You can change this selection at any time later in the configuration panel.</p>
+        
+        <!-- Interactive Chart Type Cards Grid -->
+        <div class="ncm-grid">
+          <div class="ncm-card" data-chart="line">
+            <div class="ncm-card-icon-box blue">
+              <span class="material-symbols-outlined">show_chart</span>
+            </div>
+            <div class="ncm-card-text">
+              <h4 class="ncm-card-title">Line Chart</h4>
+              <p class="ncm-card-desc">Ideal for continuous trends, time-series data, and tracking growth cycles over intervals.</p>
+            </div>
+          </div>
+          
+          <div class="ncm-card" data-chart="bar">
+            <div class="ncm-card-icon-box purple">
+              <span class="material-symbols-outlined">bar_chart</span>
+            </div>
+            <div class="ncm-card-text">
+              <h4 class="ncm-card-title">Bar Chart</h4>
+              <p class="ncm-card-desc">Perfect for comparing distinct categories, showing distributions, or stacking components.</p>
+            </div>
+          </div>
+          
+          <div class="ncm-card" data-chart="scatter">
+            <div class="ncm-card-icon-box orange">
+              <span class="material-symbols-outlined">scatter_plot</span>
+            </div>
+            <div class="ncm-card-text">
+              <h4 class="ncm-card-title">Scatter Plot</h4>
+              <p class="ncm-card-desc">Designed for correlation studies, data distributions, and mapping ROI against variables.</p>
+            </div>
+          </div>
+          
+          <div class="ncm-card" data-chart="area">
+            <div class="ncm-card-icon-box emerald">
+              <span class="material-symbols-outlined">area_chart</span>
+            </div>
+            <div class="ncm-card-text">
+              <h4 class="ncm-card-title">Area Chart</h4>
+              <p class="ncm-card-desc">Excellent for emphasizing cumulative totals, volume developments, and part-to-whole trends.</p>
+            </div>
+          </div>
+          
+          <div class="ncm-card" data-chart="pie">
+            <div class="ncm-card-icon-box pink">
+              <span class="material-symbols-outlined">pie_chart</span>
+            </div>
+            <div class="ncm-card-text">
+              <h4 class="ncm-card-title">Pie & Donut</h4>
+              <p class="ncm-card-desc">Great for representing composition, percentage share, and static category ratios.</p>
+            </div>
+          </div>
+          
+          <div class="ncm-card" data-chart="histogram">
+            <div class="ncm-card-icon-box red">
+              <span class="material-symbols-outlined">analytics</span>
+            </div>
+            <div class="ncm-card-text">
+              <h4 class="ncm-card-title">Histogram</h4>
+              <p class="ncm-card-desc">Used for mapping value frequency distributions and binning continuous numeric segments.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/loader.js"></script>
+  <script src="assets/js/theme.js"></script>
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/storage.js"></script>
+  <script src="assets/js/data-parser.js"></script>
+  <script src="assets/js/chart-engine.js"></script>
+  <script src="assets/js/export-manager.js"></script>
+  <script src="assets/js/app.js"></script>
+
+</body>
+
+</html>

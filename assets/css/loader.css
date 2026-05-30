@@ -1,0 +1,232 @@
+/* ═══════════════════════════════════════════
+   PLOTOX PREMIUM LOADING SCREEN STYLES
+   ═══════════════════════════════════════════ */
+
+/* --- Main Loader Overlay --- */
+#plotox-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  background-color: #FFFFFF;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  pointer-events: all;
+  box-sizing: border-box;
+  /* Smooth exit animation */
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(0);
+}
+
+/* --- Exit Transition Triggered by JS --- */
+#plotox-loader.fade-out {
+  opacity: 0;
+  transform: translateY(-30px);
+  pointer-events: none;
+}
+
+/* --- Content Wrapper --- */
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+/* --- Main Heading --- */
+.loader-heading {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(24px, 4vw, 42px);
+  font-weight: 700;
+  color: #121212;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin: 0 0 10px 0;
+  opacity: 0;
+  transform: translateY(15px);
+  animation: loaderFadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 200ms;
+}
+
+/* --- Secondary Text --- */
+.loader-subheading {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(13px, 2vw, 17px);
+  font-weight: 500;
+  color: #6B6B6B;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin: 0 0 28px 0;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: loaderFadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 650ms;
+}
+
+/* --- Brand Logo Reveal Wrapper --- */
+.loader-brand-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 10px;
+  overflow: visible;
+}
+
+/* --- Massive Brand Typography --- */
+.loader-brand-wrapper .giant-text-word {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(90px, 20vw, 260px);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  color: #000000;
+  position: relative;
+  overflow: visible;
+  white-space: nowrap;
+}
+
+/* --- Individual Staggered Letters --- */
+.gt-letter {
+  display: inline-block;
+  position: relative;
+  will-change: transform, opacity;
+  opacity: 0;
+  transform: translateY(30px) scale(0.85);
+}
+
+/* --- Timing & Specific Keyframes for Reveal Sequence --- */
+
+/* P Letter: Static position reveal */
+.gt-letter-p {
+  animation: letterRevealStatic 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 1100ms;
+}
+
+/* L Letter: Static position reveal */
+.gt-letter-l {
+  animation: letterRevealStatic 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 1220ms;
+}
+
+/* O1 Letter (First O): Static position reveal */
+.gt-letter-o1 {
+  animation: letterRevealStatic 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 1340ms;
+}
+
+/* T Letter: Static position reveal */
+.gt-letter-t {
+  animation: letterRevealStatic 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 1460ms;
+}
+
+/* O2 Letter (Second O): Rising reveal (elevated to -0.22em) */
+.gt-letter-o2 {
+  animation: letterRevealRisingO 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 1580ms;
+}
+
+/* X Letter: Rising reveal (elevated to -0.40em) */
+.gt-letter-x {
+  animation: letterRevealRisingX 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 1700ms;
+}
+
+/* ═══════════════════════════════════════════
+   KEYFRAME DEFINITIONS (GPU-Accelerated)
+   ═══════════════════════════════════════════ */
+
+/* Text fade in and slide up */
+@keyframes loaderFadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Static Letter Entry */
+@keyframes letterRevealStatic {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Rising Letter 'o' Reveal (Stretched by 0.55 * 0.4 factor -> 0.22em) */
+@keyframes letterRevealRisingO {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.85);
+  }
+  /* Stretches up into its elevated spot */
+  100% {
+    opacity: 1;
+    transform: translateY(-0.22em) scale(1);
+  }
+}
+
+/* Rising Letter 'x' Reveal (Stretched by 1.0 * 0.4 factor -> 0.40em) */
+@keyframes letterRevealRisingX {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.85);
+  }
+  /* Stretches up into its elevated spot */
+  100% {
+    opacity: 1;
+    transform: translateY(-0.40em) scale(1);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   APP CONTENT SHADOW & FADE-IN
+   ═══════════════════════════════════════════ */
+
+/* Prevent scroll on body during initialization */
+body.loading-active {
+  overflow: hidden !important;
+}
+
+/* Start app elements completely hidden and shifted */
+body.loading-active .app-topbar,
+body.loading-active .app-body {
+  opacity: 0 !important;
+  transform: translateY(12px) !important;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Once class is removed, transition back to standard display */
+body.app-ready .app-topbar,
+body.app-ready .app-body {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Responsive adjustment for extra compact devices */
+@media (max-width: 480px) {
+  .loader-brand-wrapper .giant-text-word {
+    font-size: clamp(64px, 18vw, 110px);
+  }
+  .loader-heading {
+    margin-bottom: 6px;
+  }
+  .loader-subheading {
+    margin-bottom: 16px;
+  }
+}

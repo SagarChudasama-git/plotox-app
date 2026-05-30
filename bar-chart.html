@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Free Online Bar Chart Generator | plotox</title>
+  <meta name="description" content="Create grouped or stacked interactive bar charts instantly. Compare categories, show item distributions, and style bar charts without registration.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+
+  <!-- ECharts CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="assets/css/design-system.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/seo-pages.css">
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       TOP NAVIGATION
+  ════════════════════════════════════════════ -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a class="nav-logo" href="index.html">plot<span class="logo-rising-o">o</span><span class="logo-rising-x">x</span></a>
+        <div class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="app.html">Dashboard</a>
+          <a href="line-chart.html">Line Chart</a>
+          <a href="bar-chart.html" class="active">Bar Chart</a>
+        </div>
+      </div>
+      <div>
+        <a class="nav-cta" href="app.html?type=bar">Launch App</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════
+       SEO MAIN LAYOUT
+  ════════════════════════════════════════════ -->
+  <main class="seo-main container">
+
+    <!-- ── HERO SECTION WITH INTERACTIVE DEMO ── -->
+    <section class="seo-hero">
+      <div class="seo-hero-content">
+        <span class="section-badge">Bar Chart Tool</span>
+        <h1 class="seo-hero-title">Create interactive bar charts in seconds</h1>
+        <p class="seo-hero-desc">Compare discrete data values across groups. Load your spreadsheet and instantly structure grouped or stacked bar charts with absolute privacy.</p>
+        <div>
+          <a class="btn-primary" href="app.html?type=bar">Create Bar Chart Now</a>
+        </div>
+      </div>
+
+      <!-- Live Demo Widget -->
+      <div class="seo-demo-box">
+        <div class="seo-chart-container" id="seo-chart" data-chart-type="bar" data-sample="mobile_app_downloads" data-title="Monthly Mobile App Downloads">
+          <!-- ECharts chart renders here -->
+        </div>
+        <div class="seo-demo-controls">
+          <label class="demo-checkbox-group">
+            <input type="checkbox" id="demo-grid" checked>
+            Show Grid
+          </label>
+          <label class="demo-checkbox-group">
+            <input type="checkbox" id="demo-legend" checked>
+            Show Legend
+          </label>
+          <button class="demo-btn-action" id="demo-png">
+            <span class="material-symbols-outlined">download</span> PNG
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ARTICLE & SIDEBAR DEEP DIVE ───────── -->
+    <section class="seo-content-grid">
+      
+      <!-- Article Content -->
+      <article class="seo-article">
+        <h2>What is a Bar Chart?</h2>
+        <p>A <strong>bar chart</strong> represents data using rectangular bars, where the length or height of each bar is proportional to the values it represents. It is the gold standard for representing discrete, categorical comparisons, allowing users to make instantaneous size comparisons.</p>
+        
+        <h2>When should you use a Bar Chart?</h2>
+        <p>Bar charts are best suited for comparing values across separate groups. You should choose a bar chart when:</p>
+        <ul>
+          <li>You want to compare <strong>nominal categories</strong> (e.g. products, countries, departments).</li>
+          <li>The categories are <strong>unrelated</strong> and do not belong to a sequential timeline.</li>
+          <li>You want to display <strong>distribution structures</strong> using grouped or stacked subdivisions.</li>
+        </ul>
+
+        <h2>Grouped vs. Stacked Bar Charts</h2>
+        <ul>
+          <li><strong>Grouped Bar Charts</strong>: Display columns side-by-side. Excellent for direct comparisons of individual sub-items across key clusters.</li>
+          <li><strong>Stacked Bar Charts</strong>: Pile segments on top of one another to show parts of a cumulative whole. Ideal when the total value of each category is of primary importance.</li>
+        </ul>
+
+        <h2>Designing High-Converting Bar Charts</h2>
+        <p>Follow these tips to keep your bar charts clean and highly legible:</p>
+        <ul>
+          <li><strong>Always start at zero</strong>: Changing the Y-axis minimum to anything other than zero on a bar chart visually distorts the relative sizing of the bars, making comparisons inaccurate.</li>
+          <li><strong>Sort your bars logically</strong>: Arrange categories from highest to lowest value to help viewers identify top and bottom performers at first glance.</li>
+          <li><strong>Keep labels horizontal</strong>: Rotate axes or use horizontal layouts if column label texts are long, preventing diagonal truncation.</li>
+        </ul>
+      </article>
+
+      <!-- Sidebar -->
+      <aside class="seo-sidebar">
+        <div class="seo-sidebar-widget">
+          <h4 class="widget-title">Other Generators</h4>
+          <div class="gallery-grid">
+            <a href="line-chart.html" class="gallery-link">
+              <span class="material-symbols-outlined">show_chart</span> Line Chart
+            </a>
+            <a href="bar-chart.html" class="gallery-link active">
+              <span class="material-symbols-outlined">bar_chart</span> Bar Chart
+            </a>
+            <a href="pie-chart.html" class="gallery-link">
+              <span class="material-symbols-outlined">pie_chart</span> Pie Chart
+            </a>
+            <a href="scatter-plot.html" class="gallery-link">
+              <span class="material-symbols-outlined">scatter_plot</span> Scatter Plot
+            </a>
+            <a href="area-chart.html" class="gallery-link">
+              <span class="material-symbols-outlined">area_chart</span> Area Chart
+            </a>
+            <a href="histogram.html" class="gallery-link">
+              <span class="material-symbols-outlined">analytics</span> Histogram
+            </a>
+          </div>
+        </div>
+      </aside>
+
+    </section>
+
+    <!-- ── CTA SECTION ───────────────────────── -->
+    <section class="seo-cta-section">
+      <h3>Ready to compare your categories?</h3>
+      <p>plotox lets you compile grouped or stacked bar charts in the browser without uploading data to external servers. Safe, fast, and fully customizable.</p>
+      <a class="btn-primary" href="app.html?type=bar">Launch Visualizer Dashboard</a>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">plot<span class="logo-rising-o">o</span><span class="logo-rising-x">x</span></span>
+        <span class="footer-copy">© 2026 plotox. Engineered for precision.</span>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="app.html">Dashboard</a>
+        <a href="line-chart.html">Line Chart Page</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/theme.js"></script>
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/data-parser.js"></script>
+  <script src="assets/js/chart-engine.js"></script>
+  <script src="assets/js/export-manager.js"></script>
+  <script src="assets/js/seo-helper.js"></script>
+
+</body>
+</html>

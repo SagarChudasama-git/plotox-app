@@ -1,0 +1,183 @@
+:root {
+  /* --- Colors (Light Mode - Warm Neutral) --- */
+  --color-bg:              #F7F7F5;
+  --color-surface:         #FDF8F8;
+  --color-surface-low:     #F7F3F2;
+  --color-surface-variant: #E5E2E1;
+  --color-panel:           #F3F2EF;
+  --color-card:            #FCFCFB;
+  --color-border:          #E7E7E4;
+  --color-primary:         #000000;
+  --color-on-primary:      #ffffff;
+  --color-secondary-text:  #6B6B6B;
+  --color-outline:         #747878;
+  --color-error:           #ba1a1a;
+  
+  /* --- Brand Accents --- */
+  --color-emerald:         #10b981;
+  --color-indigo:          #121212;
+  --color-orange:          #ea580c;
+  --color-pink:            #ec4899;
+  --color-purple:          #8b5cf6;
+  --color-blue:            #3b82f6;
+
+  /* --- Typography --- */
+  --font-main: 'Inter', sans-serif;
+  --font-heading: 'Space Grotesk', sans-serif;
+
+  --fs-h1: 84px;
+  --lh-h1: 1.05;
+  --ls-h1: -0.04em;
+
+  --fs-h2: 64px;
+  --lh-h2: 1.1;
+  --ls-h2: -0.03em;
+
+  --fs-h3: 32px;
+  --lh-h3: 1.2;
+  --ls-h3: -0.02em;
+
+  --fs-body-lg: 18px;
+  --lh-body-lg: 1.6;
+  --ls-body-lg: -0.01em;
+
+  --fs-body-md: 16px;
+  --lh-body-md: 1.5;
+
+  --fs-label-caps: 12px;
+  --ls-label-caps: 0.1em;
+
+  /* --- Layout & Spacing --- */
+  --max-width: 1280px;
+  --container-px: 32px;
+  --section-gap: 140px;
+  --section-gap-lg: 180px;
+
+  /* --- Radii --- */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-2xl:  24px;
+  --radius-3xl:  28px;
+  --radius-full: 9999px;
+  
+  /* --- Transitions --- */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.45s ease;
+}
+
+/* --- Warm Dark Mode Overrides --- */
+html.dark {
+  --color-bg:              #121212;
+  --color-surface:         #121212;
+  --color-surface-low:     #121212;
+  --color-surface-variant: rgba(255, 255, 255, 0.15);
+  --color-panel:           #121212;
+  --color-card:            #121212;
+  --color-border:          rgba(255, 255, 255, 0.15);
+  --color-primary:         #FFFFFF;
+  --color-on-primary:      #121212;
+  --color-secondary-text:  #FFFFFF;
+  --color-outline:         #FFFFFF;
+  --color-error:           #FFFFFF;
+
+  /* Accent overrides to ensure the app components only use #121212 and #FFFFFF in dark mode */
+  --color-emerald:         #FFFFFF;
+  --color-indigo:          #FFFFFF;
+  --color-orange:          #FFFFFF;
+  --color-pink:            #FFFFFF;
+  --color-purple:          #FFFFFF;
+  --color-blue:            #FFFFFF;
+}
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Disable text selection globally */
+*, *::before, *::after {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Allow text selection only in editable form elements */
+input, textarea, select, [contenteditable] {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+
+html, body {
+  font-family: var(--font-main);
+  font-size: var(--fs-body-md);
+  line-height: var(--lh-body-md);
+  color: var(--color-primary);
+  background-color: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+h1, h2, h3, h4, h5, h6,
+.hero-title, .section-heading, .nav-logo, .footer-logo, .widget-label-main {
+  font-family: var(--font-heading);
+}
+
+a { 
+  text-decoration: none; 
+  color: inherit; 
+}
+
+button { 
+  font-family: var(--font-main); 
+  cursor: pointer; 
+  border: none; 
+  background: none; 
+  color: inherit;
+}
+
+img { 
+  display: block; 
+  max-width: 100%; 
+}
+
+/* ---------- Material Icons ---------- */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+}
+.material-symbols-outlined.fill {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* ---------- Utility ---------- */
+.container {
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-px);
+  padding-right: var(--container-px);
+}
+
+.text-secondary { 
+  color: var(--color-secondary-text); 
+}
+
+@media (max-width: 767px) {
+  :root {
+    --container-px: 16px;
+  }
+}

@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Plotox — Experience Data Visualization</title>
+  <meta name="description"
+    content="Convert your CSV, TSV, and raw data into gorgeous interactive charts instantly in the browser. 100% private, client-side data visualization. No backend needed.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/favicon.ico">
+
+  <!-- Apache ECharts CDN for showcase chart -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       TOP NAVIGATION
+  ════════════════════════════════════════════ -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a class="nav-logo" href="#">plot<span class="logo-rising-o">o</span><span class="logo-rising-x">x</span></a>
+      </div>
+      <div>
+        <a class="nav-cta" href="app.html">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════
+       MAIN CONTENT
+  ════════════════════════════════════════════ -->
+  <main>
+
+    <!-- ── HERO ─────────────────────────────── -->
+    <section class="hero-section container">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <h1 class="hero-title">Professional charts powered directly from your data</h1>
+          <p class="hero-desc" style="max-width: 600px;">Convert raw data into clear, interactive charts without
+            complicated tools, coding, or server uploads.</p>
+          <div class="hero-actions">
+            <a class="btn-primary" href="app.html">Try for free</a>
+            <a class="btn-outline" href="#features">Learn more</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── HERO PRODUCT PANEL ────────────────── -->
+    <section class="product-panel-section container">
+      <div class="product-panel">
+
+        <!-- Showcase Card (Tab Card) above background -->
+        <div class="showcase-card">
+          <!-- Tabs at the top of the card -->
+          <div class="showcase-tabs-wrapper">
+            <div class="panel-tab-group">
+              <button class="panel-tab active"><span class="material-symbols-outlined tab-icon">upload</span><span
+                  class="tab-text">Data Integration</span></button>
+              <button class="panel-tab"><span class="material-symbols-outlined tab-icon">insights</span><span
+                  class="tab-text">Data Cleaning</span></button>
+              <button class="panel-tab"><span class="material-symbols-outlined tab-icon">bar_chart</span><span
+                  class="tab-text">Data Visualization</span></button>
+            </div>
+          </div>
+
+          <!-- Showcase Content (Panels that switch smoothly) -->
+          <div class="showcase-content">
+
+            <!-- Tab 1: Data Ingestion -->
+            <div class="showcase-panel panel-card active" id="pane-integration">
+              <div class="ingestion-container">
+                <p class="ingestion-title">Upload your dataset — zero setup needed</p>
+                <p class="ingestion-desc">Paste or upload your <span class="highlight-black">CSV / TSV / Excel
+                    file</span> and plotox instantly detects schema, column types, and <span
+                    class="highlight-black">data quality issues</span> - no code required.</p>
+                <div class="csv-raw-container">
+                  <pre><code>month,mrr_usd,new_signups,churned_users,active_users,cac_usd,avg_session_min
+Jan,42500,312,28,1840,38,8.2
+Feb,46200,341,31,2102,35,8.7
+Mar,51800,389,26,2445,32,9.1
+Apr,58300,412,34,2801,30,9.4
+May,65100,438,29,3190,28,10.2
+Jun,71400,461,38,3593,27,10.8
+Jul,78900,497,41,4009,26,11.3
+Aug,88200,534,36,4497,24,12.1
+Sep,96500,578,42,5031,23,12.6
+Oct,107300,621,39,5590,22,13.4
+Nov,119800,688,44,6214,20,14.1
+Dec,134200,742,48,6898,19,14.9</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab 2: Data Inspection -->
+            <div class="showcase-panel panel-card" id="pane-cleaning">
+              <div class="table-preview-container">
+                <div class="table-header-actions">
+                  <span class="badge badge-columns">7 columns · 12 rows</span>
+                </div>
+                <div class="table-wrapper">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>month</th>
+                        <th>mrr_usd</th>
+                        <th>new_signups</th>
+                        <th>churned_users</th>
+                        <th>active_users</th>
+                        <th>cac_usd</th>
+                        <th>avg_session_min</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td>Jan</td>
+                        <td>42,500</td>
+                        <td>312</td>
+                        <td>28</td>
+                        <td>1,840</td>
+                        <td>38</td>
+                        <td>8.2</td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>Feb</td>
+                        <td>46,200</td>
+                        <td>341</td>
+                        <td>31</td>
+                        <td>2,102</td>
+                        <td>35</td>
+                        <td>8.7</td>
+                      </tr>
+                      <tr>
+                        <td>3</td>
+                        <td>Mar</td>
+                        <td>51,800</td>
+                        <td>389</td>
+                        <td>26</td>
+                        <td>2,445</td>
+                        <td>32</td>
+                        <td>9.1</td>
+                      </tr>
+                      <tr>
+                        <td>4</td>
+                        <td>Apr</td>
+                        <td>58,300</td>
+                        <td>412</td>
+                        <td>34</td>
+                        <td>2,801</td>
+                        <td>30</td>
+                        <td>9.4</td>
+                      </tr>
+                      <tr>
+                        <td>5</td>
+                        <td>May</td>
+                        <td>65,100</td>
+                        <td>438</td>
+                        <td>29</td>
+                        <td>3,190</td>
+                        <td>28</td>
+                        <td>10.2</td>
+                      </tr>
+                      <tr>
+                        <td>6</td>
+                        <td>Jun</td>
+                        <td>71,400</td>
+                        <td>461</td>
+                        <td>38</td>
+                        <td>3,593</td>
+                        <td>27</td>
+                        <td>10.8</td>
+                      </tr>
+                      <tr>
+                        <td>7</td>
+                        <td>Jul</td>
+                        <td>78,900</td>
+                        <td>497</td>
+                        <td>41</td>
+                        <td>4,009</td>
+                        <td>26</td>
+                        <td>11.3</td>
+                      </tr>
+                      <tr>
+                        <td>8</td>
+                        <td>Aug</td>
+                        <td>88,200</td>
+                        <td>534</td>
+                        <td>36</td>
+                        <td>4,497</td>
+                        <td>24</td>
+                        <td>12.1</td>
+                      </tr>
+                      <tr>
+                        <td>9</td>
+                        <td>Sep</td>
+                        <td>96,500</td>
+                        <td>578</td>
+                        <td>42</td>
+                        <td>5,031</td>
+                        <td>23</td>
+                        <td>12.6</td>
+                      </tr>
+                      <tr>
+                        <td>10</td>
+                        <td>Oct</td>
+                        <td>107,300</td>
+                        <td>621</td>
+                        <td>39</td>
+                        <td>5,590</td>
+                        <td>22</td>
+                        <td>13.4</td>
+                      </tr>
+                      <tr>
+                        <td>11</td>
+                        <td>Nov</td>
+                        <td>119,800</td>
+                        <td>688</td>
+                        <td>44</td>
+                        <td>6,214</td>
+                        <td>20</td>
+                        <td>14.1</td>
+                      </tr>
+                      <tr>
+                        <td>12</td>
+                        <td>Dec</td>
+                        <td>134,200</td>
+                        <td>742</td>
+                        <td>48</td>
+                        <td>6,898</td>
+                        <td>19</td>
+                        <td>14.9</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab 3: Data Visualization (Interactive ECharts Chart) -->
+            <div class="showcase-panel panel-card" id="pane-visualization">
+              <div class="chart-display">
+                <div class="chart-header-row">
+                  <div class="chart-title">MRR Growth vs New Signups — 2024</div>
+                  <div class="chart-legend">
+                    <span class="chart-legend-item"><span class="legend-dot legend-dot-blue"></span>MRR ($)</span>
+                    <span class="chart-legend-item"><span class="legend-dot legend-dot-green"></span>Signups</span>
+                  </div>
+                </div>
+                <div id="showcase-plotly-chart" style="width: 100%; min-height: 400px;"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── TRUST STRIP ──────────────────────── --
+    <section class="trust-section container">
+      <p class="trust-label">Trusted by companies simplifying their analytical workflows</p>
+    </section> -->
+
+    <!-- ── LOGO MARQUEE ─────────────────────── -->
+    <!-- <section class="marquee-section">
+      <div class="marquee-wrapper">
+        <div class="marquee-track">
+          <div class="logo-item"><span class="material-symbols-outlined">bolt</span>Velocity</div>
+          <div class="logo-item"><span class="material-symbols-outlined">deployed_code</span>Nexus</div>
+          <div class="logo-item"><span class="material-symbols-outlined">auto_awesome</span>Lumina</div>
+          <div class="logo-item"><span class="material-symbols-outlined">layers</span>Stack</div>
+          <div class="logo-item"><span class="material-symbols-outlined">token</span>Quanta</div>
+          <div class="logo-item"><span class="material-symbols-outlined">hub</span>Orbital</div>
+          <div class="logo-item"><span class="material-symbols-outlined">data_exploration</span>Scalar</div>
+        </div>
+        <div class="marquee-track" aria-hidden="true">
+          <div class="logo-item"><span class="material-symbols-outlined">bolt</span>Velocity</div>
+          <div class="logo-item"><span class="material-symbols-outlined">deployed_code</span>Nexus</div>
+          <div class="logo-item"><span class="material-symbols-outlined">auto_awesome</span>Lumina</div>
+          <div class="logo-item"><span class="material-symbols-outlined">layers</span>Stack</div>
+          <div class="logo-item"><span class="material-symbols-outlined">token</span>Quanta</div>
+          <div class="logo-item"><span class="material-symbols-outlined">hub</span>Orbital</div>
+          <div class="logo-item"><span class="material-symbols-outlined">data_exploration</span>Scalar</div>
+        </div>
+      </div>
+    </section> -->
+
+    <!-- ── PLATFORM OVERVIEW ─────────────────── -->
+    <section class="platform-section container" id="features">
+      <div class="platform-intro">
+        <h2>Analysis with Different Chart Types</h2>
+        <p>Explore the rendering speeds, responsive window fitting, and detailed tooltips of charting.</p>
+      </div>
+
+      <!-- Dashboard panel with glassmorphic widget -->
+      <div class="dashboard-panel">
+        <img src="https://images.unsplash.com/photo-1604076913837-52ab5629fba9?q=80&w=987&auto=format&fit=crop"
+          alt="Dashboard Preview">
+        <div class="dashboard-overlay">
+          <div class="glow-blob glow-blue"></div>
+          <div class="glow-blob glow-purple"></div>
+
+          <!-- Glassmorphic Chart Preview Widget -->
+          <div class="chart-showcase-widget">
+
+            <!-- Chart Type Selector Pills -->
+            <div class="chart-selector-pills chart-selector-scroll">
+              <button class="selector-pill active" data-chart="line">
+                <span class="material-symbols-outlined pill-icon">show_chart</span>
+                <span>Line Chart</span>
+              </button>
+              <button class="selector-pill" data-chart="bar">
+                <span class="material-symbols-outlined pill-icon">bar_chart</span>
+                <span>Bar Chart</span>
+              </button>
+              <button class="selector-pill" data-chart="scatter">
+                <span class="material-symbols-outlined pill-icon">scatter_plot</span>
+                <span>Scatter Plot</span>
+              </button>
+              <button class="selector-pill" data-chart="area">
+                <span class="material-symbols-outlined pill-icon">insights</span>
+                <span>Area Chart</span>
+              </button>
+              <button class="selector-pill" data-chart="pie">
+                <span class="material-symbols-outlined pill-icon">pie_chart</span>
+                <span>Pie Chart</span>
+              </button>
+              <button class="selector-pill" data-chart="histogram">
+                <span class="material-symbols-outlined pill-icon">equalizer</span>
+                <span>Histogram</span>
+              </button>
+            </div>
+
+            <!-- Mini Chart Container -->
+            <div class="showcase-chart-container">
+              <div id="dashboard-showcase-chart" style="width: 100%; height: 100%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FAQ SECTION ───────────────────────── -->
+    <section class="faq-section container" id="faq">
+      <div class="platform-intro">
+        <h2>Frequently Asked Questions</h2>
+        <p>Got questions about plotox? We've got answers.</p>
+      </div>
+
+      <div class="faq-grid">
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Is my data safe with plotox?</span>
+            <span class="material-symbols-outlined faq-icon">expand_more</span>
+          </div>
+          <div class="faq-answer">
+            Yes, 100%. plotox runs entirely client-side. Your uploaded CSV/TSV data is parsed, calculated, and
+            visualized directly in your browser. No files are ever sent to a server.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>What chart types are supported?</span>
+            <span class="material-symbols-outlined faq-icon">expand_more</span>
+          </div>
+          <div class="faq-answer">
+            We support Line charts, Grouped and Stacked Bar charts, Area charts, Pie and Donut charts, Scatter plots,
+            and Histograms out of the box.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Can I edit my data in the app?</span>
+            <span class="material-symbols-outlined faq-icon">expand_more</span>
+          </div>
+          <div class="faq-answer">
+            Yes! In the Data Inspector table, you can double-click any column header to rename it. The renamed keys will
+            instantly apply across all labels, axes selectors, and active legends.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>How does the automatic data cleaning work?</span>
+            <span class="material-symbols-outlined faq-icon">expand_more</span>
+          </div>
+          <div class="faq-answer">
+            When you upload your dataset, our smart pipeline automatically strips symbols (like $, %, or commas),
+            standardizes date columns to a unified timeline, ignores null or empty entries, and lets you rename columns
+            dynamically.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Can I export charts in high-resolution vector formats?</span>
+            <span class="material-symbols-outlined faq-icon">expand_more</span>
+          </div>
+          <div class="faq-answer">
+            Yes! You can export your charts as high-fidelity PNG images, scalable SVG vector graphics (perfect for
+            publications), standalone interactive HTML files, or clean JSON option structures.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Is there a file size limit for CSV uploads?</span>
+            <span class="material-symbols-outlined faq-icon">expand_more</span>
+          </div>
+          <div class="faq-answer">
+            Since plotox parses and renders data using high-speed client-side Javascript, it can comfortably handle
+            files with tens of thousands of rows. The only limit is your local computer's memory.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Can I customize chart colors and themes?</span>
+            <span class="material-symbols-outlined faq-icon">expand_more</span>
+          </div>
+          <div class="faq-answer">
+            Absolutely! plotox features a sleek, global dark mode toggle that instantly translates your color choices,
+            chart backgrounds, axes lines, labels, legends, and tooltip panels between light and dark modes.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SIGN OFF / CTA ────────────────────── -->
+    <section class="signoff-section container">
+      <h2>Experience Data Visualization</h2>
+      <div class="signoff-actions">
+        <a class="btn-primary" href="app.html">Launch Dashboard</a>
+      </div>
+    </section>
+
+    <!-- ──GIANT TEXT REVEAL ──── -->
+    <section class="giant-text-section" id="giant-text-reveal">
+      <div class="giant-text-container">
+        <div class="giant-text-word" aria-label="plotox">
+          <span class="gt-letter" data-rise="0">p</span><span class="gt-letter" data-rise="0">l</span><span
+            class="gt-letter" data-rise="0">o</span><span class="gt-letter" data-rise="0">t</span><span
+            class="gt-letter gt-rising" data-rise="0.55">o</span><span class="gt-letter gt-rising"
+            data-rise="1">x</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="container footer-inner">
+
+      <!-- Graph Tools -->
+      <div class="footer-col">
+        <h5 class="footer-col-heading">Graph Tools</h5>
+        <ul class="footer-col-links">
+          <li><a href="app.html?type=line">Line Chart</a></li>
+          <li><a href="app.html?type=bar">Bar Chart</a></li>
+          <li><a href="app.html?type=scatter">Scatter Plot</a></li>
+          <li><a href="app.html?type=area">Area Chart</a></li>
+          <li><a href="app.html?type=pie">Pie Chart</a></li>
+          <li><a href="app.html?type=histogram">Histogram</a></li>
+        </ul>
+      </div>
+
+      <!-- Data Tools -->
+      <div class="footer-col">
+        <h5 class="footer-col-heading">Data Tools</h5>
+        <ul class="footer-col-links">
+          <li><a>Coming Soon</a></li>
+        </ul>
+      </div>
+
+      <!-- Legal -->
+      <div class="footer-col">
+        <h5 class="footer-col-heading">Legal</h5>
+        <ul class="footer-col-links">
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="container footer-bottom">
+      <span>© 2026 plotox. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <!-- Script -->
+  <script src="assets/js/common.js"></script>
+  <script src="script.js"></script>
+
+</body>
+
+</html>

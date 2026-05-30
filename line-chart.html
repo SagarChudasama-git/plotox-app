@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Free Online Line Chart Generator | plotox</title>
+  <meta name="description" content="Create stunning interactive line charts instantly in your browser. Plot trends, analyze timelines, and customize style. 100% client-side and secure.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+
+  <!-- ECharts CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="assets/css/design-system.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/seo-pages.css">
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       TOP NAVIGATION
+  ════════════════════════════════════════════ -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a class="nav-logo" href="index.html">plot<span class="logo-rising-o">o</span><span class="logo-rising-x">x</span></a>
+        <div class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="app.html">Dashboard</a>
+          <a href="line-chart.html" class="active">Line Chart</a>
+          <a href="bar-chart.html">Bar Chart</a>
+        </div>
+      </div>
+      <div>
+        <a class="nav-cta" href="app.html?type=line">Launch App</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════
+       SEO MAIN LAYOUT
+  ════════════════════════════════════════════ -->
+  <main class="seo-main container">
+
+    <!-- ── HERO SECTION WITH INTERACTIVE DEMO ── -->
+    <section class="seo-hero">
+      <div class="seo-hero-content">
+        <span class="section-badge">Line Chart Tool</span>
+        <h1 class="seo-hero-title">Create interactive line charts instantly</h1>
+        <p class="seo-hero-desc">Visualize continuous data trends over time. Upload your CSV and customize labels, gridlines, and smoothing curves to map data in seconds.</p>
+        <div>
+          <a class="btn-primary" href="app.html?type=line">Create Line Chart Now</a>
+        </div>
+      </div>
+
+      <!-- Live Demo Widget -->
+      <div class="seo-demo-box">
+        <div class="seo-chart-container" id="seo-chart" data-chart-type="line" data-sample="mobile_app_downloads" data-title="Monthly Mobile App Downloads">
+          <!-- ECharts chart renders here -->
+        </div>
+        <div class="seo-demo-controls">
+          <label class="demo-checkbox-group">
+            <input type="checkbox" id="demo-grid" checked>
+            Show Grid
+          </label>
+          <label class="demo-checkbox-group">
+            <input type="checkbox" id="demo-legend" checked>
+            Show Legend
+          </label>
+          <label class="demo-checkbox-group">
+            <input type="checkbox" id="demo-smooth">
+            Smooth Curve
+          </label>
+          <button class="demo-btn-action" id="demo-png">
+            <span class="material-symbols-outlined">download</span> PNG
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ARTICLE & SIDEBAR DEEP DIVE ───────── -->
+    <section class="seo-content-grid">
+      
+      <!-- Article Content -->
+      <article class="seo-article">
+        <h2>What is a Line Chart?</h2>
+        <p>A <strong>line chart</strong> is a type of chart which displays information as a series of data points connected by straight line segments. It is the most fundamental and commonly used chart type across business intelligence and data analytics, serving as the default choice for mapping continuous variables.</p>
+        
+        <h2>When should you use a Line Chart?</h2>
+        <p>Line charts are highly effective for showing changes over time (time-series analysis). You should choose a line chart when:</p>
+        <ul>
+          <li>You want to display <strong>trends, growth patterns, or cycles</strong> over minutes, days, months, or years.</li>
+          <li>Your data contains <strong>ordered intervals</strong> (chronological order is the most common).</li>
+          <li>You are comparing <strong>multiple categories or series</strong> to see if their trajectories correlate.</li>
+        </ul>
+
+        <h2>Best Practices for Designing Line Charts</h2>
+        <ul>
+          <li><strong>Keep the X-Axis chronological</strong>: Place time units on the X-axis, progressing from left to right.</li>
+          <li><strong>Limit the number of series</strong>: Avoid plotting more than 4 or 5 lines on a single chart to prevent a "spaghetti chart" effect that makes it unreadable.</li>
+          <li><strong>Use appropriate scales</strong>: While bar charts must start at zero, line charts can start at a non-zero minimum value to highlight subtle fluctuations, provided it is clearly labeled.</li>
+        </ul>
+
+        <h2>Step-by-Step Guide to Generate Line Charts on plotox</h2>
+        <p>Creating a chart is simple and doesn't require registration:</p>
+        <ul>
+          <li>1. Drag and drop your CSV or TSV data file into the <strong>plotox Dashboard</strong>.</li>
+          <li>2. Under <strong>Select Chart Type</strong>, click on the **Line Chart** icon.</li>
+          <li>3. Pick your timeline column for the <strong>X-Axis</strong>, and check the box next to your numeric fields for the <strong>Y-Axis</strong>.</li>
+          <li>4. Customize your titles and download your chart as a vector SVG or web-ready PNG.</li>
+        </ul>
+      </article>
+
+      <!-- Sidebar -->
+      <aside class="seo-sidebar">
+        <div class="seo-sidebar-widget">
+          <h4 class="widget-title">Other Generators</h4>
+          <div class="gallery-grid">
+            <a href="line-chart.html" class="gallery-link active">
+              <span class="material-symbols-outlined">show_chart</span> Line Chart
+            </a>
+            <a href="bar-chart.html" class="gallery-link">
+              <span class="material-symbols-outlined">bar_chart</span> Bar Chart
+            </a>
+            <a href="pie-chart.html" class="gallery-link">
+              <span class="material-symbols-outlined">pie_chart</span> Pie Chart
+            </a>
+            <a href="scatter-plot.html" class="gallery-link">
+              <span class="material-symbols-outlined">scatter_plot</span> Scatter Plot
+            </a>
+            <a href="area-chart.html" class="gallery-link">
+              <span class="material-symbols-outlined">area_chart</span> Area Chart
+            </a>
+            <a href="histogram.html" class="gallery-link">
+              <span class="material-symbols-outlined">analytics</span> Histogram
+            </a>
+          </div>
+        </div>
+      </aside>
+
+    </section>
+
+    <!-- ── CTA SECTION ───────────────────────── -->
+    <section class="seo-cta-section">
+      <h3>Ready to visualize your own data?</h3>
+      <p>Upload your local files and generate stunning interactive line charts in less than a second. 100% private, no accounts required.</p>
+      <a class="btn-primary" href="app.html?type=line">Launch Visualizer Dashboard</a>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">plot<span class="logo-rising-o">o</span><span class="logo-rising-x">x</span></span>
+        <span class="footer-copy">© 2026 plotox. Engineered for precision.</span>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="app.html">Dashboard</a>
+        <a href="bar-chart.html">Bar Chart Page</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/theme.js"></script>
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/data-parser.js"></script>
+  <script src="assets/js/chart-engine.js"></script>
+  <script src="assets/js/export-manager.js"></script>
+  <script src="assets/js/seo-helper.js"></script>
+
+</body>
+</html>
