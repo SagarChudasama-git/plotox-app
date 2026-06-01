@@ -2367,6 +2367,30 @@ Kevin Hart,31,Los Angeles,76000,Marketing,2021-09-22`;
 
   // Expose for chart integration
   window.plotoxCleanerState = cleanerState;
+
+  // Reset function to clear datasets, stacks, textareas, and release DOM resources
+  window.plotoxResetCleaner = function () {
+    cleanerState.datasets = [];
+    cleanerState.activeDatasetId = null;
+    cleanerState.currentPage = 1;
+    cleanerState.searchQuery = '';
+    cleanerState.sortCol = null;
+    cleanerState.sortDir = 'none';
+    cleanerState.undoStack = [];
+    cleanerState.redoStack = [];
+
+    if (searchInput) searchInput.value = '';
+    if (fileInput) fileInput.value = '';
+
+    const pasteTextarea = document.getElementById('cleaner-paste-textarea');
+    if (pasteTextarea) pasteTextarea.value = '';
+
+    const pasteNameInput = document.getElementById('cleaner-paste-name');
+    if (pasteNameInput) pasteNameInput.value = 'pasted_data.csv';
+
+    renderAll();
+    saveToStorage();
+  };
 }
 
 // Auto-init

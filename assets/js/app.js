@@ -277,159 +277,159 @@ function initApp() {
             activeCSVText = savedSession.rawText;
             state.chartConfig = Object.assign({}, state.chartConfig, savedSession.config);
 
-          if (typeOverride) {
-            state.chartConfig.chartType = typeOverride;
-          }
-
-          // Restore UI values
-          chartTitleInput.value = state.chartConfig.title || '';
-          if (configChartTitle) configChartTitle.value = state.chartConfig.title || '';
-          syncCanvasTitle();
-
-          // Restore Style Popover inputs
-          if (styleTitleText) styleTitleText.value = state.chartConfig.title || '';
-          if (styleTitleWeight) styleTitleWeight.value = state.chartConfig.titleWeight || '600';
-          if (styleTitleStyle) styleTitleStyle.value = state.chartConfig.titleStyle || 'normal';
-          if (styleTitleSize) styleTitleSize.value = state.chartConfig.titleSize || '16px';
-          if (styleTitleColorCustom) {
-            const tc = state.chartConfig.titleColor || 'var(--color-primary)';
-            if (tc.startsWith('#')) {
-              styleTitleColorCustom.value = tc;
+            if (typeOverride) {
+              state.chartConfig.chartType = typeOverride;
             }
-          }
-          if (styleColorPresets) {
-            styleColorPresets.forEach(p => {
-              const active = p.getAttribute('data-color') === (state.chartConfig.titleColor || 'var(--color-primary)');
-              p.classList.toggle('active', active);
+
+            // Restore UI values
+            chartTitleInput.value = state.chartConfig.title || '';
+            if (configChartTitle) configChartTitle.value = state.chartConfig.title || '';
+            syncCanvasTitle();
+
+            // Restore Style Popover inputs
+            if (styleTitleText) styleTitleText.value = state.chartConfig.title || '';
+            if (styleTitleWeight) styleTitleWeight.value = state.chartConfig.titleWeight || '600';
+            if (styleTitleStyle) styleTitleStyle.value = state.chartConfig.titleStyle || 'normal';
+            if (styleTitleSize) styleTitleSize.value = state.chartConfig.titleSize || '16px';
+            if (styleTitleColorCustom) {
+              const tc = state.chartConfig.titleColor || 'var(--color-primary)';
+              if (tc.startsWith('#')) {
+                styleTitleColorCustom.value = tc;
+              }
+            }
+            if (styleColorPresets) {
+              styleColorPresets.forEach(p => {
+                const active = p.getAttribute('data-color') === (state.chartConfig.titleColor || 'var(--color-primary)');
+                p.classList.toggle('active', active);
+              });
+            }
+            applyHeaderStyles();
+
+            if (configXLabel) configXLabel.value = state.chartConfig.xAxisLabel || '';
+            if (configYLabel) configYLabel.value = state.chartConfig.yAxisLabel || '';
+            if (configColorPalette) configColorPalette.value = state.chartConfig.colorPalette || 'classic';
+            if (configXRotation) configXRotation.value = String(state.chartConfig.xAxisLabelRotate || 0);
+            if (configLegendPosition) configLegendPosition.value = state.chartConfig.legendPosition || 'bottom';
+            if (showXGridCheck) showXGridCheck.checked = state.chartConfig.showXGrid !== false;
+            if (showYGridCheck) showYGridCheck.checked = state.chartConfig.showYGrid !== false;
+            if (showTooltipCheck) showTooltipCheck.checked = state.chartConfig.showTooltip !== false;
+            showGridCheck.checked = state.chartConfig.showGrid !== false;
+            showLegendCheck.checked = state.chartConfig.showLegend !== false;
+            lineSmoothCheck.checked = !!state.chartConfig.lineSmooth;
+            barModeSelect.value = state.chartConfig.barmode || 'group';
+            pieStyleSelect.value = state.chartConfig.pieStyle || 'pie';
+            histogramBinsSelect.value = state.chartConfig.histogramBins || 'auto';
+            scatterSizeSelect.value = state.chartConfig.scatterSize || '12';
+
+            if (checkPublication) checkPublication.checked = !!state.chartConfig.publicationMode;
+            if (checkLogy) checkLogy.checked = !!state.chartConfig.logY;
+            if (checkPoints) checkPoints.checked = state.chartConfig.showPoints !== false;
+            if (checkMinmax) checkMinmax.checked = !!state.chartConfig.showMinMax;
+            // Sync config pill button states
+            if (pillXGrid) pillXGrid.classList.toggle('active', state.chartConfig.showXGrid !== false);
+            if (pillYGrid) pillYGrid.classList.toggle('active', state.chartConfig.showYGrid !== false);
+            if (pillTooltip) pillTooltip.classList.toggle('active', state.chartConfig.showTooltip !== false);
+            if (pillSmooth) pillSmooth.classList.toggle('active', !!state.chartConfig.lineSmooth);
+
+            // Sync toolbar toggle pill states
+            const togglePublication = document.getElementById('toggle-publication');
+            const toggleLogy = document.getElementById('toggle-logy');
+            const togglePoints = document.getElementById('toggle-points');
+            const toggleMinmax = document.getElementById('toggle-minmax');
+            if (togglePublication) togglePublication.classList.toggle('active', !!state.chartConfig.publicationMode);
+            if (toggleLogy) toggleLogy.classList.toggle('active', !!state.chartConfig.logY);
+            if (togglePoints) togglePoints.classList.toggle('active', state.chartConfig.showPoints !== false);
+            if (toggleMinmax) toggleMinmax.classList.toggle('active', !!state.chartConfig.showMinMax);
+
+            const toggleGridlines = document.getElementById('toggle-gridlines-toolbar');
+            const checkGridlines = document.getElementById('check-gridlines-toolbar');
+            const toggleSmooth = document.getElementById('toggle-smooth-toolbar');
+            const checkSmooth = document.getElementById('check-smooth-toolbar');
+
+            const isGridOn = state.chartConfig.showXGrid !== false || state.chartConfig.showYGrid !== false;
+            if (toggleGridlines) toggleGridlines.classList.toggle('active', isGridOn);
+            if (checkGridlines) checkGridlines.checked = isGridOn;
+
+            const isSmoothOn = !!state.chartConfig.lineSmooth;
+            if (toggleSmooth) toggleSmooth.classList.toggle('active', isSmoothOn);
+            if (checkSmooth) checkSmooth.checked = isSmoothOn;
+
+            // Sync quick switcher labels
+            const typeLabels = {
+              line: 'Line Chart',
+              bar: 'Bar Chart',
+              area: 'Area Chart',
+              scatter: 'Scatter Plot',
+              pie: 'Pie Chart',
+              histogram: 'Histogram'
+            };
+            const toolbarChartTypeLabel = document.getElementById('toolbar-chart-type-label');
+            if (toolbarChartTypeLabel) {
+              toolbarChartTypeLabel.textContent = typeLabels[state.chartConfig.chartType] || 'Line Chart';
+            }
+
+            const toolbarPaletteLabel = document.getElementById('toolbar-palette-label');
+            if (toolbarPaletteLabel) {
+              const paletteText = (state.chartConfig.colorPalette || 'classic');
+              toolbarPaletteLabel.textContent = paletteText.charAt(0).toUpperCase() + paletteText.slice(1);
+            }
+
+            // Highlight active chart type in grid
+            chartTypeButtons.forEach(btn => {
+              if (btn.getAttribute('data-type') === state.chartConfig.chartType) {
+                btn.classList.add('active');
+              } else {
+                btn.classList.remove('active');
+              }
             });
-          }
-          applyHeaderStyles();
+            updateUIForChartType(state.chartConfig.chartType);
 
-          if (configXLabel) configXLabel.value = state.chartConfig.xAxisLabel || '';
-          if (configYLabel) configYLabel.value = state.chartConfig.yAxisLabel || '';
-          if (configColorPalette) configColorPalette.value = state.chartConfig.colorPalette || 'classic';
-          if (configXRotation) configXRotation.value = String(state.chartConfig.xAxisLabelRotate || 0);
-          if (configLegendPosition) configLegendPosition.value = state.chartConfig.legendPosition || 'bottom';
-          if (showXGridCheck) showXGridCheck.checked = state.chartConfig.showXGrid !== false;
-          if (showYGridCheck) showYGridCheck.checked = state.chartConfig.showYGrid !== false;
-          if (showTooltipCheck) showTooltipCheck.checked = state.chartConfig.showTooltip !== false;
-          showGridCheck.checked = state.chartConfig.showGrid !== false;
-          showLegendCheck.checked = state.chartConfig.showLegend !== false;
-          lineSmoothCheck.checked = !!state.chartConfig.lineSmooth;
-          barModeSelect.value = state.chartConfig.barmode || 'group';
-          pieStyleSelect.value = state.chartConfig.pieStyle || 'pie';
-          histogramBinsSelect.value = state.chartConfig.histogramBins || 'auto';
-          scatterSizeSelect.value = state.chartConfig.scatterSize || '12';
-
-          if (checkPublication) checkPublication.checked = !!state.chartConfig.publicationMode;
-          if (checkLogy) checkLogy.checked = !!state.chartConfig.logY;
-          if (checkPoints) checkPoints.checked = state.chartConfig.showPoints !== false;
-          if (checkMinmax) checkMinmax.checked = !!state.chartConfig.showMinMax;
-          // Sync config pill button states
-          if (pillXGrid) pillXGrid.classList.toggle('active', state.chartConfig.showXGrid !== false);
-          if (pillYGrid) pillYGrid.classList.toggle('active', state.chartConfig.showYGrid !== false);
-          if (pillTooltip) pillTooltip.classList.toggle('active', state.chartConfig.showTooltip !== false);
-          if (pillSmooth) pillSmooth.classList.toggle('active', !!state.chartConfig.lineSmooth);
-
-          // Sync toolbar toggle pill states
-          const togglePublication = document.getElementById('toggle-publication');
-          const toggleLogy = document.getElementById('toggle-logy');
-          const togglePoints = document.getElementById('toggle-points');
-          const toggleMinmax = document.getElementById('toggle-minmax');
-          if (togglePublication) togglePublication.classList.toggle('active', !!state.chartConfig.publicationMode);
-          if (toggleLogy) toggleLogy.classList.toggle('active', !!state.chartConfig.logY);
-          if (togglePoints) togglePoints.classList.toggle('active', state.chartConfig.showPoints !== false);
-          if (toggleMinmax) toggleMinmax.classList.toggle('active', !!state.chartConfig.showMinMax);
-
-          const toggleGridlines = document.getElementById('toggle-gridlines-toolbar');
-          const checkGridlines = document.getElementById('check-gridlines-toolbar');
-          const toggleSmooth = document.getElementById('toggle-smooth-toolbar');
-          const checkSmooth = document.getElementById('check-smooth-toolbar');
-
-          const isGridOn = state.chartConfig.showXGrid !== false || state.chartConfig.showYGrid !== false;
-          if (toggleGridlines) toggleGridlines.classList.toggle('active', isGridOn);
-          if (checkGridlines) checkGridlines.checked = isGridOn;
-
-          const isSmoothOn = !!state.chartConfig.lineSmooth;
-          if (toggleSmooth) toggleSmooth.classList.toggle('active', isSmoothOn);
-          if (checkSmooth) checkSmooth.checked = isSmoothOn;
-
-          // Sync quick switcher labels
-          const typeLabels = {
-            line: 'Line Chart',
-            bar: 'Bar Chart',
-            area: 'Area Chart',
-            scatter: 'Scatter Plot',
-            pie: 'Pie Chart',
-            histogram: 'Histogram'
-          };
-          const toolbarChartTypeLabel = document.getElementById('toolbar-chart-type-label');
-          if (toolbarChartTypeLabel) {
-            toolbarChartTypeLabel.textContent = typeLabels[state.chartConfig.chartType] || 'Line Chart';
-          }
-
-          const toolbarPaletteLabel = document.getElementById('toolbar-palette-label');
-          if (toolbarPaletteLabel) {
-            const paletteText = (state.chartConfig.colorPalette || 'classic');
-            toolbarPaletteLabel.textContent = paletteText.charAt(0).toUpperCase() + paletteText.slice(1);
-          }
-
-          // Highlight active chart type in grid
-          chartTypeButtons.forEach(btn => {
-            if (btn.getAttribute('data-type') === state.chartConfig.chartType) {
-              btn.classList.add('active');
-            } else {
-              btn.classList.remove('active');
+            // Populate delimiter select if detected
+            if (state.chartConfig.delimiter) {
+              delimiterSelect.value = state.chartConfig.delimiter;
             }
-          });
-          updateUIForChartType(state.chartConfig.chartType);
 
-          // Populate delimiter select if detected
-          if (state.chartConfig.delimiter) {
-            delimiterSelect.value = state.chartConfig.delimiter;
-          }
+            // Parse and restore dataset
+            const parsed = DataParser.parse(activeCSVText, delimiterSelect.value);
+            state.dataset = parsed;
 
-          // Parse and restore dataset
-          const parsed = DataParser.parse(activeCSVText, delimiterSelect.value);
-          state.dataset = parsed;
+            // Restore CSV text in paste area
+            pasteText.value = activeCSVText;
 
-          // Restore CSV text in paste area
-          pasteText.value = activeCSVText;
+            // Populate axes selects
+            populateSelectors();
+            xAxisSelect.value = state.chartConfig.xAxis;
+            updateActiveXPill();
+            populateYChecklist(true);
 
-          // Populate axes selects
-          populateSelectors();
-          xAxisSelect.value = state.chartConfig.xAxis;
-          updateActiveXPill();
-          populateYChecklist(true);
+            // Show edit-data bar and unlock generate button
+            editDataBar.style.display = 'flex';
+            dataMetaBadge.textContent = `${parsed.headers.length} columns · ${parsed.rows.length} rows`;
+            enableWorkflow();
 
-          // Show edit-data bar and unlock generate button
-          editDataBar.style.display = 'flex';
-          dataMetaBadge.textContent = `${parsed.headers.length} columns · ${parsed.rows.length} rows`;
-          enableWorkflow();
+            // Auto-reveal and plot on restored session
+            revealSections(false); // Immediate without scrolling animation on load
 
-          // Auto-reveal and plot on restored session
-          revealSections(false); // Immediate without scrolling animation on load
+            // Highlight active sample
+            sampleButtons.forEach(btn => {
+              if (activeFilename.includes(btn.getAttribute('data-sample'))) {
+                btn.classList.add('active');
+              } else {
+                btn.classList.remove('active');
+              }
+            });
 
-          // Highlight active sample
-          sampleButtons.forEach(btn => {
-            if (activeFilename.includes(btn.getAttribute('data-sample'))) {
-              btn.classList.add('active');
-            } else {
-              btn.classList.remove('active');
+            if (urlType === 'cleaner') {
+              switchView('cleaner');
             }
-          });
-
-          if (urlType === 'cleaner') {
-            switchView('cleaner');
+            return;
           }
-          return;
+        } catch (e) {
+          console.error("Error loading saved session:", e);
+          if (sm) sm.clearActiveSession();
         }
-      } catch (e) {
-        console.error("Error loading saved session:", e);
-        if (sm) sm.clearActiveSession();
       }
     }
-  }
 
     if (typeOverride) {
       state.chartConfig.chartType = typeOverride;
@@ -839,6 +839,7 @@ function initApp() {
       });
     }
 
+
     // Sidebar Data Cleaner trigger
     const dataCleanerBtn = document.getElementById('nav-data-cleaner-btn');
     if (dataCleanerBtn) {
@@ -916,6 +917,7 @@ function initApp() {
         switchView('workspace');
       });
     });
+
 
     // Axis mapping elements listeners (Auto redraw on change)
     xAxisSelect.addEventListener('change', (e) => {
@@ -2942,6 +2944,13 @@ Dec,70000,40000,7000,5000`
     if (viewName === 'workspace') viewName = 'charts';
     // Handle 'history' as alias for 'projects' (backward compat)
     if (viewName === 'history') viewName = 'projects';
+
+    // Reset Data Cleaner if leaving the cleaner view to free up DOM and memory resources
+    if (viewName !== 'cleaner') {
+      if (typeof window.plotoxResetCleaner === 'function') {
+        window.plotoxResetCleaner();
+      }
+    }
 
     switch (viewName) {
       case 'charts':
