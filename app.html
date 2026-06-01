@@ -27,11 +27,15 @@
   <!-- jsPDF CDN for client-side PDF export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
+  <!-- SheetJS CDN for Excel file support -->
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+
   <!-- Stylesheets -->
   <link rel="stylesheet" href="assets/css/loader.css">
   <link rel="stylesheet" href="assets/css/design-system.css">
   <link rel="stylesheet" href="assets/css/components.css">
   <link rel="stylesheet" href="assets/css/app.css">
+  <link rel="stylesheet" href="assets/css/data-cleaner.css">
   <style>
     .sidebar-history-dropdown {
       display: none;
@@ -113,10 +117,12 @@
   <!-- TOP NAVIGATION BAR -->
   <header class="app-topbar">
     <div class="topbar-left-wrapper" style="display: flex; align-items: center; gap: 12px;">
-      <button id="btn-sidebar-toggle" class="sidebar-toggle-btn" aria-label="Toggle Navigation" title="Toggle navigation menu">
+      <button id="btn-sidebar-toggle" class="sidebar-toggle-btn" aria-label="Toggle Navigation"
+        title="Toggle navigation menu">
         <span class="material-symbols-outlined">menu</span>
       </button>
-      <a href="index.html" class="topbar-logo">plot<span class="logo-rising-o">o</span><span class="logo-rising-x">x</span></a>
+      <a href="index.html" class="topbar-logo">plot<span class="logo-rising-o">o</span><span
+          class="logo-rising-x">x</span></a>
     </div>
 
     <div class="topbar-right">
@@ -145,49 +151,59 @@
         </button>
 
         <div class="sidebar-menu">
-          <!-- Views/Navigation Group -->
+          <!-- Main Navigation Group -->
           <div class="sidebar-section-title"
             style="font-size: 10px; font-weight: 600; color: var(--color-outline); text-transform: uppercase; letter-spacing: 0.05em; margin: 8px 10px 4px 10px;">
             Navigation</div>
 
-          <button class="sidebar-menu-item active" id="nav-workspace-btn">
-            <span class="material-symbols-outlined">space_dashboard</span>
-            <span>Workspace</span>
-          </button>
-
-          <button class="sidebar-menu-item" id="nav-history-btn">
-            <span class="material-symbols-outlined">history</span>
-            <span>History Archive</span>
-          </button>
-
-          <!-- Chart Types Group -->
-          <div class="sidebar-section-title"
-            style="font-size: 10px; font-weight: 600; color: var(--color-outline); text-transform: uppercase; letter-spacing: 0.05em; margin: 16px 10px 4px 10px;">
-            Chart Types</div>
-
-          <button class="sidebar-menu-item type-grid-btn active" data-type="line">
-            <span class="material-symbols-outlined">show_chart</span>
-            <span>Line Chart</span>
-          </button>
-          <button class="sidebar-menu-item type-grid-btn" data-type="bar">
+          <button class="sidebar-menu-item active" id="nav-charts-btn">
             <span class="material-symbols-outlined">bar_chart</span>
-            <span>Bar Chart</span>
+            <span>Charts</span>
+            <span class="material-symbols-outlined sidebar-chevron" id="nav-charts-chevron"
+              style="transform: rotate(180deg); transition: transform var(--transition-fast);">expand_more</span>
           </button>
-          <button class="sidebar-menu-item type-grid-btn" data-type="scatter">
-            <span class="material-symbols-outlined">scatter_plot</span>
-            <span>Scatter Plot</span>
+
+          <!-- Charts Dropdown Content (open by default) -->
+          <div class="sidebar-dropdown-content open" id="nav-charts-dropdown">
+            <button class="sidebar-menu-item type-grid-btn active" data-type="line">
+              <span class="material-symbols-outlined">show_chart</span>
+              <span>Line Chart</span>
+            </button>
+            <button class="sidebar-menu-item type-grid-btn" data-type="bar">
+              <span class="material-symbols-outlined">bar_chart</span>
+              <span>Bar Chart</span>
+            </button>
+            <button class="sidebar-menu-item type-grid-btn" data-type="scatter">
+              <span class="material-symbols-outlined">scatter_plot</span>
+              <span>Scatter Plot</span>
+            </button>
+            <button class="sidebar-menu-item type-grid-btn" data-type="area">
+              <span class="material-symbols-outlined">area_chart</span>
+              <span>Area Chart</span>
+            </button>
+            <button class="sidebar-menu-item type-grid-btn" data-type="pie">
+              <span class="material-symbols-outlined">pie_chart</span>
+              <span>Pie Chart</span>
+            </button>
+            <button class="sidebar-menu-item type-grid-btn" data-type="histogram">
+              <span class="material-symbols-outlined">equalizer</span>
+              <span>Histogram</span>
+            </button>
+          </div>
+
+          <button class="sidebar-menu-item" id="nav-data-cleaner-btn">
+            <span class="material-symbols-outlined">cleaning_services</span>
+            <span>Data Cleaner</span>
           </button>
-          <button class="sidebar-menu-item type-grid-btn" data-type="area">
-            <span class="material-symbols-outlined">area_chart</span>
-            <span>Area Chart</span>
+
+          <button class="sidebar-menu-item" id="nav-projects-btn">
+            <span class="material-symbols-outlined">folder</span>
+            <span>Projects</span>
           </button>
-          <button class="sidebar-menu-item type-grid-btn" data-type="pie">
-            <span class="material-symbols-outlined">pie_chart</span>
-            <span>Pie Chart</span>
-          </button>
-          <button class="sidebar-menu-item type-grid-btn" data-type="histogram">
-            <span class="material-symbols-outlined">equalizer</span>
-            <span>Histogram</span>
+
+          <button class="sidebar-menu-item" id="nav-settings-btn">
+            <span class="material-symbols-outlined">settings</span>
+            <span>Settings</span>
           </button>
         </div>
       </div>
@@ -264,8 +280,14 @@
 
               <!-- Tabs row -->
               <div class="data-tabs-row">
-                <button class="data-tab active" id="btn-preview-tab">Preview</button>
-                <button class="data-tab" id="btn-columns-tab">Grid View</button>
+                <button class="data-tab active" id="btn-preview-tab">
+                  <span class="material-symbols-outlined">preview</span>
+                  <span>Preview</span>
+                </button>
+                <button class="data-tab" id="btn-columns-tab">
+                  <span class="material-symbols-outlined">grid_on</span>
+                  <span>Grid View</span>
+                </button>
               </div>
 
               <!-- Paste / Drop Area -->
@@ -486,7 +508,8 @@
                   </div>
 
                   <!-- Chart Canvas Options Toolbar -->
-                  <div class="chart-canvas-toolbar" id="chart-canvas-toolbar" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center;">
+                  <div class="chart-canvas-toolbar" id="chart-canvas-toolbar"
+                    style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center;">
                     <!-- Hidden checkboxes for backward compatibility -->
                     <input type="checkbox" id="check-publication" style="display: none;">
                     <input type="checkbox" id="check-logy" style="display: none;">
@@ -496,7 +519,9 @@
                     <input type="checkbox" id="check-smooth-toolbar" style="display: none;">
 
                     <!-- Dynamic Controls Mountpoint -->
-                    <div id="dynamic-toolbar-controls" style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center;"></div>
+                    <div id="dynamic-toolbar-controls"
+                      style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center;">
+                    </div>
 
                     <!-- Permanent Style Popover Button -->
                     <button class="toolbar-toggle-pill" id="btn-chart-style" title="Customize chart title appearance">
@@ -624,8 +649,9 @@
           <div id="workspace-history-panel" style="display: none;">
             <div class="history-archive-header">
               <div class="history-archive-title-container">
-                <h1 class="history-archive-title">History</h1>
-                <p class="history-archive-desc">Your recent CSVs – click Import to load one back with a pre-filled dataset.</p>
+                <h1 class="history-archive-title">Projects</h1>
+                <p class="history-archive-desc">Your recent Projects – click Import to load one back with a pre-filled
+                  dataset.</p>
               </div>
               <button class="history-clear-all-btn" id="clear-history-btn">
                 <span class="material-symbols-outlined" style="font-size: 16px;">delete</span>
@@ -636,6 +662,464 @@
               <!-- History entries will be rendered dynamically as a beautiful structured list table -->
             </div>
           </div>
+
+          <!-- DATA CLEANER WORKSPACE PANEL -->
+          <div id="workspace-cleaner-panel" style="display: none;">
+            <!-- Cleaner Page Header -->
+            <div class="cleaner-page-header">
+              <h1 class="cleaner-page-title">Data Cleaner & Extractor</h1>
+              <p class="cleaner-page-desc">Prepare, clean and transform your datasets before visualization.</p>
+            </div>
+
+            <!-- Cleaner Action Bar -->
+            <div class="cleaner-action-bar">
+              <label class="cleaner-action-btn primary" for="cleaner-file-input" id="cleaner-upload-btn">
+                <span class="material-symbols-outlined">upload</span>
+                Upload Dataset
+              </label>
+              <input type="file" id="cleaner-file-input" accept=".csv,.tsv,.txt,.xlsx,.xls" style="display:none;">
+              <button class="cleaner-action-btn" id="cleaner-paste-btn">
+                <span class="material-symbols-outlined">content_paste</span>
+                Paste Data
+              </button>
+              <button class="cleaner-action-btn" id="cleaner-sample-btn">
+                <span class="material-symbols-outlined">data_object</span>
+                Load Sample
+              </button>
+            </div>
+
+            <!-- Main Layout: Workspace + Properties -->
+            <div class="cleaner-main-layout">
+              <div class="cleaner-main-left">
+
+                <!-- Dataset Tabs Bar -->
+                <div class="dataset-tabs-bar" id="dataset-tabs-bar">
+                  <!-- Tabs rendered dynamically -->
+                  <button class="dataset-tab-add" id="dataset-tab-add" title="Open new dataset">+</button>
+                </div>
+
+                <!-- Cleaner Workspace Card -->
+                <div class="cleaner-workspace-card" id="cleaner-workspace-card">
+                  <!-- Toolbar -->
+                  <div class="cleaner-toolbar">
+                    <button class="cleaner-toolbar-btn" id="cleaner-tb-undo" title="Undo">
+                      <span class="material-symbols-outlined">undo</span>
+                      <span>Undo</span>
+                    </button>
+                    <button class="cleaner-toolbar-btn" id="cleaner-tb-redo" title="Redo">
+                      <span class="material-symbols-outlined">redo</span>
+                      <span>Redo</span>
+                    </button>
+                    <div class="cleaner-toolbar-divider"></div>
+                    <button class="cleaner-toolbar-btn" id="cleaner-tb-export" title="Export">
+                      <span class="material-symbols-outlined">download</span>
+                      <span>Export</span>
+                    </button>
+                    <div class="cleaner-toolbar-divider"></div>
+                    <button class="cleaner-toolbar-btn" id="cleaner-tb-refresh" title="Refresh">
+                      <span class="material-symbols-outlined">refresh</span>
+                      <span>Refresh</span>
+                    </button>
+                    <div class="cleaner-toolbar-spacer"></div>
+                    <button class="cleaner-toolbar-btn" id="cleaner-tb-gen-chart"
+                      title="Generate Chart from cleaned data"
+                      style="background: var(--color-primary); color: var(--color-on-primary); border-color: var(--color-primary); font-weight: 600;">
+                      <span class="material-symbols-outlined">auto_awesome</span>
+                      <span>Generate Chart</span>
+                    </button>
+                  </div>
+
+                  <!-- Internal Workspace Tabs -->
+                  <div class="cleaner-internal-tabs">
+                    <button class="cleaner-internal-tab active" data-cleaner-tab="raw">
+                      <span class="material-symbols-outlined">table_rows</span>
+                      <span>Raw Data</span>
+                    </button>
+                    <button class="cleaner-internal-tab" data-cleaner-tab="clean">
+                      <span class="material-symbols-outlined">brush</span>
+                      <span>Clean Data</span>
+                    </button>
+                    <button class="cleaner-internal-tab" data-cleaner-tab="transform">
+                      <span class="material-symbols-outlined">transform</span>
+                      <span>Transform</span>
+                    </button>
+                    <button class="cleaner-internal-tab" data-cleaner-tab="validation">
+                      <span class="material-symbols-outlined">fact_check</span>
+                      <span>Validation</span>
+                    </button>
+                  </div>
+
+                  <!-- RAW DATA TAB -->
+                  <div class="cleaner-tab-content active" id="cleaner-tab-raw">
+                    <!-- Grid Controls -->
+                    <div class="cleaner-grid-controls">
+                      <input type="text" class="cleaner-search-input" id="cleaner-search"
+                        placeholder="Search across all cells...">
+                      <span class="cleaner-grid-meta" id="cleaner-grid-meta">No data loaded</span>
+                    </div>
+                    <!-- Spreadsheet -->
+                    <div class="cleaner-grid-wrapper" id="cleaner-grid-wrapper">
+                      <div class="cleaner-empty-state" id="cleaner-empty-state">
+                        <span class="material-symbols-outlined cleaner-empty-icon">table_chart</span>
+                        <div class="cleaner-empty-title">No Dataset Loaded</div>
+                        <div class="cleaner-empty-desc">Upload a CSV or Excel file, or paste raw data to start cleaning
+                          and transforming your dataset.</div>
+                      </div>
+                    </div>
+                    <!-- Pagination -->
+                    <div class="cleaner-pagination" id="cleaner-pagination" style="display:none;">
+                      <div class="cleaner-pagination-left" style="display: flex; align-items: center; gap: 8px;">
+                        <span>Rows per page:</span>
+                        <select class="cleaner-per-page-select" id="cleaner-per-page">
+                          <option value="25">25</option>
+                          <option value="50" selected>50</option>
+                          <option value="100">100</option>
+                          <option value="500">500</option>
+                          <option value="1000">1000</option>
+                          <option value="all">All</option>
+                          <option value="custom">Custom...</option>
+                        </select>
+                        <input type="number" id="cleaner-custom-per-page" class="cleaner-per-page-input"
+                          style="display: none; width: 75px; padding: 4px 10px; border: 1px solid var(--color-border); border-radius: 50px; font-size: 11px; outline: none; background: var(--color-surface); color: var(--color-primary); box-sizing: border-box;"
+                          min="1" placeholder="Rows">
+                      </div>
+                      <div class="cleaner-pagination-right" id="cleaner-page-btns">
+                        <!-- Page buttons rendered dynamically -->
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- CLEAN DATA TAB -->
+                  <div class="cleaner-tab-content" id="cleaner-tab-clean">
+                    <div class="cleaner-ops-layout">
+                      <!-- Operations Sidebar -->
+                      <div class="cleaner-ops-sidebar">
+                        <div class="cleaner-ops-section-title">Row Operations</div>
+                        <button class="cleaner-op-btn" data-op="remove-empty-rows">
+                          <span class="material-symbols-outlined">delete_sweep</span>
+                          <span class="op-label">Remove Empty Rows</span>
+                          <span class="op-count" id="op-count-empty-rows">0</span>
+                        </button>
+                        <button class="cleaner-op-btn" data-op="remove-duplicates">
+                          <span class="material-symbols-outlined">filter_alt</span>
+                          <span class="op-label">Remove Duplicates</span>
+                          <span class="op-count" id="op-count-duplicates">0</span>
+                        </button>
+
+                        <div class="cleaner-ops-section-title">Column Operations</div>
+                        <button class="cleaner-op-btn" data-op="remove-empty-cols">
+                          <span class="material-symbols-outlined">view_column</span>
+                          <span class="op-label">Remove Empty Columns</span>
+                          <span class="op-count" id="op-count-empty-cols">0</span>
+                        </button>
+                        <button class="cleaner-op-btn" data-op="smart-fill-empty"
+                          style="background: rgba(99, 102, 241, 0.05); border-color: rgba(99, 102, 241, 0.2);">
+                          <span class="material-symbols-outlined"
+                            style="color: var(--color-primary);">auto_fix_high</span>
+                          <span class="op-label" style="font-weight: 600;">Smart Fill Empty Cells</span>
+                        </button>
+
+                        <div class="cleaner-ops-section-title">Text Operations</div>
+                        <button class="cleaner-op-btn" data-op="trim-spaces">
+                          <span class="material-symbols-outlined">space_bar</span>
+                          <span class="op-label">Trim Whitespace</span>
+                        </button>
+                        <button class="cleaner-op-btn" data-op="normalize-text">
+                          <span class="material-symbols-outlined">text_format</span>
+                          <span class="op-label">Normalize Text</span>
+                        </button>
+                        <button class="cleaner-op-btn" data-op="fix-formatting">
+                          <span class="material-symbols-outlined">format_paint</span>
+                          <span class="op-label">Fix Formatting</span>
+                        </button>
+                        <div class="cleaner-ops-section-title">Advanced Operations</div>
+                        <button class="cleaner-op-btn" data-op="impute-missing">
+                          <span class="material-symbols-outlined">analytics</span>
+                          <span class="op-label">Fill Missing Values</span>
+                        </button>
+                        <button class="cleaner-op-btn" data-op="find-replace">
+                          <span class="material-symbols-outlined">find_replace</span>
+                          <span class="op-label">Find & Replace</span>
+                        </button>
+                        <button class="cleaner-op-btn" data-op="remove-outliers">
+                          <span class="material-symbols-outlined">equalizer</span>
+                          <span class="op-label">Remove Outliers (IQR)</span>
+                        </button>
+                        <button class="cleaner-op-btn" data-op="convert-types">
+                          <span class="material-symbols-outlined">change_circle</span>
+                          <span class="op-label">Convert Data Types</span>
+                        </button>
+                      </div>
+                      <!-- Preview Area -->
+                      <div class="cleaner-ops-preview" id="cleaner-ops-preview">
+                        <div class="cleaner-ops-preview-header">
+                          <span>Preview Changes</span>
+                          <span class="cleaner-change-badge" id="cleaner-change-badge" style="display:none;">0
+                            changes</span>
+                        </div>
+                        <div id="cleaner-issues-banner" style="margin: 12px; display: none;"></div>
+                        <div class="cleaner-grid-wrapper" id="cleaner-clean-grid">
+                          <div class="cleaner-empty-state">
+                            <span class="material-symbols-outlined cleaner-empty-icon">cleaning_services</span>
+                            <div class="cleaner-empty-title">Select an Operation</div>
+                            <div class="cleaner-empty-desc">Click any cleaning operation on the left to preview and
+                              apply changes to your dataset.</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- TRANSFORM TAB -->
+                  <div class="cleaner-tab-content" id="cleaner-tab-transform">
+                    <div class="cleaner-transform-layout">
+                      <!-- Transform Sidebar -->
+                      <div class="cleaner-transform-sidebar">
+                        <div class="cleaner-ops-section-title">Column Transforms</div>
+                        <button class="cleaner-op-btn" data-transform="rename">
+                          <span class="material-symbols-outlined">drive_file_rename_outline</span>
+                          <span class="op-label">Rename Columns</span>
+                        </button>
+                        <button class="cleaner-op-btn" data-transform="merge">
+                          <span class="material-symbols-outlined">merge</span>
+                          <span class="op-label">Merge Columns</span>
+                        </button>
+                        <button class="cleaner-op-btn" data-transform="split">
+                          <span class="material-symbols-outlined">call_split</span>
+                          <span class="op-label">Split Column</span>
+                        </button>
+
+                        <div class="cleaner-ops-section-title">Data Transforms</div>
+                        <button class="cleaner-op-btn" data-transform="sort">
+                          <span class="material-symbols-outlined">sort</span>
+                          <span class="op-label">Sort</span>
+                        </button>
+                        <button class="cleaner-op-btn" data-transform="filter">
+                          <span class="material-symbols-outlined">filter_list</span>
+                          <span class="op-label">Filter Rows</span>
+                        </button>
+                        <button class="cleaner-op-btn" data-transform="group">
+                          <span class="material-symbols-outlined">workspaces</span>
+                          <span class="op-label">Group By</span>
+                        </button>
+                        <button class="cleaner-op-btn" data-transform="calculated">
+                          <span class="material-symbols-outlined">calculate</span>
+                          <span class="op-label">Calculated Field</span>
+                        </button>
+                      </div>
+                      <!-- Transform Form Area -->
+                      <div class="cleaner-transform-form" id="cleaner-transform-form">
+                        <div class="cleaner-empty-state">
+                          <span class="material-symbols-outlined cleaner-empty-icon">transform</span>
+                          <div class="cleaner-empty-title">Select a Transform</div>
+                          <div class="cleaner-empty-desc">Choose a transformation from the left panel to modify your
+                            dataset structure.</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- VALIDATION TAB -->
+                  <div class="cleaner-tab-content" id="cleaner-tab-validation">
+                    <div class="cleaner-validation-container" id="cleaner-validation-container">
+                      <div class="cleaner-empty-state">
+                        <span class="material-symbols-outlined cleaner-empty-icon">verified</span>
+                        <div class="cleaner-empty-title">No Data to Validate</div>
+                        <div class="cleaner-empty-desc">Upload a dataset to see data quality metrics and health score.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div><!-- /cleaner-workspace-card -->
+              </div><!-- /cleaner-main-left -->
+
+              <!-- Right Properties Panel -->
+              <div class="cleaner-properties-panel" id="cleaner-properties-panel">
+                <div class="cleaner-props-title">Dataset Properties</div>
+                <div class="cleaner-prop-item">
+                  <span class="cleaner-prop-label">File Name</span>
+                  <span class="cleaner-prop-value" id="prop-filename">—</span>
+                </div>
+                <div class="cleaner-prop-item">
+                  <span class="cleaner-prop-label">Dataset Size</span>
+                  <span class="cleaner-prop-value" id="prop-size">—</span>
+                </div>
+                <div class="cleaner-prop-item">
+                  <span class="cleaner-prop-label">Columns</span>
+                  <span class="cleaner-prop-value" id="prop-cols">—</span>
+                </div>
+                <div class="cleaner-prop-item">
+                  <span class="cleaner-prop-label">Rows</span>
+                  <span class="cleaner-prop-value" id="prop-rows">—</span>
+                </div>
+                <div class="cleaner-prop-item">
+                  <span class="cleaner-prop-label">Last Modified</span>
+                  <span class="cleaner-prop-value" id="prop-modified">—</span>
+                </div>
+                <div class="cleaner-prop-item">
+                  <span class="cleaner-prop-label">Data Types</span>
+                  <div class="cleaner-prop-types-list" id="prop-types-list">—</div>
+                </div>
+              </div>
+            </div><!-- /cleaner-main-layout -->
+          </div><!-- /workspace-cleaner-panel -->
+
+          <!-- SETTINGS PANEL -->
+          <div id="workspace-settings-panel" style="display: none;">
+            <div class="cleaner-page-header">
+              <h1 class="cleaner-page-title">Settings</h1>
+              <p class="cleaner-page-desc">Configure Plotox preferences and manage your data.</p>
+            </div>
+            <div class="settings-container">
+              <!-- Appearance -->
+              <div class="settings-section">
+                <div class="settings-section-header">
+                  <div class="settings-section-title">Appearance</div>
+                  <div class="settings-section-desc">Customize the look and feel of Plotox.</div>
+                </div>
+                <div class="settings-section-body">
+                  <div class="settings-row">
+                    <div>
+                      <div class="settings-row-label">Dark Mode</div>
+                      <div class="settings-row-desc">Toggle dark theme for the application.</div>
+                    </div>
+                    <label class="toggle-switch">
+                      <input type="checkbox" id="settings-dark-mode">
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                  <div class="settings-row">
+                    <div>
+                      <div class="settings-row-label">Default Chart Type</div>
+                      <div class="settings-row-desc">Chart type to use when starting a new chart.</div>
+                    </div>
+                    <select class="settings-select" id="settings-default-chart">
+                      <option value="line">Line Chart</option>
+                      <option value="bar">Bar Chart</option>
+                      <option value="scatter">Scatter Plot</option>
+                      <option value="area">Area Chart</option>
+                      <option value="pie">Pie Chart</option>
+                      <option value="histogram">Histogram</option>
+                    </select>
+                  </div>
+                  <div class="settings-row">
+                    <div>
+                      <div class="settings-row-label">Default Color Palette</div>
+                      <div class="settings-row-desc">Default palette for new charts.</div>
+                    </div>
+                    <select class="settings-select" id="settings-default-palette">
+                      <option value="classic">Classic</option>
+                      <option value="vibrant">Vibrant</option>
+                      <option value="orange">Orange</option>
+                      <option value="forest">Forest Green</option>
+                      <option value="ocean">Ocean</option>
+                      <option value="monochrome">Monochrome</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <!-- Data Cleaner -->
+              <div class="settings-section">
+                <div class="settings-section-header">
+                  <div class="settings-section-title">Data Cleaner</div>
+                  <div class="settings-section-desc">Configure data cleaning defaults.</div>
+                </div>
+                <div class="settings-section-body">
+                  <div class="settings-row">
+                    <div>
+                      <div class="settings-row-label">Rows Per Page</div>
+                      <div class="settings-row-desc">Default pagination for spreadsheet views.</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <select class="settings-select" id="settings-rows-per-page">
+                        <option value="25">25 rows</option>
+                        <option value="50" selected>50 rows</option>
+                        <option value="100">100 rows</option>
+                        <option value="500">500 rows</option>
+                        <option value="1000">1000 rows</option>
+                        <option value="custom">Custom...</option>
+                      </select>
+                      <input type="number" id="settings-custom-rows-per-page" class="settings-select"
+                        style="display: none; width: 75px; padding: 6px 10px; border-radius: 50px;" min="1"
+                        placeholder="Rows">
+                    </div>
+                  </div>
+                  <div class="settings-row">
+                    <div>
+                      <div class="settings-row-label">Auto-Save Datasets</div>
+                      <div class="settings-row-desc">Automatically save datasets to browser storage.</div>
+                    </div>
+                    <label class="toggle-switch">
+                      <input type="checkbox" id="settings-auto-save" checked>
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <!-- Export -->
+              <div class="settings-section">
+                <div class="settings-section-header">
+                  <div class="settings-section-title">Export</div>
+                  <div class="settings-section-desc">Default export format and quality settings.</div>
+                </div>
+                <div class="settings-section-body">
+                  <div class="settings-row">
+                    <div>
+                      <div class="settings-row-label">Default Chart Export Format</div>
+                      <div class="settings-row-desc">Format used when downloading charts.</div>
+                    </div>
+                    <select class="settings-select" id="settings-export-format">
+                      <option value="png">PNG</option>
+                      <option value="jpg">JPG</option>
+                      <option value="svg">SVG</option>
+                      <option value="pdf">PDF</option>
+                    </select>
+                  </div>
+                  <div class="settings-row">
+                    <div>
+                      <div class="settings-row-label">Default Dataset Export Format</div>
+                      <div class="settings-row-desc">Format used when exporting cleaned datasets.</div>
+                    </div>
+                    <select class="settings-select" id="settings-dataset-format">
+                      <option value="csv">CSV</option>
+                      <option value="xlsx">XLSX</option>
+                      <option value="json">JSON</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <!-- Data Management -->
+              <div class="settings-section">
+                <div class="settings-section-header">
+                  <div class="settings-section-title">Data Management</div>
+                  <div class="settings-section-desc">Manage stored data and reset preferences.</div>
+                </div>
+                <div class="settings-section-body">
+                  <div class="settings-row">
+                    <div>
+                      <div class="settings-row-label">Clear All History</div>
+                      <div class="settings-row-desc">Remove all saved chart sessions and history.</div>
+                    </div>
+                    <button class="settings-danger-btn" id="settings-clear-history">
+                      <span class="material-symbols-outlined" style="font-size: 14px;">delete</span>
+                      Clear History
+                    </button>
+                  </div>
+                  <div class="settings-row">
+                    <div>
+                      <div class="settings-row-label">Reset All Settings</div>
+                      <div class="settings-row-desc">Restore all settings to default values.</div>
+                    </div>
+                    <button class="settings-danger-btn" id="settings-reset-all">
+                      <span class="material-symbols-outlined" style="font-size: 14px;">restart_alt</span>
+                      Reset
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!-- /workspace-settings-panel -->
 
         </div>
       </main>
@@ -798,11 +1282,12 @@
           <span class="material-symbols-outlined">close</span>
         </button>
       </div>
-      
+
       <!-- Modal Content -->
       <div class="ncm-content">
-        <p class="ncm-subtitle">Select the visualization structure for your dataset. You can change this selection at any time later in the configuration panel.</p>
-        
+        <p class="ncm-subtitle">Select the visualization structure for your dataset. You can change this selection at
+          any time later in the configuration panel.</p>
+
         <!-- Interactive Chart Type Cards Grid -->
         <div class="ncm-grid">
           <div class="ncm-card" data-chart="line">
@@ -811,60 +1296,116 @@
             </div>
             <div class="ncm-card-text">
               <h4 class="ncm-card-title">Line Chart</h4>
-              <p class="ncm-card-desc">Ideal for continuous trends, time-series data, and tracking growth cycles over intervals.</p>
+              <p class="ncm-card-desc">Ideal for continuous trends, time-series data, and tracking growth cycles over
+                intervals.</p>
             </div>
           </div>
-          
+
           <div class="ncm-card" data-chart="bar">
             <div class="ncm-card-icon-box purple">
               <span class="material-symbols-outlined">bar_chart</span>
             </div>
             <div class="ncm-card-text">
               <h4 class="ncm-card-title">Bar Chart</h4>
-              <p class="ncm-card-desc">Perfect for comparing distinct categories, showing distributions, or stacking components.</p>
+              <p class="ncm-card-desc">Perfect for comparing distinct categories, showing distributions, or stacking
+                components.</p>
             </div>
           </div>
-          
+
           <div class="ncm-card" data-chart="scatter">
             <div class="ncm-card-icon-box orange">
               <span class="material-symbols-outlined">scatter_plot</span>
             </div>
             <div class="ncm-card-text">
               <h4 class="ncm-card-title">Scatter Plot</h4>
-              <p class="ncm-card-desc">Designed for correlation studies, data distributions, and mapping ROI against variables.</p>
+              <p class="ncm-card-desc">Designed for correlation studies, data distributions, and mapping ROI against
+                variables.</p>
             </div>
           </div>
-          
+
           <div class="ncm-card" data-chart="area">
             <div class="ncm-card-icon-box emerald">
               <span class="material-symbols-outlined">area_chart</span>
             </div>
             <div class="ncm-card-text">
               <h4 class="ncm-card-title">Area Chart</h4>
-              <p class="ncm-card-desc">Excellent for emphasizing cumulative totals, volume developments, and part-to-whole trends.</p>
+              <p class="ncm-card-desc">Excellent for emphasizing cumulative totals, volume developments, and
+                part-to-whole trends.</p>
             </div>
           </div>
-          
+
           <div class="ncm-card" data-chart="pie">
             <div class="ncm-card-icon-box pink">
               <span class="material-symbols-outlined">pie_chart</span>
             </div>
             <div class="ncm-card-text">
               <h4 class="ncm-card-title">Pie & Donut</h4>
-              <p class="ncm-card-desc">Great for representing composition, percentage share, and static category ratios.</p>
+              <p class="ncm-card-desc">Great for representing composition, percentage share, and static category ratios.
+              </p>
             </div>
           </div>
-          
+
           <div class="ncm-card" data-chart="histogram">
             <div class="ncm-card-icon-box red">
               <span class="material-symbols-outlined">analytics</span>
             </div>
             <div class="ncm-card-text">
               <h4 class="ncm-card-title">Histogram</h4>
-              <p class="ncm-card-desc">Used for mapping value frequency distributions and binning continuous numeric segments.</p>
+              <p class="ncm-card-desc">Used for mapping value frequency distributions and binning continuous numeric
+                segments.</p>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLEANER PASTE DATA MODAL OVERLAY -->
+  <div class="cleaner-modal-overlay" id="cleaner-paste-modal" style="display: none;">
+    <div class="cleaner-modal-card">
+      <!-- Modal Header -->
+      <div class="cleaner-modal-header">
+        <div class="cleaner-modal-title-row">
+          <span class="material-symbols-outlined"
+            style="color: var(--color-primary); font-size: 22px;">content_paste</span>
+          <h3 class="cleaner-modal-title">Paste Raw Dataset</h3>
+        </div>
+        <button class="cleaner-modal-close" id="cleaner-paste-modal-close" title="Close modal">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <!-- Modal Body -->
+      <div class="cleaner-modal-body">
+        <p class="cleaner-modal-desc"
+          style="font-size: 13px; color: var(--color-secondary-text); margin-bottom: 16px; line-height: 1.5;">
+          Paste your comma-separated (CSV), tab-separated (TSV), or custom delimited raw data table below. We will
+          parse, format, and load it into your workspace.
+        </p>
+        <div class="cleaner-form-group" style="margin-bottom: 14px;">
+          <label class="cleaner-form-label"
+            style="display: block; font-size: 11px; font-weight: 600; color: var(--color-outline); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">Dataset
+            Name</label>
+          <input type="text" class="cleaner-form-input" id="cleaner-paste-name" placeholder="e.g. employee_salaries.csv"
+            value="pasted_data.csv"
+            style="width: 100%; padding: 8px 12px; border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: 12px; background: var(--color-surface-low); color: var(--color-primary); outline: none;">
+        </div>
+        <div class="cleaner-form-group">
+          <label class="cleaner-form-label"
+            style="display: block; font-size: 11px; font-weight: 600; color: var(--color-outline); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">CSV/TSV
+            Content</label>
+          <textarea class="cleaner-paste-textarea" id="cleaner-paste-textarea"
+            placeholder="Name,Age,City,Salary&#10;John Smith,32,New York,85000&#10;Jane Doe,28,San Francisco,92000"
+            style="width: 100%; height: 200px; font-family: monospace; font-size: 11.5px; padding: 12px; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface-low); color: var(--color-primary); resize: none; overflow-y: auto; outline: none; box-sizing: border-box; line-height: 1.4;"></textarea>
+        </div>
+      </div>
+      <!-- Modal Footer -->
+      <div class="cleaner-modal-footer"
+        style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; border-top: 1px solid var(--color-border); padding-top: 14px;">
+        <button class="cleaner-action-btn" id="cleaner-paste-modal-cancel"
+          style="border-radius: var(--radius-md); font-size: 12px; padding: 8px 16px;">Cancel</button>
+        <button class="cleaner-action-btn primary" id="cleaner-paste-modal-submit"
+          style="border-radius: var(--radius-md); font-size: 12px; padding: 8px 16px; background: var(--color-primary); color: var(--color-on-primary);">Load
+          Dataset</button>
       </div>
     </div>
   </div>
@@ -877,6 +1418,8 @@
   <script src="assets/js/data-parser.js"></script>
   <script src="assets/js/chart-engine.js"></script>
   <script src="assets/js/export-manager.js"></script>
+  <script src="assets/js/file-size-guard.js"></script>
+  <script src="assets/js/data-cleaner.js"></script>
   <script src="assets/js/app.js"></script>
 
 </body>

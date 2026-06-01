@@ -19,8 +19,8 @@
   pointer-events: all;
   box-sizing: border-box;
   /* Smooth exit animation */
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), 
-              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   transform: translateY(0);
 }
 
@@ -173,6 +173,7 @@
     opacity: 0;
     transform: translateY(30px) scale(0.85);
   }
+
   /* Stretches up into its elevated spot */
   100% {
     opacity: 1;
@@ -186,6 +187,7 @@
     opacity: 0;
     transform: translateY(30px) scale(0.85);
   }
+
   /* Stretches up into its elevated spot */
   100% {
     opacity: 1;
@@ -207,8 +209,8 @@ body.loading-active .app-topbar,
 body.loading-active .app-body {
   opacity: 0 !important;
   transform: translateY(12px) !important;
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
-              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 /* Once class is removed, transition back to standard display */
@@ -223,9 +225,11 @@ body.app-ready .app-body {
   .loader-brand-wrapper .giant-text-word {
     font-size: clamp(64px, 18vw, 110px);
   }
+
   .loader-heading {
     margin-bottom: 6px;
   }
+
   .loader-subheading {
     margin-bottom: 16px;
   }

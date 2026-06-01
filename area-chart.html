@@ -1,16 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Free Online Area Chart Generator | plotox</title>
-  <meta name="description" content="Generate interactive area charts instantly in your browser. Track volume changes, compare categories, and customize layouts. 100% private.">
+  <title>Plotox | Area Chart Generator</title>
+  <meta name="description"
+    content="Generate interactive area charts instantly in your browser. Track volume changes, compare categories, and customize layouts. 100% private.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/favicon.ico">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet">
 
   <!-- ECharts CDN -->
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
@@ -20,6 +29,7 @@
   <link rel="stylesheet" href="assets/css/components.css">
   <link rel="stylesheet" href="assets/css/seo-pages.css">
 </head>
+
 <body>
 
   <!-- ═══════════════════════════════════════════
@@ -28,13 +38,8 @@
   <nav class="navbar">
     <div class="navbar-inner">
       <div class="nav-left">
-        <a class="nav-logo" href="index.html">plot<span class="logo-rising-o">o</span><span class="logo-rising-x">x</span></a>
-        <div class="nav-links">
-          <a href="index.html">Home</a>
-          <a href="app.html">Dashboard</a>
-          <a href="line-chart.html">Line Chart</a>
-          <a href="area-chart.html" class="active">Area Chart</a>
-        </div>
+        <a class="nav-logo" href="index.html">plot<span class="logo-rising-o">o</span><span
+            class="logo-rising-x">x</span></a>
       </div>
       <div>
         <a class="nav-cta" href="app.html?type=area">Launch App</a>
@@ -52,7 +57,8 @@
       <div class="seo-hero-content">
         <span class="section-badge">Area Chart Tool</span>
         <h1 class="seo-hero-title">Create interactive area charts instantly</h1>
-        <p class="seo-hero-desc">Highlight cumulative volume and patterns. Upload your dataset to map filled area charts, comparing volumes across time segments with premium styling.</p>
+        <p class="seo-hero-desc">Highlight cumulative volume and patterns. Upload your dataset to map filled area
+          charts, comparing volumes across time segments with premium styling.</p>
         <div>
           <a class="btn-primary" href="app.html?type=area">Create Area Chart Now</a>
         </div>
@@ -60,7 +66,8 @@
 
       <!-- Live Demo Widget -->
       <div class="seo-demo-box">
-        <div class="seo-chart-container" id="seo-chart" data-chart-type="area" data-sample="mobile_app_downloads" data-title="Monthly Mobile App Downloads">
+        <div class="seo-chart-container" id="seo-chart" data-chart-type="area" data-sample="mobile_app_downloads"
+          data-title="Monthly Mobile App Downloads">
           <!-- ECharts chart renders here -->
         </div>
         <div class="seo-demo-controls">
@@ -81,22 +88,27 @@
 
     <!-- ── ARTICLE & SIDEBAR DEEP DIVE ───────── -->
     <section class="seo-content-grid">
-      
+
       <!-- Article Content -->
       <article class="seo-article">
         <h2>What is an Area Chart?</h2>
-        <p>An <strong>area chart</strong> represents the change in one or more quantities over time, similar to a line chart, but with the area between the line and the X-axis filled with color or shading. It is useful for emphasizing the magnitude of change over time.</p>
-        
+        <p>An <strong>area chart</strong> represents the change in one or more quantities over time, similar to a line
+          chart, but with the area between the line and the X-axis filled with color or shading. It is useful for
+          emphasizing the magnitude of change over time.</p>
+
         <h2>When should you use an Area Chart?</h2>
         <p>Choose an area chart when:</p>
         <ul>
           <li>You want to show **cumulative totals** or volume developments over time.</li>
-          <li>You need to highlight **the absolute sizing or weight** of a metric, rather than just the trend trajectory.</li>
+          <li>You need to highlight **the absolute sizing or weight** of a metric, rather than just the trend
+            trajectory.</li>
           <li>You are comparing a **part-to-whole relationship** over a timeline (stacked area chart).</li>
         </ul>
 
         <h2>Area Chart vs. Line Chart</h2>
-        <p>While line charts are best for comparing values and trajectories, area charts are better for demonstrating overall volume. Use a line chart if you have many intersecting series, as overlapping filled shapes in an area chart can quickly become cluttered and unreadable.</p>
+        <p>While line charts are best for comparing values and trajectories, area charts are better for demonstrating
+          overall volume. Use a line chart if you have many intersecting series, as overlapping filled shapes in an area
+          chart can quickly become cluttered and unreadable.</p>
       </article>
 
       <!-- Sidebar -->
@@ -122,6 +134,9 @@
             <a href="histogram.html" class="gallery-link">
               <span class="material-symbols-outlined">analytics</span> Histogram
             </a>
+            <a href="data-cleaner.html" class="gallery-link">
+              <span class="material-symbols-outlined">cleaning_services</span> Data Cleaner
+            </a>
           </div>
         </div>
       </aside>
@@ -131,7 +146,8 @@
     <!-- ── CTA SECTION ───────────────────────── -->
     <section class="seo-cta-section">
       <h3>Visualize your volumes today</h3>
-      <p>plotox handles data processing inside the browser environment for maximum speed and security. Load your file to start visualizing.</p>
+      <p>plotox handles data processing inside the browser environment for maximum speed and security. Load your file to
+        start visualizing.</p>
       <a class="btn-primary" href="app.html?type=area">Launch Visualizer Dashboard</a>
     </section>
 
@@ -141,16 +157,8 @@
        FOOTER
   ════════════════════════════════════════════ -->
   <footer class="footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <span class="footer-logo">plot<span class="logo-rising-o">o</span><span class="logo-rising-x">x</span></span>
-        <span class="footer-copy">© 2026 plotox. Engineered for precision.</span>
-      </div>
-      <div class="footer-links">
-        <a href="index.html">Home</a>
-        <a href="app.html">Dashboard</a>
-        <a href="line-chart.html">Line Chart Page</a>
-      </div>
+    <div class="container footer-bottom" style="border-top: 1px solid var(--color-border); padding: 30px 0;">
+      <span>© 2026 plotox | Experience Data Visualization</span>
     </div>
   </footer>
 
@@ -163,4 +171,5 @@
   <script src="assets/js/seo-helper.js"></script>
 
 </body>
+
 </html>

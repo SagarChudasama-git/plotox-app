@@ -1,16 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Free Online Scatter Plot Generator | plotox</title>
-  <meta name="description" content="Generate interactive scatter plots instantly. Map mathematical correlations, identify clusters, and check statistical outliers with our free client-side tool.">
+  <title>Plotox | Scatter Plot Generator</title>
+  <meta name="description"
+    content="Generate interactive scatter plots instantly. Map mathematical correlations, identify clusters, and check statistical outliers with our free client-side tool.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/favicon.ico">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet">
 
   <!-- ECharts CDN -->
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
@@ -20,6 +29,7 @@
   <link rel="stylesheet" href="assets/css/components.css">
   <link rel="stylesheet" href="assets/css/seo-pages.css">
 </head>
+
 <body>
 
   <!-- ═══════════════════════════════════════════
@@ -28,13 +38,8 @@
   <nav class="navbar">
     <div class="navbar-inner">
       <div class="nav-left">
-        <a class="nav-logo" href="index.html">plot<span class="logo-rising-o">o</span><span class="logo-rising-x">x</span></a>
-        <div class="nav-links">
-          <a href="index.html">Home</a>
-          <a href="app.html">Dashboard</a>
-          <a href="line-chart.html">Line Chart</a>
-          <a href="scatter-plot.html" class="active">Scatter Plot</a>
-        </div>
+        <a class="nav-logo" href="index.html">plot<span class="logo-rising-o">o</span><span
+            class="logo-rising-x">x</span></a>
       </div>
       <div>
         <a class="nav-cta" href="app.html?type=scatter">Launch App</a>
@@ -52,7 +57,8 @@
       <div class="seo-hero-content">
         <span class="section-badge">Scatter Plot Tool</span>
         <h1 class="seo-hero-title">Visualize correlations with scatter plots</h1>
-        <p class="seo-hero-desc">Map numerical variables against one another. Identify patterns, group clusters, and spot data outliers with our high-performance interactive renderer.</p>
+        <p class="seo-hero-desc">Map numerical variables against one another. Identify patterns, group clusters, and
+          spot data outliers with our high-performance interactive renderer.</p>
         <div>
           <a class="btn-primary" href="app.html?type=scatter">Create Scatter Plot Now</a>
         </div>
@@ -60,7 +66,8 @@
 
       <!-- Live Demo Widget -->
       <div class="seo-demo-box">
-        <div class="seo-chart-container" id="seo-chart" data-chart-type="scatter" data-sample="mobile_app_downloads" data-title="Android vs iOS App Downloads Correlation">
+        <div class="seo-chart-container" id="seo-chart" data-chart-type="scatter" data-sample="mobile_app_downloads"
+          data-title="Android vs iOS App Downloads Correlation">
           <!-- ECharts chart renders here -->
         </div>
         <div class="seo-demo-controls">
@@ -77,14 +84,17 @@
 
     <!-- ── ARTICLE & SIDEBAR DEEP DIVE ───────── -->
     <section class="seo-content-grid">
-      
+
       <!-- Article Content -->
       <article class="seo-article">
         <h2>What is a Scatter Plot?</h2>
-        <p>A <strong>scatter plot</strong> (also called a scatter graph or correlation chart) uses Cartesian coordinates to display values for typically two variables for a set of data. The data is displayed as a collection of points, each determining the position on the horizontal axis (X) and vertical axis (Y).</p>
-        
+        <p>A <strong>scatter plot</strong> (also called a scatter graph or correlation chart) uses Cartesian coordinates
+          to display values for typically two variables for a set of data. The data is displayed as a collection of
+          points, each determining the position on the horizontal axis (X) and vertical axis (Y).</p>
+
         <h2>When should you use a Scatter Plot?</h2>
-        <p>Scatter plots are primarily used to discover and model relationships between numerical variables. Use a scatter plot when:</p>
+        <p>Scatter plots are primarily used to discover and model relationships between numerical variables. Use a
+          scatter plot when:</p>
         <ul>
           <li>You suspect there is a <strong>relationship or correlation</strong> between two numeric variables.</li>
           <li>You want to determine if the correlation is **positive, negative, linear, or non-linear**.</li>
@@ -93,9 +103,12 @@
 
         <h2>Understanding Scatter Plot Correlations</h2>
         <ul>
-          <li><strong>Positive Correlation</strong>: As X increases, Y increases. The points form an upward trajectory.</li>
-          <li><strong>Negative Correlation</strong>: As X increases, Y decreases. The points form a downward trajectory.</li>
-          <li><strong>No Correlation</strong>: The points are scattered randomly, indicating no statistical relationship between the variables.</li>
+          <li><strong>Positive Correlation</strong>: As X increases, Y increases. The points form an upward trajectory.
+          </li>
+          <li><strong>Negative Correlation</strong>: As X increases, Y decreases. The points form a downward trajectory.
+          </li>
+          <li><strong>No Correlation</strong>: The points are scattered randomly, indicating no statistical relationship
+            between the variables.</li>
         </ul>
       </article>
 
@@ -122,6 +135,9 @@
             <a href="histogram.html" class="gallery-link">
               <span class="material-symbols-outlined">analytics</span> Histogram
             </a>
+            <a href="data-cleaner.html" class="gallery-link">
+              <span class="material-symbols-outlined">cleaning_services</span> Data Cleaner
+            </a>
           </div>
         </div>
       </aside>
@@ -131,7 +147,8 @@
     <!-- ── CTA SECTION ───────────────────────── -->
     <section class="seo-cta-section">
       <h3>Analyze your correlations in real-time</h3>
-      <p>plotox provides advanced client-side charting capabilities, keeping your datasets secure in your browser. Start plotting instantly.</p>
+      <p>plotox provides advanced client-side charting capabilities, keeping your datasets secure in your browser. Start
+        plotting instantly.</p>
       <a class="btn-primary" href="app.html?type=scatter">Launch Visualizer Dashboard</a>
     </section>
 
@@ -141,16 +158,8 @@
        FOOTER
   ════════════════════════════════════════════ -->
   <footer class="footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <span class="footer-logo">plot<span class="logo-rising-o">o</span><span class="logo-rising-x">x</span></span>
-        <span class="footer-copy">© 2026 plotox. Engineered for precision.</span>
-      </div>
-      <div class="footer-links">
-        <a href="index.html">Home</a>
-        <a href="app.html">Dashboard</a>
-        <a href="line-chart.html">Line Chart Page</a>
-      </div>
+    <div class="container footer-bottom" style="border-top: 1px solid var(--color-border); padding: 30px 0;">
+      <span>© 2026 plotox | Experience Data Visualization</span>
     </div>
   </footer>
 
@@ -163,4 +172,5 @@
   <script src="assets/js/seo-helper.js"></script>
 
 </body>
+
 </html>

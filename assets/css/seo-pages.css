@@ -65,16 +65,7 @@
 }
 
 .seo-demo-controls {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  background-color: var(--color-surface-low);
-  padding: 10px 16px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
-  transition: background-color var(--transition-normal), border-color var(--transition-normal);
+  display: none !important;
 }
 
 .demo-checkbox-group {
@@ -238,5 +229,16 @@
   }
   .seo-chart-container {
     height: 280px;
+  }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+  }
+  .seo-cta-section {
+    padding: 40px 20px;
+  }
+  .seo-cta-section h3 {
+    font-size: 24px;
   }
 }

@@ -1,16 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Free Online Pie Chart Generator | plotox</title>
-  <meta name="description" content="Generate interactive pie and donut charts instantly in your browser. Visualize percentages, parts-of-a-whole, and customize colors. 100% private.">
+  <title>Plotox | Pie Chart Generator</title>
+  <meta name="description"
+    content="Generate interactive pie and donut charts instantly in your browser. Visualize percentages, parts-of-a-whole, and customize colors. 100% private.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/favicon.ico">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet">
 
   <!-- ECharts CDN -->
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
@@ -20,6 +29,7 @@
   <link rel="stylesheet" href="assets/css/components.css">
   <link rel="stylesheet" href="assets/css/seo-pages.css">
 </head>
+
 <body>
 
   <!-- ═══════════════════════════════════════════
@@ -28,13 +38,8 @@
   <nav class="navbar">
     <div class="navbar-inner">
       <div class="nav-left">
-        <a class="nav-logo" href="index.html">plot<span class="logo-rising-o">o</span><span class="logo-rising-x">x</span></a>
-        <div class="nav-links">
-          <a href="index.html">Home</a>
-          <a href="app.html">Dashboard</a>
-          <a href="line-chart.html">Line Chart</a>
-          <a href="pie-chart.html" class="active">Pie Chart</a>
-        </div>
+        <a class="nav-logo" href="index.html">plot<span class="logo-rising-o">o</span><span
+            class="logo-rising-x">x</span></a>
       </div>
       <div>
         <a class="nav-cta" href="app.html?type=pie">Launch App</a>
@@ -52,7 +57,8 @@
       <div class="seo-hero-content">
         <span class="section-badge">Pie Chart Tool</span>
         <h1 class="seo-hero-title">Create interactive pie &amp; donut charts</h1>
-        <p class="seo-hero-desc">Represent proportions and percentages dynamically. Select any category column to map relative sizes and share proportions in a high-fidelity visual layout.</p>
+        <p class="seo-hero-desc">Represent proportions and percentages dynamically. Select any category column to map
+          relative sizes and share proportions in a high-fidelity visual layout.</p>
         <div>
           <a class="btn-primary" href="app.html?type=pie">Create Pie Chart Now</a>
         </div>
@@ -60,7 +66,8 @@
 
       <!-- Live Demo Widget -->
       <div class="seo-demo-box">
-        <div class="seo-chart-container" id="seo-chart" data-chart-type="pie" data-sample="mobile_app_downloads" data-title="Android Downloads Distribution">
+        <div class="seo-chart-container" id="seo-chart" data-chart-type="pie" data-sample="mobile_app_downloads"
+          data-title="Android Downloads Distribution">
           <!-- ECharts chart renders here -->
         </div>
         <div class="seo-demo-controls">
@@ -77,14 +84,18 @@
 
     <!-- ── ARTICLE & SIDEBAR DEEP DIVE ───────── -->
     <section class="seo-content-grid">
-      
+
       <!-- Article Content -->
       <article class="seo-article">
         <h2>What is a Pie Chart?</h2>
-        <p>A <strong>pie chart</strong> (or circular chart) is divided into slices to illustrate numerical proportion. In a pie chart, the arc length of each slice is proportional to the quantity it represents. It is the default choice for showcasing part-to-whole relationships.</p>
-        
+        <p>A <strong>pie chart</strong> (or circular chart) is divided into slices to illustrate numerical proportion.
+          In a pie chart, the arc length of each slice is proportional to the quantity it represents. It is the default
+          choice for showcasing part-to-whole relationships.</p>
+
         <h2>Donut Charts: A Modern Alternative</h2>
-        <p>A donut chart is functionally identical to a pie chart, but has a hollow center. The blank center space can be used to display summary labels or titles, and many cognitive studies suggest donut charts are easier to read because the human brain is better at comparing linear segment lengths than angles.</p>
+        <p>A donut chart is functionally identical to a pie chart, but has a hollow center. The blank center space can
+          be used to display summary labels or titles, and many cognitive studies suggest donut charts are easier to
+          read because the human brain is better at comparing linear segment lengths than angles.</p>
 
         <h2>When should you use a Pie Chart?</h2>
         <ul>
@@ -95,9 +106,12 @@
 
         <h2>Pie Chart Common Mistakes to Avoid</h2>
         <ul>
-          <li><strong>Avoid too many slices</strong>: If you have dozens of categories, the slices become too small to compare. Use a bar chart instead.</li>
-          <li><strong>Sum must equal 100%</strong>: Ensure all combined categories represent the entire dataset population.</li>
-          <li><strong>Sort slices logically</strong>: Start the largest slice at the 12 o'clock position and progress clockwise to the smallest for easier parsing.</li>
+          <li><strong>Avoid too many slices</strong>: If you have dozens of categories, the slices become too small to
+            compare. Use a bar chart instead.</li>
+          <li><strong>Sum must equal 100%</strong>: Ensure all combined categories represent the entire dataset
+            population.</li>
+          <li><strong>Sort slices logically</strong>: Start the largest slice at the 12 o'clock position and progress
+            clockwise to the smallest for easier parsing.</li>
         </ul>
       </article>
 
@@ -124,6 +138,9 @@
             <a href="histogram.html" class="gallery-link">
               <span class="material-symbols-outlined">analytics</span> Histogram
             </a>
+            <a href="data-cleaner.html" class="gallery-link">
+              <span class="material-symbols-outlined">cleaning_services</span> Data Cleaner
+            </a>
           </div>
         </div>
       </aside>
@@ -133,7 +150,8 @@
     <!-- ── CTA SECTION ───────────────────────── -->
     <section class="seo-cta-section">
       <h3>Compare your proportions now</h3>
-      <p>plotox parses CSV data and generates clean, modern pie charts without sending any files over the network. Runs instantly on your computer.</p>
+      <p>plotox parses CSV data and generates clean, modern pie charts without sending any files over the network. Runs
+        instantly on your computer.</p>
       <a class="btn-primary" href="app.html?type=pie">Launch Visualizer Dashboard</a>
     </section>
 
@@ -143,16 +161,8 @@
        FOOTER
   ════════════════════════════════════════════ -->
   <footer class="footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <span class="footer-logo">plot<span class="logo-rising-o">o</span><span class="logo-rising-x">x</span></span>
-        <span class="footer-copy">© 2024 plotox AI. Engineered for precision.</span>
-      </div>
-      <div class="footer-links">
-        <a href="index.html">Home</a>
-        <a href="app.html">Dashboard</a>
-        <a href="line-chart.html">Line Chart Page</a>
-      </div>
+    <div class="container footer-bottom" style="border-top: 1px solid var(--color-border); padding: 30px 0;">
+      <span>© 2026 plotox | Experience Data Visualization</span>
     </div>
   </footer>
 
@@ -165,4 +175,5 @@
   <script src="assets/js/seo-helper.js"></script>
 
 </body>
+
 </html>

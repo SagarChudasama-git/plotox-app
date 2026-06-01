@@ -151,7 +151,7 @@ function initApp() {
   }
 
   // --- User Error Display (Toast Style) ---
-  function showUserError(message) {
+  function showUserError(message, title = 'Error') {
     console.error('plotox:', message);
 
     const existing = document.querySelector('.toast-notification');
@@ -159,16 +159,38 @@ function initApp() {
 
     const toast = document.createElement('div');
     toast.className = 'toast-notification error';
+
+    let displayTitle = title;
+    let displayMessage = message;
+    if (message.includes('exceeds 1 MB') && title === 'Error') {
+      displayTitle = 'File is too large';
+      displayMessage = 'The file exceeds 1 MB. Please import a smaller dataset.';
+    }
+
     toast.innerHTML = `
-      <span class="material-symbols-outlined">error</span>
-      <span>${message}</span>
+      <div class="toast-icon-container">
+        <span class="material-symbols-outlined">error</span>
+      </div>
+      <div class="toast-body">
+        <div class="toast-title">${displayTitle}</div>
+        <div class="toast-description">${displayMessage}</div>
+      </div>
+      <button class="toast-close-btn">
+        <span class="material-symbols-outlined" style="font-size: 16px !important;">close</span>
+      </button>
     `;
     document.body.appendChild(toast);
 
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       toast.style.animation = 'slideUpFade 0.3s ease-in reverse';
       setTimeout(() => toast.remove(), 300);
-    }, 4000);
+    }, 5000);
+
+    toast.querySelector('.toast-close-btn').addEventListener('click', () => {
+      clearTimeout(timeoutId);
+      toast.style.animation = 'slideUpFade 0.3s ease-in reverse';
+      setTimeout(() => toast.remove(), 300);
+    });
   }
 
   // --- Ingest and Unlock Workflow ---
@@ -237,18 +259,23 @@ function initApp() {
     const savedSession = sm ? sm.getActiveSession() : null;
 
     if (savedSession) {
-      try {
-        const isSampleSession = savedSession.filename.includes('mobile_app_downloads') ||
-          savedSession.filename.includes('mobile_os_platforms') ||
-          savedSession.filename.includes('ecommerce_orders') ||
-          savedSession.filename.includes('global_temperatures') ||
-          savedSession.filename.includes('novatech_saas_2024');
-        if (isSampleSession) {
-          if (sm) sm.clearActiveSession();
-        } else {
-          activeFilename = savedSession.filename;
-          activeCSVText = savedSession.rawText;
-          state.chartConfig = Object.assign({}, state.chartConfig, savedSession.config);
+      const sizeGuard = FileSizeGuard.validateText(savedSession.rawText, savedSession.filename || 'Saved session');
+      if (!sizeGuard.valid) {
+        showUserError(`Saved session validation failed: ${sizeGuard.errorMessage}`, sizeGuard.title);
+        if (sm) sm.clearActiveSession();
+      } else {
+        try {
+          const isSampleSession = savedSession.filename.includes('mobile_app_downloads') ||
+            savedSession.filename.includes('mobile_os_platforms') ||
+            savedSession.filename.includes('ecommerce_orders') ||
+            savedSession.filename.includes('global_temperatures') ||
+            savedSession.filename.includes('novatech_saas_2024');
+          if (isSampleSession) {
+            if (sm) sm.clearActiveSession();
+          } else {
+            activeFilename = savedSession.filename;
+            activeCSVText = savedSession.rawText;
+            state.chartConfig = Object.assign({}, state.chartConfig, savedSession.config);
 
           if (typeOverride) {
             state.chartConfig.chartType = typeOverride;
@@ -392,6 +419,9 @@ function initApp() {
             }
           });
 
+          if (urlType === 'cleaner') {
+            switchView('cleaner');
+          }
           return;
         }
       } catch (e) {
@@ -399,6 +429,7 @@ function initApp() {
         if (sm) sm.clearActiveSession();
       }
     }
+  }
 
     if (typeOverride) {
       state.chartConfig.chartType = typeOverride;
@@ -444,6 +475,10 @@ function initApp() {
         revealSections(false);
       }, 400);
     }
+
+    if (urlType === 'cleaner') {
+      switchView('cleaner');
+    }
   }
 
   // --- Reveal Sections and Redraw ---
@@ -485,7 +520,7 @@ function initApp() {
 
   // --- Event Listeners ---
   function setupEventListeners() {
-    
+
     // Mobile Navigation Drawer Toggle and Bindings
     const btnSidebarToggle = document.getElementById('btn-sidebar-toggle');
     const sidebarNav = document.querySelector('.app-sidebar-nav');
@@ -507,7 +542,7 @@ function initApp() {
         e.stopPropagation();
         const isOpen = sidebarNav.classList.toggle('active');
         sidebarOverlay.classList.toggle('active', isOpen);
-        
+
         // Toggle hamburger icon between menu and close
         const icon = btnSidebarToggle.querySelector('.material-symbols-outlined');
         if (icon) {
@@ -525,6 +560,8 @@ function initApp() {
       sidebarItems.forEach(item => {
         item.addEventListener('click', () => {
           if (window.innerWidth <= 768) {
+            // Do not close the drawer if clicking the dropdown header button
+            if (item.id === 'nav-charts-btn') return;
             closeSidebarDrawer();
           }
         });
@@ -566,10 +603,12 @@ function initApp() {
     if (ncmCloseBtn && newChartOverlay) {
       ncmCloseBtn.addEventListener('click', () => {
         newChartOverlay.classList.remove('open');
+        sessionStorage.removeItem('plotox-cleaner-pending'); // Clear pending cleaner redirect flag
       });
       newChartOverlay.addEventListener('click', (e) => {
         if (e.target === newChartOverlay) {
           newChartOverlay.classList.remove('open');
+          sessionStorage.removeItem('plotox-cleaner-pending'); // Clear pending cleaner redirect flag
         }
       });
     }
@@ -579,15 +618,40 @@ function initApp() {
         card.addEventListener('click', () => {
           const chosenType = card.getAttribute('data-chart');
           newChartOverlay.classList.remove('open');
-          
+
+          // Check if triggered from the Data Cleaner generate flow
+          if (sessionStorage.getItem('plotox-cleaner-pending') === 'true') {
+            sessionStorage.removeItem('plotox-cleaner-pending');
+
+            // Update active chart type configuration
+            state.chartConfig.chartType = chosenType;
+            updateUIForChartType(chosenType);
+
+            // Synchronize active sidebar navigation buttons
+            chartTypeButtons.forEach(b => {
+              b.classList.toggle('active', b.getAttribute('data-type') === chosenType);
+            });
+
+            // Redirect workspace view to dynamic chart dashboard
+            switchView('workspace');
+
+            // Trigger loading cleaned dataset from sessionStorage
+            setTimeout(() => {
+              if (typeof window.plotoxLoadCleanerData === 'function') {
+                window.plotoxLoadCleanerData();
+              }
+            }, 100);
+            return;
+          }
+
           // Clear current dataset and reset work space for fresh data ingestion
           resetWorkflow();
-          
+
           const activeSampleIndicator = document.getElementById('active-sample-indicator');
           const loadSampleBtnElement = document.getElementById('load-sample-btn');
           if (activeSampleIndicator) activeSampleIndicator.style.display = 'none';
           if (loadSampleBtnElement) loadSampleBtnElement.style.display = 'inline-flex';
-          
+
           // Update active sidebar button styles to chosen type
           chartTypeButtons.forEach(b => {
             if (b.getAttribute('data-type') === chosenType) {
@@ -596,15 +660,15 @@ function initApp() {
               b.classList.remove('active');
             }
           });
-          
+
           // Update visual active state
           state.chartConfig.chartType = chosenType;
           updateUIForChartType(chosenType);
           saveSession();
-          
+
           // Redirect page to active workspace properly
           switchView('workspace');
-          
+
           // Automatically trigger the file picker dialog for the new chart type!
           setTimeout(() => {
             fileInput.value = '';
@@ -640,6 +704,13 @@ function initApp() {
     pasteText.addEventListener('input', debounce((e) => {
       const text = e.target.value.trim();
       if (text) {
+        const sizeGuard = FileSizeGuard.validateText(text, 'Pasted text');
+        if (!sizeGuard.valid) {
+          showUserError(sizeGuard.errorMessage, sizeGuard.title);
+          pasteText.value = '';
+          disableWorkflow();
+          return;
+        }
         try {
           parseAndLoadData(text, activeFilename || 'pasted_data.csv', delimiterSelect.value);
         } catch (err) {
@@ -734,64 +805,82 @@ function initApp() {
       });
     }
 
-    // Sidebar Workspace trigger
-    const workspaceBtn = document.getElementById('nav-workspace-btn');
-    if (workspaceBtn) {
-      workspaceBtn.addEventListener('click', () => {
-        resetWorkflow();
-        const activeSampleIndicator = document.getElementById('active-sample-indicator');
-        const loadSampleBtnElement = document.getElementById('load-sample-btn');
-        if (activeSampleIndicator) activeSampleIndicator.style.display = 'none';
-        if (loadSampleBtnElement) loadSampleBtnElement.style.display = 'inline-flex';
-        switchView('workspace');
+    // Sidebar Charts trigger
+    const chartsBtn = document.getElementById('nav-charts-btn');
+    const chartsChevron = document.getElementById('nav-charts-chevron');
+    const chartsDropdown = document.getElementById('nav-charts-dropdown');
+
+    if (chartsBtn && chartsDropdown) {
+      chartsBtn.addEventListener('click', (e) => {
+        const isCurrentlyCharts = document.getElementById('workspace-view-panel').style.display !== 'none';
+
+        // If clicking the chevron, always toggle the dropdown
+        if (e.target === chartsChevron || chartsChevron?.contains(e.target)) {
+          e.stopPropagation();
+          const isOpen = chartsDropdown.classList.toggle('open');
+          chartsDropdown.style.display = isOpen ? 'flex' : 'none';
+          if (chartsChevron) chartsChevron.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+          return;
+        }
+
+        if (isCurrentlyCharts) {
+          // Toggle dropdown
+          const isOpen = chartsDropdown.classList.toggle('open');
+          chartsDropdown.style.display = isOpen ? 'flex' : 'none';
+          if (chartsChevron) chartsChevron.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+        } else {
+          // Switch view
+          switchView('charts');
+          // Ensure open
+          chartsDropdown.classList.add('open');
+          chartsDropdown.style.display = 'flex';
+          if (chartsChevron) chartsChevron.style.transform = 'rotate(180deg)';
+        }
       });
     }
 
-    // Sidebar History Archive trigger
-    const historyBtn = document.getElementById('nav-history-btn');
-    if (historyBtn) {
-      historyBtn.addEventListener('click', () => {
-        switchView('history');
+    // Sidebar Data Cleaner trigger
+    const dataCleanerBtn = document.getElementById('nav-data-cleaner-btn');
+    if (dataCleanerBtn) {
+      dataCleanerBtn.addEventListener('click', () => {
+        switchView('cleaner');
+      });
+    }
+
+    // Sidebar Projects trigger (shows History)
+    const projectsBtn = document.getElementById('nav-projects-btn');
+    if (projectsBtn) {
+      projectsBtn.addEventListener('click', () => {
+        switchView('projects');
+      });
+    }
+
+    // Sidebar Settings trigger
+    const settingsBtn = document.getElementById('nav-settings-btn');
+    if (settingsBtn) {
+      settingsBtn.addEventListener('click', () => {
+        switchView('settings');
       });
     }
 
     // Clear history button inside dashboard (Triggers custom confirmation modal)
     const clearHistoryBtn = document.getElementById('clear-history-btn');
-    const confirmOverlay = document.getElementById('confirm-modal-overlay');
-    const confirmCancelBtn = document.getElementById('confirm-cancel-btn');
-    const confirmApproveBtn = document.getElementById('confirm-approve-btn');
-
-    if (clearHistoryBtn && confirmOverlay) {
-      const openConfirmModal = () => {
-        confirmOverlay.classList.add('open');
-      };
-
-      const closeConfirmModal = () => {
-        confirmOverlay.classList.remove('open');
-      };
-
-      clearHistoryBtn.addEventListener('click', openConfirmModal);
-      if (confirmCancelBtn) confirmCancelBtn.addEventListener('click', closeConfirmModal);
-
-      if (confirmApproveBtn) {
-        confirmApproveBtn.addEventListener('click', () => {
-          if (typeof HistoryStorage !== 'undefined') {
-            HistoryStorage.clearHistory();
-            loadHistoryList();
-            drawHistoryDashboard();
-            updateHeaderStrip();
-          }
-          closeConfirmModal();
-        });
-      }
-
-      confirmOverlay.addEventListener('click', (e) => {
-        if (e.target === confirmOverlay) closeConfirmModal();
-      });
-
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && confirmOverlay.classList.contains('open')) {
-          closeConfirmModal();
+    if (clearHistoryBtn) {
+      clearHistoryBtn.addEventListener('click', () => {
+        if (typeof window.plotoxConfirm === 'function') {
+          window.plotoxConfirm({
+            title: 'Clear History',
+            text: 'Are you sure you want to clear all your saved sessions? This action is permanent and cannot be undone.',
+            confirmText: 'Clear All',
+            onConfirm: () => {
+              if (typeof HistoryStorage !== 'undefined') {
+                HistoryStorage.clearHistory();
+                loadHistoryList();
+                drawHistoryDashboard();
+                updateHeaderStrip();
+              }
+            }
+          });
         }
       });
     }
@@ -1496,6 +1585,11 @@ function initApp() {
   }
 
   function handleFile(file) {
+    const sizeGuard = FileSizeGuard.validateFile(file);
+    if (!sizeGuard.valid) {
+      showUserError(sizeGuard.errorMessage, sizeGuard.title);
+      return;
+    }
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
@@ -1581,6 +1675,12 @@ Dec,70000,40000,7000,5000`
 
   // --- Parsing & Processing Dataset ---
   function parseAndLoadData(text, filename, delimiter = null) {
+    const sizeGuard = FileSizeGuard.validateText(text, filename || 'Dataset');
+    if (!sizeGuard.valid) {
+      showUserError(sizeGuard.errorMessage, sizeGuard.title);
+      disableWorkflow();
+      return;
+    }
     let parsed;
     try {
       parsed = DataParser.parse(text, delimiter);
@@ -1848,7 +1948,7 @@ Dec,70000,40000,7000,5000`
       const btn = document.createElement('button');
       btn.className = 'toolbar-toggle-pill';
       btn.id = id;
-      
+
       const isActive = activeStateGetter();
       btn.classList.toggle('active', isActive);
 
@@ -1901,7 +2001,7 @@ Dec,70000,40000,7000,5000`
       state.chartConfig.showXGrid = active;
       state.chartConfig.showYGrid = active;
       state.chartConfig.gridType = active ? 'dashed' : 'none';
-      
+
       // Sync legacy config checkboxes/pills if they exist
       const checkGridlines = document.getElementById('check-gridlines-toolbar');
       if (checkGridlines) checkGridlines.checked = active;
@@ -1923,7 +2023,7 @@ Dec,70000,40000,7000,5000`
     if (type === 'line' || type === 'area') {
       createToggleButton('tb-gridlines', 'Gridlines', 'grid_on', isGridOn, toggleGrid);
 
-      createToggleButton('tb-smooth', 'Smooth Line', 'gesture', 
+      createToggleButton('tb-smooth', 'Smooth Line', 'gesture',
         () => !!state.chartConfig.lineSmooth,
         (active) => {
           state.chartConfig.lineSmooth = active;
@@ -2697,6 +2797,11 @@ Dec,70000,40000,7000,5000`
 
   function restoreSession(session) {
     if (!session) return;
+    const sizeGuard = FileSizeGuard.validateText(session.rawText, session.filename || 'Session data');
+    if (!sizeGuard.valid) {
+      showUserError(sizeGuard.errorMessage, sizeGuard.title);
+      return;
+    }
     try {
       activeFilename = session.filename;
       activeCSVText = session.rawText;
@@ -2810,31 +2915,122 @@ Dec,70000,40000,7000,5000`
   function switchView(viewName) {
     const workspacePanel = document.getElementById('workspace-view-panel');
     const historyPanel = document.getElementById('workspace-history-panel');
-    const workspaceBtn = document.getElementById('nav-workspace-btn');
-    const historyBtn = document.getElementById('nav-history-btn');
+    const cleanerPanel = document.getElementById('workspace-cleaner-panel');
+    const settingsPanel = document.getElementById('workspace-settings-panel');
     const pageHeader = document.querySelector('.page-header');
+    const chartsDropdown = document.getElementById('nav-charts-dropdown');
+    const chartsChevron = document.getElementById('nav-charts-chevron');
 
-    if (viewName === 'workspace') {
-      if (workspacePanel) workspacePanel.style.display = 'block';
-      if (historyPanel) historyPanel.style.display = 'none';
+    // All nav buttons
+    const chartsBtn = document.getElementById('nav-charts-btn');
+    const dataCleanerBtn = document.getElementById('nav-data-cleaner-btn');
+    const projectsBtn = document.getElementById('nav-projects-btn');
+    const settingsBtn = document.getElementById('nav-settings-btn');
 
-      if (workspaceBtn) workspaceBtn.classList.add('active');
-      if (historyBtn) historyBtn.classList.remove('active');
+    // Hide all panels
+    if (workspacePanel) workspacePanel.style.display = 'none';
+    if (historyPanel) historyPanel.style.display = 'none';
+    if (cleanerPanel) cleanerPanel.style.display = 'none';
+    if (settingsPanel) settingsPanel.style.display = 'none';
 
-      if (pageHeader) pageHeader.style.display = '';
-    } else if (viewName === 'history') {
-      if (workspacePanel) workspacePanel.style.display = 'none';
-      if (historyPanel) historyPanel.style.display = 'block';
+    // Deactivate all nav buttons
+    [chartsBtn, dataCleanerBtn, projectsBtn, settingsBtn].forEach(btn => {
+      if (btn) btn.classList.remove('active');
+    });
 
-      if (workspaceBtn) workspaceBtn.classList.remove('active');
-      if (historyBtn) historyBtn.classList.add('active');
+    // Handle 'workspace' as alias for 'charts' (backward compat)
+    if (viewName === 'workspace') viewName = 'charts';
+    // Handle 'history' as alias for 'projects' (backward compat)
+    if (viewName === 'history') viewName = 'projects';
 
-      if (pageHeader) pageHeader.style.display = 'none';
-
-      drawHistoryDashboard();
+    switch (viewName) {
+      case 'charts':
+        if (workspacePanel) workspacePanel.style.display = 'block';
+        if (chartsBtn) chartsBtn.classList.add('active');
+        if (pageHeader) pageHeader.style.display = '';
+        if (chartsDropdown) {
+          chartsDropdown.classList.add('open');
+          chartsDropdown.style.display = 'flex';
+        }
+        if (chartsChevron) {
+          chartsChevron.style.transform = 'rotate(180deg)';
+        }
+        break;
+      case 'cleaner':
+        if (cleanerPanel) cleanerPanel.style.display = 'block';
+        if (dataCleanerBtn) dataCleanerBtn.classList.add('active');
+        if (pageHeader) pageHeader.style.display = 'none';
+        if (chartsDropdown) {
+          chartsDropdown.classList.remove('open');
+          chartsDropdown.style.display = 'none';
+        }
+        if (chartsChevron) {
+          chartsChevron.style.transform = 'rotate(0deg)';
+        }
+        break;
+      case 'projects':
+        if (historyPanel) historyPanel.style.display = 'block';
+        if (projectsBtn) projectsBtn.classList.add('active');
+        if (pageHeader) pageHeader.style.display = 'none';
+        drawHistoryDashboard();
+        if (chartsDropdown) {
+          chartsDropdown.classList.remove('open');
+          chartsDropdown.style.display = 'none';
+        }
+        if (chartsChevron) {
+          chartsChevron.style.transform = 'rotate(0deg)';
+        }
+        break;
+      case 'settings':
+        if (settingsPanel) settingsPanel.style.display = 'block';
+        if (settingsBtn) settingsBtn.classList.add('active');
+        if (pageHeader) pageHeader.style.display = 'none';
+        if (chartsDropdown) {
+          chartsDropdown.classList.remove('open');
+          chartsDropdown.style.display = 'none';
+        }
+        if (chartsChevron) {
+          chartsChevron.style.transform = 'rotate(0deg)';
+        }
+        break;
     }
     updateHeaderStrip();
   }
+
+  // Expose switchView globally for cross-module communication
+  window.plotoxSwitchView = switchView;
+
+  // --- Load cleaned data from Data Cleaner ---
+  window.plotoxLoadCleanerData = function () {
+    try {
+      const csvText = sessionStorage.getItem('plotox-cleaner-csv');
+      const filename = sessionStorage.getItem('plotox-cleaner-filename') || 'cleaned_data.csv';
+      if (csvText) {
+        const sizeGuard = FileSizeGuard.validateText(csvText, filename);
+        if (!sizeGuard.valid) {
+          showUserError(sizeGuard.errorMessage, sizeGuard.title);
+          sessionStorage.removeItem('plotox-cleaner-csv');
+          sessionStorage.removeItem('plotox-cleaner-filename');
+          return;
+        }
+        switchView('charts');
+        activeFilename = filename;
+        activeCSVText = csvText;
+        pasteText.value = csvText;
+        const parsed = DataParser.parse(csvText);
+        state.dataset = parsed;
+        populateSelectors();
+        enableWorkflow();
+        if (editDataBar) editDataBar.style.display = 'flex';
+        if (dataMetaBadge) dataMetaBadge.textContent = `${parsed.headers.length} columns · ${parsed.rows.length} rows`;
+        saveSession();
+        sessionStorage.removeItem('plotox-cleaner-csv');
+        sessionStorage.removeItem('plotox-cleaner-filename');
+      }
+    } catch (e) {
+      console.error('Failed to load cleaner data:', e);
+    }
+  };
 
   // --- Dynamic Header Strip Update ---
   function updateHeaderStrip() {
@@ -2946,7 +3142,7 @@ Dec,70000,40000,7000,5000`
       return;
     } else {
       if (descEl) {
-        descEl.textContent = 'Your recent CSVs – click Import to load one back with a pre-filled dataset.';
+        descEl.textContent = 'Your recent Projects – click Import to load one back with a pre-filled dataset.';
       }
       if (clearBtn) {
         clearBtn.style.display = 'inline-flex';

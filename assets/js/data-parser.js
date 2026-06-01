@@ -63,7 +63,7 @@ class DataParser {
           i++; // Skip the trailing \n for \r\n line endings
         }
         currentRow.push(currentCell.trim());
-        
+
         // Only push row if it contains data
         if (currentRow.length > 1 || (currentRow.length === 1 && currentRow[0] !== '')) {
           rows.push(currentRow);
@@ -93,7 +93,7 @@ class DataParser {
     if (headers.length === 0) {
       throw new Error("No column headers could be parsed from the first row.");
     }
-    
+
     // Filter out rows that do not match header length to ensure data integrity
     const expectedLength = headers.length;
     const dataRows = [];
@@ -104,7 +104,7 @@ class DataParser {
       // Skip empty or all-whitespace lines
       if (r.length === 1 && r[0].trim() === '') continue;
       if (r.every(cell => cell.trim() === '')) continue;
-      
+
       if (r.length === expectedLength) {
         dataRows.push(r);
       } else {
@@ -169,7 +169,7 @@ class DataParser {
         const min = Math.min(...numbers);
         const max = Math.max(...numbers);
         const mean = sum / numbers.length;
-        
+
         stats[colName] = {
           min: parseFloat(min.toFixed(4)),
           max: parseFloat(max.toFixed(4)),

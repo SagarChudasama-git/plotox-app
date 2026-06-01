@@ -10,7 +10,7 @@ class StorageManager {
       sessionStorage.setItem('plotiq-session-filename', filename);
       sessionStorage.setItem('plotiq-session-text', rawText);
       sessionStorage.setItem('plotiq-session-config', JSON.stringify(config));
-      
+
       // Fallback
       sessionStorage.setItem('plotox-session-filename', filename);
       sessionStorage.setItem('plotox-session-text', rawText);
@@ -51,7 +51,7 @@ class StorageManager {
       sessionStorage.removeItem('plotiq-session-filename');
       sessionStorage.removeItem('plotiq-session-text');
       sessionStorage.removeItem('plotiq-session-config');
-      
+
       sessionStorage.removeItem('plotox-session-filename');
       sessionStorage.removeItem('plotox-session-text');
       sessionStorage.removeItem('plotox-session-config');
@@ -107,9 +107,9 @@ class HistoryStorage {
         config: JSON.parse(JSON.stringify(config)), // Deep clone
         rawText
       };
-      
+
       history.unshift(entry);
-      
+
       // Limit history size to 25 to avoid browser storage limit
       if (history.length > 25) {
         history.pop();
@@ -134,6 +134,10 @@ class HistoryStorage {
     }
   }
 }
+
+// Make globally available
+window.StorageManager = StorageManager;
+window.HistoryStorage = HistoryStorage;
 
 // Make globally available
 window.StorageManager = StorageManager;

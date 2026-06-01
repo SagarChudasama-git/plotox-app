@@ -47,6 +47,7 @@
 /* ---------- BADGES ---------- */
 .section-badge {
   display: inline-flex;
+  align-self: flex-start;
   align-items: center;
   font-size: var(--fs-label-caps);
   font-weight: 600;
@@ -129,6 +130,12 @@ html.dark .navbar {
 .nav-links a:hover,
 .nav-links a.active {
   color: var(--color-primary);
+}
+
+@media (min-width: 768px) {
+  .nav-links {
+    display: flex;
+  }
 }
 
 .nav-cta {

@@ -132,7 +132,7 @@ class ChartEngine {
 
       // Styling Variables based on Light/Dark Mode
       const defaultTextCol = isDarkMode ? '#9A9895' : '#6B6B6B';
-      const fontColor = (function() {
+      const fontColor = (function () {
         if (config.titleColor) {
           if (config.titleColor.startsWith('var(')) {
             return defaultTextCol;
@@ -141,7 +141,7 @@ class ChartEngine {
         }
         return defaultTextCol;
       })();
-      
+
       const titleColor = isDarkMode ? '#FFFFFF' : '#000000';
       const gridColor = isDarkMode ? '#2A2926' : '#E7E7E4';
       const axisLineColor = isDarkMode ? '#888888' : '#333333';
@@ -152,10 +152,10 @@ class ChartEngine {
       const isPublication = config.publicationMode === true;
       const fontStyle = isPublication ? 'Georgia, "Times New Roman", serif' : 'Inter, sans-serif';
       const animationEnabled = !isPublication;
-      
+
       const lineThickness = isPublication ? 3 : (config.lineWidth !== undefined ? Number(config.lineWidth) : 2.5);
       const lineType = isPublication ? 'solid' : (config.lineType || 'solid');
-      
+
       // Gridlines visibility
       const gridType = config.gridType || 'dashed';
       const showXGridlines = (gridType !== 'none') && (isPublication ? false : (config.showXGrid !== false));
@@ -170,7 +170,7 @@ class ChartEngine {
       };
 
       // Proportional global chart text font size scaling
-      const globalFontSize = (function() {
+      const globalFontSize = (function () {
         const titleSizeStr = config.titleSize || '16px';
         const titleSize = parseInt(titleSizeStr) || 16;
         if (titleSize <= 12) return 10;
@@ -178,6 +178,9 @@ class ChartEngine {
         if (titleSize <= 20) return 14;
         return 16;
       })();
+
+      // Check if dataZoom should be enabled (more than 100 rows, and not pie/donut chart)
+      const enableZoom = dataset.rows.length > 100 && config.chartType !== 'pie' && config.chartType !== 'donut';
 
       // Initialize ECharts option object
       let option = {
@@ -198,7 +201,7 @@ class ChartEngine {
             fontSize: config.titleSize ? parseInt(config.titleSize) : 16,
             fontWeight: config.titleWeight || '600',
             fontStyle: config.titleStyle || 'normal',
-            color: (function() {
+            color: (function () {
               if (config.titleColor) {
                 if (config.titleColor.startsWith('var(')) {
                   // Resolve system default primary color based on theme
@@ -222,11 +225,11 @@ class ChartEngine {
           },
           confine: true
         },
-        grid: (function() {
+        grid: (function () {
           let leftVal = '8%';
           let rightVal = '8%';
-          let bottomVal = '10%';
-          let topVal = '10%';
+          let bottomVal = enableZoom ? '75px' : '10%';
+          let topVal = enableZoom ? '55px' : '10%';
 
           if (config.legendPosition === 'left') {
             leftVal = '18%';
@@ -235,11 +238,11 @@ class ChartEngine {
             leftVal = '6%';
             rightVal = '18%';
           } else if (config.legendPosition === 'bottom') {
-            bottomVal = '16%';
-            topVal = '8%';
+            bottomVal = enableZoom ? '85px' : '16%';
+            topVal = enableZoom ? '45px' : '8%';
           } else if (config.legendPosition === 'top') {
-            topVal = '16%';
-            bottomVal = '8%';
+            topVal = enableZoom ? '65px' : '16%';
+            bottomVal = enableZoom ? '65px' : '8%';
           }
 
           return {
@@ -293,7 +296,7 @@ class ChartEngine {
         option.grid = {};
         option.xAxis = { show: false };
         option.yAxis = { show: false };
-        
+
         const isDonut = config.chartType === 'donut' || config.pieStyle === 'donut';
         const pieCenter = ['50%', '50%'];
 
@@ -347,10 +350,10 @@ class ChartEngine {
           max = max + Math.max(1, Math.abs(max) * 0.1);
         }
 
-        const binCount = (config.histogramBins && config.histogramBins !== 'auto') 
-          ? Number(config.histogramBins) 
+        const binCount = (config.histogramBins && config.histogramBins !== 'auto')
+          ? Number(config.histogramBins)
           : Math.min(Math.max(5, Math.ceil(Math.sqrt(numericValues.length))), 20);
-          
+
         const binWidth = (max - min) / binCount;
         const binFrequencies = Array(binCount).fill(0);
         const binLabels = [];
@@ -381,10 +384,10 @@ class ChartEngine {
             fontWeight: config.titleWeight || '600',
             fontStyle: config.titleStyle || 'normal'
           },
-          axisLabel: { 
-            color: fontColor, 
-            rotate: config.xAxisLabelRotate !== undefined ? Number(config.xAxisLabelRotate) : 15, 
-            formatter: formatKValue, 
+          axisLabel: {
+            color: fontColor,
+            rotate: config.xAxisLabelRotate !== undefined ? Number(config.xAxisLabelRotate) : 15,
+            formatter: formatKValue,
             fontFamily: fontStyle,
             fontSize: globalFontSize,
             fontWeight: config.titleWeight || '500',
@@ -408,8 +411,8 @@ class ChartEngine {
             fontStyle: config.titleStyle || 'normal'
           },
           boundaryGap: ['0%', '10%'],
-          axisLabel: { 
-            color: fontColor, 
+          axisLabel: {
+            color: fontColor,
             formatter: formatKValue,
             fontFamily: fontStyle,
             fontSize: globalFontSize,
@@ -501,10 +504,10 @@ class ChartEngine {
           },
           data: isScatter ? undefined : xValues,
           boundaryGap: (config.chartType === 'line' || config.chartType === 'area') ? false : true,
-          axisLabel: { 
-            color: fontColor, 
-            rotate: config.xAxisLabelRotate !== undefined ? Number(config.xAxisLabelRotate) : 0, 
-            formatter: formatKValue, 
+          axisLabel: {
+            color: fontColor,
+            rotate: config.xAxisLabelRotate !== undefined ? Number(config.xAxisLabelRotate) : 0,
+            formatter: formatKValue,
             fontFamily: fontStyle,
             fontSize: globalFontSize,
             fontWeight: config.titleWeight || '500',
@@ -529,8 +532,8 @@ class ChartEngine {
             fontStyle: config.titleStyle || 'normal'
           },
           boundaryGap: ['0%', '10%'],
-          axisLabel: { 
-            color: fontColor, 
+          axisLabel: {
+            color: fontColor,
             formatter: formatKValue,
             fontFamily: fontStyle,
             fontSize: globalFontSize,
@@ -630,7 +633,7 @@ class ChartEngine {
             seriesOption.data = seriesData.map((item, sIdx) => {
               const isMin = minIndices.includes(sIdx);
               const isMax = maxIndices.includes(sIdx);
-              
+
               if (!isMin && !isMax) {
                 if (config.showPoints === false) {
                   return {
@@ -740,6 +743,80 @@ class ChartEngine {
             }
           }
         });
+      }
+
+      if (enableZoom) {
+        option.dataZoom = [
+          {
+            type: 'inside',
+            xAxisIndex: [0]
+          },
+          {
+            type: 'slider',
+            show: true,
+            xAxisIndex: [0],
+            bottom: 15,
+            height: 20,
+            borderColor: isDarkMode ? '#2A2926' : '#E7E7E4',
+            fillerColor: isDarkMode ? 'rgba(99, 102, 241, 0.15)' : 'rgba(99, 102, 241, 0.1)',
+            backgroundColor: isDarkMode ? '#1C1C19' : '#FFFFFF',
+            handleIcon: 'path://M-1.5,0.5h3v9h-3V0.5z M-0.5,1.5h1v7h-1V1.5z',
+            handleSize: '120%',
+            handleStyle: {
+              color: isDarkMode ? '#4f46e5' : '#6366f1',
+              borderColor: isDarkMode ? '#6366f1' : '#4f46e5',
+              borderWidth: 1,
+              shadowBlur: 3,
+              shadowColor: 'rgba(0, 0, 0, 0.2)',
+              shadowOffsetX: 1,
+              shadowOffsetY: 1
+            },
+            moveHandleSize: 7,
+            moveHandleStyle: {
+              color: isDarkMode ? '#3A3936' : '#D7D7D4'
+            },
+            selectedDataBackground: {
+              lineStyle: {
+                color: isDarkMode ? '#6366f1' : '#4f46e5'
+              },
+              areaStyle: {
+                color: isDarkMode ? 'rgba(99, 102, 241, 0.2)' : 'rgba(99, 102, 241, 0.1)'
+              }
+            },
+            textStyle: {
+              color: fontColor,
+              fontFamily: fontStyle,
+              fontSize: 10
+            }
+          }
+        ];
+
+        option.toolbox = {
+          show: true,
+          right: '5%',
+          top: 15,
+          itemSize: 15,
+          iconStyle: {
+            borderColor: fontColor
+          },
+          emphasis: {
+            iconStyle: {
+              borderColor: isDarkMode ? '#FFFFFF' : '#000000'
+            }
+          },
+          feature: {
+            dataZoom: {
+              yAxisIndex: 'none',
+              title: {
+                zoom: 'Area Zoom',
+                back: 'Reset View'
+              }
+            },
+            restore: {
+              title: 'Reset'
+            }
+          }
+        };
       }
 
       chart.setOption(option, { notMerge: true, lazyUpdate: false });

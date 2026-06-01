@@ -713,6 +713,9 @@ html.dark .toolbar-select {
 }
 
 .data-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 500;
@@ -723,6 +726,10 @@ html.dark .toolbar-select {
   cursor: pointer;
   font-family: var(--font-main);
   transition: color var(--transition-fast);
+}
+
+.data-tab .material-symbols-outlined {
+  font-size: 16px !important;
 }
 
 .data-tab:hover {
@@ -1952,26 +1959,78 @@ html.dark .legend-color-popover {
   z-index: 10000;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
+  gap: 14px;
+  padding: 14px 18px;
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
-  font-size: 13px;
-  color: var(--color-primary);
-  animation: slideUpFade 0.3s ease-out;
-  max-width: 380px;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  font-family: var(--font-main);
+  animation: slideUpFade 0.2s ease-out;
+  max-width: 400px;
 }
 
 .toast-notification.error {
   border-color: var(--color-error);
-  background-color: rgba(186, 26, 26, 0.06);
+  background-color: var(--color-surface);
 }
 
-.toast-notification .material-symbols-outlined {
+.toast-notification .toast-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background-color: rgba(186, 26, 26, 0.08);
+  border: 1.2px solid rgba(186, 26, 26, 0.15);
+}
+
+.toast-notification .toast-icon-container .material-symbols-outlined {
   font-size: 18px !important;
   color: var(--color-error);
+}
+
+.toast-notification .toast-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex-grow: 1;
+}
+
+.toast-notification .toast-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--color-primary);
+  line-height: 1.25;
+}
+
+.toast-notification .toast-description {
+  font-size: 11.5px;
+  color: var(--color-secondary-text);
+  line-height: 1.35;
+}
+
+.toast-notification .toast-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background: transparent;
+  border: none;
+  color: var(--color-outline);
+  cursor: pointer;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+  margin-left: 4px;
+}
+
+.toast-notification .toast-close-btn:hover {
+  background-color: var(--color-surface-low);
+  color: var(--color-primary);
 }
 
 @keyframes slideUpFade {
@@ -2874,7 +2933,7 @@ html.dark .history-empty-icon-circle {
 
 .history-archive-title {
   font-family: var(--font-heading);
-  font-size: 35px;
+  font-size: 42px;
   font-weight: 700;
   color: var(--color-primary);
   margin: 0;
@@ -3574,7 +3633,8 @@ html.dark .style-select-control {
   }
 
   .app-body {
-    display: block !important; /* Converts app grid to block layout to prevent vertical stacking */
+    display: block !important;
+    /* Converts app grid to block layout to prevent vertical stacking */
   }
 
   .app-content-area {
@@ -3585,7 +3645,8 @@ html.dark .style-select-control {
   .app-sidebar-nav {
     position: fixed !important;
     top: 0 !important;
-    left: -240px !important; /* Start offscreen */
+    left: -240px !important;
+    /* Start offscreen */
     width: 240px !important;
     height: 100vh !important;
     height: 100dvh !important;
@@ -3640,7 +3701,7 @@ html.dark .style-select-control {
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2) !important;
     z-index: 210 !important;
   }
-  
+
   html.dark .legend-color-popover {
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5) !important;
   }
@@ -3665,6 +3726,7 @@ html.dark .style-select-control {
 
 /* 640px Mobile Phone Custom Wraps */
 @media (max-width: 640px) {
+
   /* Dynamic Title & Legend Wrapping in ECharts Header */
   .chart-canvas-title-bar {
     flex-direction: column !important;
@@ -3792,7 +3854,8 @@ html.dark .style-select-control {
 .confirm-modal-card {
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 16px; /* Beautifully curved card */
+  border-radius: 16px;
+  /* Beautifully curved card */
   width: 90%;
   max-width: 400px;
   padding: 20px;
@@ -3850,7 +3913,8 @@ html.dark .style-select-control {
   padding: 10px 24px;
   font-size: 13px;
   font-weight: 600;
-  border-radius: 9999px; /* Pill shaped buttons */
+  border-radius: 9999px;
+  /* Pill shaped buttons */
   cursor: pointer;
   font-family: var(--font-main);
   transition: all var(--transition-fast);
@@ -3888,7 +3952,8 @@ html.dark .style-select-control {
   font-size: 12px !important;
   font-weight: 600 !important;
   border: 1px solid var(--color-border) !important;
-  border-radius: 9999px !important; /* Pill shaped */
+  border-radius: 9999px !important;
+  /* Pill shaped */
   cursor: pointer !important;
   font-family: var(--font-main) !important;
   transition: all var(--transition-fast) !important;
@@ -3920,7 +3985,7 @@ html.dark .style-select-control {
     gap: 14px;
     margin-bottom: 20px;
   }
-  
+
   .history-clear-all-btn {
     width: 100%;
     justify-content: center;
@@ -3934,20 +3999,20 @@ html.dark .style-select-control {
     background: transparent;
   }
 
-  .history-list-table, 
-  .history-list-table thead, 
-  .history-list-table tbody, 
-  .history-list-table tr, 
+  .history-list-table,
+  .history-list-table thead,
+  .history-list-table tbody,
+  .history-list-table tr,
   .history-list-table td {
     display: block;
     width: 100%;
     box-sizing: border-box;
   }
-  
+
   .history-list-table thead {
     display: none;
   }
-  
+
   .history-list-row {
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
@@ -3958,9 +4023,10 @@ html.dark .style-select-control {
     flex-direction: column;
     gap: 12px;
     box-shadow: var(--shadow-sm);
-    position: relative; /* relative positioning for absolute child align */
+    position: relative;
+    /* relative positioning for absolute child align */
   }
-  
+
   .history-list-row:last-child {
     margin-bottom: 0;
   }
@@ -3969,28 +4035,30 @@ html.dark .style-select-control {
     padding: 0 !important;
     border: none !important;
   }
-  
+
   .history-list-row td.col-file {
     font-size: 14px;
-    padding-right: 110px !important; /* prevent overflow overlap with badge */
+    padding-right: 110px !important;
+    /* prevent overflow overlap with badge */
   }
-  
+
   .history-filename-monospace {
     white-space: normal;
     word-break: break-all;
     max-width: 100%;
     display: inline-block;
   }
-  
+
   .history-list-row td.col-type {
-    position: absolute; /* absolute position for right align inline with filename */
+    position: absolute;
+    /* absolute position for right align inline with filename */
     top: 18px;
     right: 18px;
     width: auto;
     display: inline-flex;
     align-items: center;
   }
-  
+
   .history-list-row td.col-size::before {
     content: "Dimensions: ";
     font-size: 11px;
@@ -3999,7 +4067,7 @@ html.dark .style-select-control {
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
-  
+
   .history-list-row td.col-when::before {
     content: "Created: ";
     font-size: 11px;
@@ -4008,14 +4076,14 @@ html.dark .style-select-control {
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
-  
+
   .history-list-row td.col-actions {
     margin-top: 8px;
     border-top: 1px dashed var(--color-border) !important;
     padding-top: 14px !important;
     width: 100%;
   }
-  
+
   .action-buttons-cell-mockup {
     display: flex;
     justify-content: space-between;
@@ -4023,7 +4091,7 @@ html.dark .style-select-control {
     width: 100%;
     gap: 8px;
   }
-  
+
   .history-import-link {
     flex: 1;
     justify-content: center;
@@ -4034,8 +4102,27 @@ html.dark .style-select-control {
   .history-empty-container-mockup {
     padding: 48px 16px;
   }
-  
+
   .history-empty-desc-mockup {
     font-size: 12px;
   }
+}
+
+/* --- Sidebar Dropdown Menu (Chart Types) --- */
+.sidebar-dropdown-content {
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 12px;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+.sidebar-dropdown-content.open {
+  display: flex;
+}
+
+.sidebar-dropdown-content .sidebar-menu-item {
+  padding: 8px 12px;
+  font-size: 12.5px;
 }

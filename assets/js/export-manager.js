@@ -25,7 +25,7 @@ class ExportManager {
     // Check specific fields that look like font style configuration containers
     if (obj.fontFamily !== undefined || obj.fontSize !== undefined || obj.fontWeight !== undefined || obj.color !== undefined) {
       obj.fontFamily = isPub ? 'Georgia, "Times New Roman", serif' : 'Space Grotesk, sans-serif';
-      
+
       // Force weight to 700 (bold) unless specifically overridden to another bold scale
       if (obj.fontWeight === undefined || obj.fontWeight === 'normal' || obj.fontWeight === '500' || obj.fontWeight === 400 || obj.fontWeight === 500) {
         obj.fontWeight = 700;
@@ -90,7 +90,7 @@ class ExportManager {
         const el = textElements[i];
         el.setAttribute('font-family', fontStack);
         el.setAttribute('font-weight', '700');
-        
+
         const tspans = el.getElementsByTagName('tspan');
         for (let j = 0; j < tspans.length; j++) {
           tspans[j].setAttribute('font-family', fontStack);
@@ -165,7 +165,7 @@ class ExportManager {
     // Add Watermark brand logo at the bottom right corner (plotox with rising o and x)
     const isDarkExport = option.backgroundColor && String(option.backgroundColor).startsWith('#1');
     const watermarkColor = isDarkExport ? 'rgba(255, 255, 255, 0.25)' : 'rgba(0, 0, 0, 0.25)';
-    
+
     option.graphic = option.graphic || [];
     const graphicList = Array.isArray(option.graphic) ? option.graphic : [option.graphic];
     graphicList.push({
@@ -231,7 +231,7 @@ class ExportManager {
 
     if (option.grid && option.grid[0]) {
       const grid = option.grid[0];
-      
+
       // Convert absolute pixels back to percentages with a safe minimum (12% left/right, 14% bottom)
       const toPercent = (val, size, minPercent) => {
         if (typeof val === 'number') {
@@ -278,7 +278,7 @@ class ExportManager {
   static _withTitleShown(chart, callback) {
     const currentOption = chart.getOption();
     const exportOption = this._getExportOption(chart);
-    
+
     // Set modified option with lazyUpdate=false to force instant synchronous redraw
     chart.setOption(exportOption, { notMerge: true, lazyUpdate: false });
 
@@ -310,7 +310,7 @@ class ExportManager {
       const dataURL = chart.getDataURL({
         type: 'png',
         pixelRatio: pixelRatio,
-        excludeComponents: ['toolbox']
+        excludeComponents: ['toolbox', 'dataZoom']
       });
       this._triggerDownload(dataURL, `${filename}.png`);
     });
@@ -337,7 +337,7 @@ class ExportManager {
         type: 'jpeg',
         pixelRatio: pixelRatio,
         backgroundColor: '#FFFFFF',
-        excludeComponents: ['toolbox']
+        excludeComponents: ['toolbox', 'dataZoom']
       });
       this._triggerDownload(dataURL, `${filename}.jpg`);
     });
@@ -371,7 +371,7 @@ class ExportManager {
 
       const dataURL = tempChart.getDataURL({
         type: 'svg',
-        excludeComponents: ['toolbox']
+        excludeComponents: ['toolbox', 'dataZoom']
       });
 
       tempChart.dispose();
@@ -405,7 +405,7 @@ class ExportManager {
     const bgColor = (option.backgroundColor && option.backgroundColor[0]) || option.backgroundColor || '#FEFCF8';
     const isPub = option.publicationMode === true;
     const fontStack = isPub ? 'Georgia, "Times New Roman", serif' : '"Space Grotesk", sans-serif';
-    
+
     // Determine if the background is dark to style the control buttons appropriately
     const isDark = bgColor.startsWith('#1') || bgColor === '#000000' || bgColor === 'black';
 
@@ -414,7 +414,7 @@ class ExportManager {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plotox — Interactive Chart Export</title>
+  <title>Plotox — Interactive Chart</title>
   <!-- Load Space Grotesk Google Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -574,13 +574,13 @@ class ExportManager {
       const imgData = chart.getDataURL({
         type: 'png',
         pixelRatio: pixelRatio,
-        excludeComponents: ['toolbox']
+        excludeComponents: ['toolbox', 'dataZoom']
       });
 
       try {
         const { jsPDF } = window.jspdf;
         const orientation = width > height ? 'l' : 'p';
-        
+
         const pdf = new jsPDF(orientation, 'px', [width, height]);
         pdf.addImage(imgData, 'PNG', 0, 0, width, height);
         pdf.save(`${filename}.pdf`);
@@ -607,7 +607,7 @@ class ExportManager {
     const optionStr = JSON.stringify(option, null, 2);
     const blob = new Blob([optionStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
-    
+
     this._triggerDownload(url, `${filename}.json`);
   }
 
@@ -630,7 +630,7 @@ class ExportManager {
     link.download = fullFilename;
     document.body.appendChild(link);
     link.click();
-    
+
     // Clean up
     setTimeout(() => {
       document.body.removeChild(link);

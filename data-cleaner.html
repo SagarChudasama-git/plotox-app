@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Plotox | CSV Data Cleaner & Transformer</title>
+  <meta name="description"
+    content="Clean, normalise, and transform your CSV and Excel datasets instantly in your browser. Remove duplicates, fix empty cells, and format columns securely before plotting.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/favicon.ico">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="assets/css/design-system.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/seo-pages.css">
+
+  <style>
+    /* Custom styles for interactive cleaner demo */
+    .data-cleaner-demo {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .demo-dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 12px;
+    }
+
+    .dashboard-badge {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-outline);
+      background-color: var(--color-surface-low);
+      padding: 4px 10px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+    }
+
+    .health-score-container {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-primary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .health-val {
+      font-family: var(--font-heading);
+      font-size: 18px;
+      font-weight: 700;
+      transition: color var(--transition-fast);
+    }
+
+    .demo-table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: var(--color-surface);
+    }
+
+    .demo-cleaner-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+      text-align: left;
+    }
+
+    .demo-cleaner-table th {
+      background-color: var(--color-surface-low);
+      color: var(--color-primary);
+      font-weight: 600;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--color-border);
+      border-right: 1px solid var(--color-border);
+    }
+
+    .demo-cleaner-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--color-border);
+      border-right: 1px solid var(--color-border);
+      color: var(--color-primary);
+      white-space: nowrap;
+      transition: background-color var(--transition-fast), color var(--transition-fast);
+    }
+
+    .demo-cleaner-table th:last-child,
+    .demo-cleaner-table td:last-child {
+      border-right: none;
+    }
+
+    /* Highlight states */
+    .row-empty-dirty {
+      background-color: rgba(186, 26, 26, 0.04) !important;
+      opacity: 0.6;
+    }
+
+    .row-dup-dirty {
+      background-color: rgba(234, 88, 12, 0.03) !important;
+    }
+
+    .row-dup-dirty td {
+      border-left: 3px solid var(--color-orange);
+    }
+
+    .cell-spaces-dirty {
+      background-color: rgba(234, 88, 12, 0.08);
+      border-radius: var(--radius-sm);
+      text-decoration: underline dotted var(--color-orange);
+    }
+
+    .cell-cleaned {
+      background-color: rgba(16, 185, 129, 0.08) !important;
+      color: #10b981 !important;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       TOP NAVIGATION
+  ════════════════════════════════════════════ -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a class="nav-logo" href="index.html">plot<span class="logo-rising-o">o</span><span
+            class="logo-rising-x">x</span></a>
+      </div>
+      <div>
+        <a class="nav-cta" href="app.html?type=cleaner">Launch App</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════
+       SEO MAIN LAYOUT
+  ════════════════════════════════════════════ -->
+  <main class="seo-main container">
+
+    <!-- ── HERO SECTION WITH INTERACTIVE DEMO ── -->
+    <section class="seo-hero">
+      <div class="seo-hero-content">
+        <span class="section-badge">Data Cleaner & Extractor</span>
+        <h1 class="seo-hero-title">Prepare and normalize datasets instantly</h1>
+        <p class="seo-hero-desc">Clean raw spreadsheets directly in your browser. Remove duplicates, resolve empty
+          values, trim whitespaces, and normalise formatting securely before plotting.</p>
+        <div>
+          <a class="btn-primary" href="app.html?type=cleaner">Clean Your Dataset Now</a>
+        </div>
+      </div>
+
+      <!-- Live Demo Widget -->
+      <div class="seo-demo-box data-cleaner-demo">
+        <div class="demo-dashboard-header">
+          <div class="dashboard-badge">Data Quality Report</div>
+          <div class="health-score-container">
+            <span class="health-label">Health Score:</span>
+            <span class="health-val" id="demo-health-score">72%</span>
+          </div>
+        </div>
+
+        <!-- Table Preview Panel -->
+        <div class="demo-table-wrapper">
+          <table class="demo-cleaner-table">
+            <thead>
+              <tr>
+                <th>id</th>
+                <th>name</th>
+                <th>age</th>
+                <th>salary</th>
+              </tr>
+            </thead>
+            <tbody id="demo-table-body">
+              <!-- Rows will be rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Controls -->
+        <div class="seo-demo-controls">
+          <label class="demo-checkbox-group">
+            <input type="checkbox" id="clean-empty">
+            Remove Empty Rows
+          </label>
+          <label class="demo-checkbox-group">
+            <input type="checkbox" id="clean-dups">
+            Remove Duplicates
+          </label>
+          <label class="demo-checkbox-group">
+            <input type="checkbox" id="clean-spaces">
+            Trim Spaces
+          </label>
+          <button class="demo-btn-action" id="demo-apply-btn"
+            style="background: var(--color-primary); color: var(--color-on-primary);">
+            <span class="material-symbols-outlined" style="font-size: 14px;">cleaning_services</span> Clean Data
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ARTICLE & SIDEBAR DEEP DIVE ───────── -->
+    <section class="seo-content-grid">
+
+      <!-- Article Content -->
+      <article class="seo-article">
+        <h2>What is Data Cleaning?</h2>
+        <p><strong>Data cleaning</strong> (or data cleansing) is the process of identifying and correcting corrupt,
+          inaccurate, duplicate, formatted, or incomplete records from a dataset. In analytical pipelines, cleaning is
+          the essential first step before charting, ensuring that visual scales and mathematical summaries accurately
+          reflect the underlying variables.</p>
+
+        <h2>Why is data cleaning essential for chart visualization?</h2>
+        <p>If you feed dirty data into a visualization engine, it leads to distorted and misleading charts. Common
+          issues resolved by cleaning include:</p>
+        <ul>
+          <li><strong>Miscalculated Averages</strong>: Empty rows or null fields parse as zeros or NaN, breaking
+            mathematical indicators.</li>
+          <li><strong>Distorted Scales</strong>: Symbols like $, %, and commas cause numeric columns to parse as text,
+            preventing visualization or creating incorrect categorical axes.</li>
+          <li><strong>Visual Noise</strong>: Duplicate values inflate totals, making bar sizes or line heights
+            representationally incorrect.</li>
+          <li><strong>Broken Categorizations</strong>: Leading and trailing spaces in text fields create duplicate
+            legend labels (e.g. "NY" vs " NY ").</li>
+        </ul>
+
+        <h2>Key data cleaning operations supported by plotox</h2>
+        <ul>
+          <li><strong>Duplicate Removal</strong>: Scans all columns and strips duplicate rows, ensuring counts are
+            accurate.</li>
+          <li><strong>Empty Value Handling</strong>: Automatically removes empty rows, or lets you fill missing cells
+            with averages or placeholder values.</li>
+          <li><strong>Symbol Stripping</strong>: Standardizes text fields by converting currency and percentage labels
+            into numbers.</li>
+          <li><strong>Text Normalization</strong>: Trims leading/trailing spaces and normalizes case styles (UPPER,
+            lower, Title Case).</li>
+          <li><strong>Calculated Fields</strong>: Add new columns by applying basic mathematical formulas (+, -, *, /)
+            on existing fields.</li>
+        </ul>
+
+        <h2>100% Client-Side Privacy</h2>
+        <p>Like the visualizer itself, the Plotox Data Cleaner operates completely within your browser's local memory.
+          Your files are never sent to a backend server, ensuring your proprietary, financial, or personal datasets
+          remain completely secure and private.</p>
+      </article>
+
+      <!-- Sidebar -->
+      <aside class="seo-sidebar">
+        <div class="seo-sidebar-widget">
+          <h4 class="widget-title">Other Generators & Tools</h4>
+          <div class="gallery-grid">
+            <a href="line-chart.html" class="gallery-link">
+              <span class="material-symbols-outlined">show_chart</span> Line Chart
+            </a>
+            <a href="bar-chart.html" class="gallery-link">
+              <span class="material-symbols-outlined">bar_chart</span> Bar Chart
+            </a>
+            <a href="pie-chart.html" class="gallery-link">
+              <span class="material-symbols-outlined">pie_chart</span> Pie Chart
+            </a>
+            <a href="scatter-plot.html" class="gallery-link">
+              <span class="material-symbols-outlined">scatter_plot</span> Scatter Plot
+            </a>
+            <a href="area-chart.html" class="gallery-link">
+              <span class="material-symbols-outlined">area_chart</span> Area Chart
+            </a>
+            <a href="histogram.html" class="gallery-link">
+              <span class="material-symbols-outlined">analytics</span> Histogram
+            </a>
+            <a href="data-cleaner.html" class="gallery-link active">
+              <span class="material-symbols-outlined">cleaning_services</span> Data Cleaner
+            </a>
+          </div>
+        </div>
+      </aside>
+
+    </section>
+
+    <!-- ── CTA SECTION ───────────────────────── -->
+    <section class="seo-cta-section">
+      <h3>Ready to optimize your datasets?</h3>
+      <p>Clean and transform your local CSV and Excel spreadsheets instantly. 100% secure, browser-based, no
+        registration required.</p>
+      <a class="btn-primary" href="app.html?type=cleaner">Launch Data Cleaner Dashboard</a>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="container footer-bottom" style="border-top: 1px solid var(--color-border); padding: 30px 0;">
+      <span>© 2026 plotox | Experience Data Visualization</span>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/theme.js"></script>
+  <script src="assets/js/common.js"></script>
+
+  <script>
+    // Interactive Data Cleaner Demo Script
+    (function () {
+      const rawData = [
+        { id: 1, name: "John Doe", age: "32", salary: "85000" },
+        { id: 2, name: "  Jane Smith  ", age: "28", salary: "92000" },
+        { id: 3, name: "", age: "", salary: "" },
+        { id: 4, name: "John Doe", age: "32", salary: "85000" },
+        { id: 5, name: "Bob Johnson", age: "45", salary: "105000" }
+      ];
+
+      const tableBody = document.getElementById('demo-table-body');
+      const healthScore = document.getElementById('demo-health-score');
+      const cleanEmpty = document.getElementById('clean-empty');
+      const cleanDups = document.getElementById('clean-dups');
+      const cleanSpaces = document.getElementById('clean-spaces');
+      const applyBtn = document.getElementById('demo-apply-btn');
+
+      function updateDemo() {
+        let data = [...rawData];
+
+        if (cleanEmpty.checked) {
+          data = data.filter(r => r.name !== "" || r.age !== "" || r.salary !== "");
+        }
+
+        if (cleanDups.checked) {
+          const seen = new Set();
+          data = data.filter(r => {
+            const key = `${r.name.trim()}|||${r.age}|||${r.salary}`;
+            if (seen.has(key) && r.name !== "") {
+              return false;
+            }
+            seen.add(key);
+            return true;
+          });
+        }
+
+        if (cleanSpaces.checked) {
+          data = data.map(r => ({
+            ...r,
+            name: r.name.trim()
+          }));
+        }
+
+        // Render table
+        tableBody.innerHTML = '';
+        data.forEach((row) => {
+          const tr = document.createElement('tr');
+
+          let rowClass = '';
+          if (!cleanEmpty.checked && row.name === "" && row.age === "" && row.salary === "") {
+            rowClass = 'row-empty-dirty';
+          } else if (!cleanDups.checked && row.id === 4) {
+            rowClass = 'row-dup-dirty';
+          }
+
+          if (rowClass) tr.className = rowClass;
+
+          const originalRow = rawData.find(r => r.id === row.id);
+          const hasOuterSpaces = originalRow.name.startsWith(' ') || originalRow.name.endsWith(' ');
+
+          let cellClass = '';
+          if (cleanSpaces.checked && hasOuterSpaces) {
+            cellClass = 'cell-cleaned';
+          } else if (!cleanSpaces.checked && hasOuterSpaces) {
+            cellClass = 'cell-spaces-dirty';
+          }
+
+          tr.innerHTML = `
+            <td>${row.id}</td>
+            <td class="${cellClass}">${row.name || '—'}</td>
+            <td>${row.age || '—'}</td>
+            <td>${row.salary || '—'}</td>
+          `;
+          tableBody.appendChild(tr);
+        });
+
+        // Calculate score
+        let score = 72;
+        if (cleanEmpty.checked) score += 10;
+        if (cleanDups.checked) score += 10;
+        if (cleanSpaces.checked) score += 8;
+        healthScore.textContent = `${score}%`;
+
+        if (score === 100) {
+          healthScore.style.color = '#10b981';
+        } else if (score >= 82) {
+          healthScore.style.color = '#ea580c';
+        } else {
+          healthScore.style.color = '#dc2626';
+        }
+      }
+
+      cleanEmpty.addEventListener('change', updateDemo);
+      cleanDups.addEventListener('change', updateDemo);
+      cleanSpaces.addEventListener('change', updateDemo);
+
+      applyBtn.addEventListener('click', () => {
+        cleanEmpty.checked = true;
+        cleanDups.checked = true;
+        cleanSpaces.checked = true;
+        updateDemo();
+      });
+
+      updateDemo();
+    })();
+  </script>
+
+</body>
+
+</html>
