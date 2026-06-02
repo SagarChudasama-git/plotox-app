@@ -1,12 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+  data-seo-title="Plotox — Create Interactive Charts from CSV & Excel"
+  data-seo-description="Upload CSV or Excel files and generate professional interactive charts instantly. Export as PNG, SVG, PDF. 100% client-side, private, and free."
+  data-seo-slug="app"
+  data-seo-type="website"
+  data-seo-breadcrumb="Home: | Dashboard:app"
+  data-seo-app-category="Interactive Chart Creator">
 
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PCZMCKSTFG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PCZMCKSTFG');
+  </script>
+
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Plotox — Instantly Generate Professional Charts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plotox — Create Interactive Charts from CSV & Excel</title>
   <meta name="description"
-    content="Transform your CSV data into stunning interactive charts instantly. Upload, configure, export — all in your browser.">
+    content="Upload CSV or Excel files and generate professional interactive charts instantly. Export as PNG, SVG, PDF. 100% client-side, private, and free.">
 
   <!-- Favicon -->
   <link rel="icon" href="assets/favicon.ico">
@@ -650,7 +665,7 @@
           <div id="workspace-history-panel" style="display: none;">
             <div class="history-archive-header">
               <div class="history-archive-title-container">
-                <h1 class="history-archive-title">Projects</h1>
+                <h2 class="history-archive-title">Projects</h2>
                 <p class="history-archive-desc">Your recent Projects – click Import to load one back with a pre-filled
                   dataset.</p>
               </div>
@@ -668,7 +683,7 @@
           <div id="workspace-cleaner-panel" style="display: none;">
             <!-- Cleaner Page Header -->
             <div class="cleaner-page-header">
-              <h1 class="cleaner-page-title">Data Cleaner & Extractor</h1>
+              <h2 class="cleaner-page-title">Data Cleaner & Extractor</h2>
               <p class="cleaner-page-desc">Prepare, clean and transform your datasets before visualization.</p>
             </div>
 
@@ -970,7 +985,7 @@
           <!-- SETTINGS PANEL -->
           <div id="workspace-settings-panel" style="display: none;">
             <div class="cleaner-page-header">
-              <h1 class="cleaner-page-title">Settings</h1>
+              <h2 class="cleaner-page-title">Settings</h2>
               <p class="cleaner-page-desc">Configure Plotox preferences and manage your data.</p>
             </div>
             <div class="settings-container">
@@ -1423,6 +1438,8 @@
   <script src="assets/js/file-size-guard.js"></script>
   <script src="assets/js/data-cleaner.js"></script>
   <script src="assets/js/app.js"></script>
+  <script src="assets/js/seo-head.js" defer></script>
+  <script src="assets/js/analytics.js" defer></script>
 
 </body>
 

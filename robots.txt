@@ -1,4 +1,10 @@
+# Plotox — robots.txt
+# https://plotox.vercel.app
+
 User-agent: *
 Allow: /
+Disallow: /assets/js/
+Disallow: /assets/data/
 
+# Sitemap
 Sitemap: https://plotox.vercel.app/sitemap.xml

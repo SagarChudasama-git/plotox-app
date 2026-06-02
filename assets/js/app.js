@@ -1234,6 +1234,14 @@ function initApp() {
         } else if (format === 'pdf') {
           ExportManager.exportPDF('chart-container', filename);
         }
+
+        // Track export event
+        if (window.PlotoxAnalytics) {
+          window.PlotoxAnalytics.trackEvent('chart_exported', {
+            format: format,
+            chart_type: state.chartConfig.chartType
+          });
+        }
       });
     }
 
@@ -1728,6 +1736,15 @@ Dec,70000,40000,7000,5000`
     enableWorkflow();
     switchView('workspace');
 
+    // Track Analytics data import
+    if (window.PlotoxAnalytics) {
+      window.PlotoxAnalytics.trackEvent('data_imported', {
+        file_name: filename,
+        columns_count: parsed.headers.length,
+        rows_count: parsed.rows.length
+      });
+    }
+
     // If Grid View is active, re-render spreadsheet grid
     if (columnsTab && columnsTab.classList.contains('active')) {
       renderWorkspaceExcelGrid();
@@ -2179,6 +2196,15 @@ Dec,70000,40000,7000,5000`
       state.chartConfig.title = chartTitleInput.value || state.chartConfig.title;
       const isDark = document.documentElement.classList.contains('dark');
       ChartEngine.render('chart-container', state.dataset, state.chartConfig, isDark);
+
+      // Track successful chart rendering
+      if (window.PlotoxAnalytics) {
+        window.PlotoxAnalytics.trackEvent('chart_rendered', {
+          chart_type: state.chartConfig.chartType,
+          y_axes_count: state.chartConfig.yAxes ? state.chartConfig.yAxes.length : 0,
+          theme: isDark ? 'dark' : 'light'
+        });
+      }
 
       // Update custom HTML legend in header
       updateCustomLegend();

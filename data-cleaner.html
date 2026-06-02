@@ -1,12 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+  data-seo-title="Free CSV Data Cleaner — Clean & Transform Datasets | Plotox"
+  data-seo-description="Clean, normalize, and transform CSV and Excel datasets in your browser. Remove duplicates, fix empty cells, trim spaces. 100% private data cleaner tool."
+  data-seo-slug="data-cleaner"
+  data-seo-type="website"
+  data-seo-breadcrumb="Home: | Data Cleaner:data-cleaner"
+  data-seo-app-category="Data Cleaner">
 
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PCZMCKSTFG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PCZMCKSTFG');
+  </script>
+
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Plotox | CSV Data Cleaner & Transformer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free CSV Data Cleaner — Clean & Transform Datasets | Plotox</title>
   <meta name="description"
-    content="Clean, normalise, and transform your CSV and Excel datasets instantly in your browser. Remove duplicates, fix empty cells, and format columns securely before plotting.">
+    content="Clean, normalize, and transform CSV and Excel datasets in your browser. Remove duplicates, fix empty cells, trim spaces. 100% private data cleaner tool.">
 
   <!-- Favicon -->
   <link rel="icon" href="assets/favicon.ico">
@@ -310,14 +325,45 @@
        FOOTER
   ════════════════════════════════════════════ -->
   <footer class="footer">
-    <div class="container footer-bottom" style="border-top: 1px solid var(--color-border); padding: 30px 0;">
-      <span>© 2026 plotox | Experience Data Visualization</span>
+    <div class="container" style="border-top: 1px solid var(--color-border); padding: 30px 0;">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 32px; margin-bottom: 24px;">
+        <div>
+          <h4 style="font-size: 13px; font-weight: 600; color: var(--color-primary); margin-bottom: 12px;">Chart Generators</h4>
+          <nav style="display: flex; flex-direction: column; gap: 6px; font-size: 13px;">
+            <a href="line-chart.html" style="color: var(--color-outline); text-decoration: none;">Line Chart Maker</a>
+            <a href="bar-chart.html" style="color: var(--color-outline); text-decoration: none;">Bar Chart Maker</a>
+            <a href="pie-chart.html" style="color: var(--color-outline); text-decoration: none;">Pie Chart Maker</a>
+            <a href="scatter-plot.html" style="color: var(--color-outline); text-decoration: none;">Scatter Plot Maker</a>
+            <a href="area-chart.html" style="color: var(--color-outline); text-decoration: none;">Area Chart Maker</a>
+            <a href="histogram.html" style="color: var(--color-outline); text-decoration: none;">Histogram Maker</a>
+          </nav>
+        </div>
+        <div>
+          <h4 style="font-size: 13px; font-weight: 600; color: var(--color-primary); margin-bottom: 12px;">Tools</h4>
+          <nav style="display: flex; flex-direction: column; gap: 6px; font-size: 13px;">
+            <a href="data-cleaner.html" style="color: var(--color-primary); text-decoration: none; font-weight: 600;">CSV Data Cleaner</a>
+            <a href="app.html" style="color: var(--color-outline); text-decoration: none;">Dashboard</a>
+          </nav>
+        </div>
+        <div>
+          <h4 style="font-size: 13px; font-weight: 600; color: var(--color-primary); margin-bottom: 12px;">Legal</h4>
+          <nav style="display: flex; flex-direction: column; gap: 6px; font-size: 13px;">
+            <a href="privacy-policy.html" style="color: var(--color-outline); text-decoration: none;">Privacy Policy</a>
+            <a href="terms-of-service.html" style="color: var(--color-outline); text-decoration: none;">Terms of Service</a>
+          </nav>
+        </div>
+      </div>
+      <div class="footer-bottom" style="padding-top: 16px; border-top: 1px solid var(--color-border);">
+        <span style="font-size: 12px; color: var(--color-outline);">© 2026 Plotox. All rights reserved.</span>
+      </div>
     </div>
   </footer>
 
   <!-- Scripts -->
   <script src="assets/js/theme.js"></script>
   <script src="assets/js/common.js"></script>
+  <script src="assets/js/seo-head.js" defer></script>
+  <script src="assets/js/analytics.js" defer></script>
 
   <script>
     // Interactive Data Cleaner Demo Script
