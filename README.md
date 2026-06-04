@@ -5,8 +5,6 @@
   
   **Convert your data into stunning visualizations with ease**
   
-  [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-  [![GitHub Stars](https://img.shields.io/github/stars/SagarChudasama-git/data-visualization?style=social)](https://github.com/SagarChudasama-git)
 </div>
 
 ---
