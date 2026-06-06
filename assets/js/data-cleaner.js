@@ -2139,6 +2139,20 @@ Kevin Hart,31,Los Angeles,76000,Marketing,2021-09-22`;
         });
       }
     }
+
+    const numberSystemSelect = document.getElementById('settings-number-system');
+    if (numberSystemSelect) {
+      numberSystemSelect.value = localStorage.getItem('plotox-number-system') || 'international';
+      numberSystemSelect.addEventListener('change', () => {
+        const sys = numberSystemSelect.value;
+        if (typeof NumberFormatter !== 'undefined') {
+          NumberFormatter.setSystem(sys);
+        } else {
+          localStorage.setItem('plotox-number-system', sys);
+          window.dispatchEvent(new CustomEvent('numberSystemChanged', { detail: { system: sys } }));
+        }
+      });
+    }
   }
 
   // ═══════════════════════════════════════════
@@ -2175,6 +2189,7 @@ Kevin Hart,31,Los Angeles,76000,Marketing,2021-09-22`;
           const sizeGuard = FileSizeGuard.validateText(text, name);
           if (!sizeGuard.valid) {
             showToast(sizeGuard.errorMessage, 'error', sizeGuard.title);
+            pasteModal.style.display = 'none';
             return;
           }
           try {

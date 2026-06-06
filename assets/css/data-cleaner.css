@@ -1246,8 +1246,7 @@ html.dark .cleaner-export-option-icon {
 .cleaner-toast {
   position: fixed;
   bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
+  right: 24px;
   z-index: 99999;
   display: flex;
   align-items: center;
@@ -1258,9 +1257,9 @@ html.dark .cleaner-export-option-icon {
   border-radius: var(--radius-lg);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
   font-family: var(--font-main);
-  animation: slideUpFadeCenter 0.3s ease-out;
+  animation: slideUpFade 0.3s ease-out;
   max-width: 400px;
-  width: calc(100% - 40px);
+  width: calc(100% - 48px);
   box-sizing: border-box;
 }
 
@@ -1352,12 +1351,12 @@ html.dark .cleaner-export-option-icon {
 @keyframes slideUpFade {
   from {
     opacity: 0;
-    transform: translateX(-50%) translateY(20px);
+    transform: translateY(20px);
   }
 
   to {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
   }
 }
 

@@ -51,6 +51,10 @@
   <link rel="stylesheet" href="assets/css/components.css">
   <link rel="stylesheet" href="assets/css/app.css">
   <link rel="stylesheet" href="assets/css/data-cleaner.css">
+  <link rel="stylesheet" href="assets/css/dashboard.css">
+
+  <!-- html2canvas CDN for dashboard image export -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <style>
     .sidebar-history-dropdown {
       display: none;
@@ -170,6 +174,11 @@
           <div class="sidebar-section-title"
             style="font-size: 10px; font-weight: 600; color: var(--color-outline); text-transform: uppercase; letter-spacing: 0.05em; margin: 8px 10px 4px 10px;">
             Navigation</div>
+
+          <button class="sidebar-menu-item" id="nav-dashboard-btn">
+            <span class="material-symbols-outlined">dashboard</span>
+            <span>Dashboard Builder</span>
+          </button>
 
           <button class="sidebar-menu-item active" id="nav-charts-btn">
             <span class="material-symbols-outlined">bar_chart</span>
@@ -1036,6 +1045,26 @@
                   </div>
                 </div>
               </div>
+              <!-- Number Formatting -->
+              <div class="settings-section">
+                <div class="settings-section-header">
+                  <div class="settings-section-title">Number Formatting</div>
+                  <div class="settings-section-desc">Unify numerical values across the app.</div>
+                </div>
+                <div class="settings-section-body">
+                  <div class="settings-row">
+                    <div>
+                      <div class="settings-row-label">Numbering System</div>
+                      <div class="settings-row-desc">Select how large numbers should be formatted globally.</div>
+                    </div>
+                    <select class="settings-select" id="settings-number-system">
+                      <option value="international">International (K, M, B, T)</option>
+                      <option value="indian">Indian (K, L, Cr)</option>
+                      <option value="full">Exact Value (1,234,567.89)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
               <!-- Data Cleaner -->
               <div class="settings-section">
                 <div class="settings-section-header">
@@ -1137,6 +1166,16 @@
               </div>
             </div>
           </div><!-- /workspace-settings-panel -->
+
+          <!-- DASHBOARD BUILDER PANEL -->
+          <div id="workspace-dashboard-panel" style="display: none;">
+            <div class="db-workspace">
+              <!-- Manager View (Dashboard Listing) -->
+              <div id="db-manager-view" class="db-manager-view"></div>
+              <!-- Editor View (Dashboard Grid Workspace) -->
+              <div id="db-editor-view" class="db-editor-view" style="display: none;"></div>
+            </div>
+          </div><!-- /workspace-dashboard-panel -->
 
         </div>
       </main>
@@ -1437,6 +1476,14 @@
   <script src="assets/js/export-manager.js"></script>
   <script src="assets/js/file-size-guard.js"></script>
   <script src="assets/js/data-cleaner.js"></script>
+
+  <!-- Auto-Generated Dashboard modules -->
+  <script src="assets/js/dashboard/number-formatter.js"></script>
+  <script src="assets/js/dashboard/dashboard-db.js"></script>
+  <script src="assets/js/dashboard/dashboard-widgets.js"></script>
+  <script src="assets/js/dashboard/dashboard-manager.js"></script>
+  <script src="assets/js/dashboard/dashboard-app.js"></script>
+
   <script src="assets/js/app.js"></script>
   <script src="assets/js/seo-head.js" defer></script>
   <script src="assets/js/analytics.js" defer></script>

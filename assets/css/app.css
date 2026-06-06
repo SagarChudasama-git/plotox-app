@@ -1180,7 +1180,6 @@ html.dark .select-control {
   cursor: pointer;
   border: none;
   transition: opacity var(--transition-fast);
-  display: inline-flex;
   align-items: center;
   gap: 6px;
 }
@@ -2651,7 +2650,6 @@ html.dark .edm-table tr:hover td {
   }
 
   .toolbar-row {
-    flex-direction: column;
     align-items: stretch;
     gap: 6px;
   }
@@ -3804,7 +3802,6 @@ html.dark .style-select-control {
 
   /* Active sample indicator components vertical stacking */
   #active-sample-indicator {
-    flex-direction: column !important;
     align-items: stretch !important;
     gap: 8px !important;
     width: 100% !important;

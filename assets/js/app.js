@@ -193,6 +193,9 @@ function initApp() {
     });
   }
 
+  // Expose to window for external files (like dashboard-app.js)
+  window.showUserError = showUserError;
+
   // --- Ingest and Unlock Workflow ---
   function enableWorkflow() {
     if (generateBtn) {
@@ -861,6 +864,14 @@ function initApp() {
     if (settingsBtn) {
       settingsBtn.addEventListener('click', () => {
         switchView('settings');
+      });
+    }
+
+    // Sidebar Dashboard Builder trigger
+    const dashboardBtn = document.getElementById('nav-dashboard-btn');
+    if (dashboardBtn) {
+      dashboardBtn.addEventListener('click', () => {
+        switchView('dashboard');
       });
     }
 
@@ -2945,6 +2956,7 @@ Dec,70000,40000,7000,5000`
     const historyPanel = document.getElementById('workspace-history-panel');
     const cleanerPanel = document.getElementById('workspace-cleaner-panel');
     const settingsPanel = document.getElementById('workspace-settings-panel');
+    const dashboardPanel = document.getElementById('workspace-dashboard-panel');
     const pageHeader = document.querySelector('.page-header');
     const chartsDropdown = document.getElementById('nav-charts-dropdown');
     const chartsChevron = document.getElementById('nav-charts-chevron');
@@ -2954,17 +2966,25 @@ Dec,70000,40000,7000,5000`
     const dataCleanerBtn = document.getElementById('nav-data-cleaner-btn');
     const projectsBtn = document.getElementById('nav-projects-btn');
     const settingsBtn = document.getElementById('nav-settings-btn');
+    const dashboardBtn = document.getElementById('nav-dashboard-btn');
 
     // Hide all panels
     if (workspacePanel) workspacePanel.style.display = 'none';
     if (historyPanel) historyPanel.style.display = 'none';
     if (cleanerPanel) cleanerPanel.style.display = 'none';
     if (settingsPanel) settingsPanel.style.display = 'none';
+    if (dashboardPanel) dashboardPanel.style.display = 'none';
 
     // Deactivate all nav buttons
-    [chartsBtn, dataCleanerBtn, projectsBtn, settingsBtn].forEach(btn => {
+    [chartsBtn, dataCleanerBtn, projectsBtn, settingsBtn, dashboardBtn].forEach(btn => {
       if (btn) btn.classList.remove('active');
     });
+
+    // Toggle dashboard-active class on main-container for padding override
+    const mainContainer = document.querySelector('.main-container');
+    if (mainContainer) {
+      mainContainer.classList.toggle('db-active', viewName === 'dashboard');
+    }
 
     // Handle 'workspace' as alias for 'charts' (backward compat)
     if (viewName === 'workspace') viewName = 'charts';
@@ -3026,6 +3046,26 @@ Dec,70000,40000,7000,5000`
         }
         if (chartsChevron) {
           chartsChevron.style.transform = 'rotate(0deg)';
+        }
+        break;
+      case 'dashboard':
+        if (dashboardPanel) dashboardPanel.style.display = 'block';
+        if (dashboardBtn) dashboardBtn.classList.add('active');
+        if (pageHeader) pageHeader.style.display = 'none';
+        if (chartsDropdown) {
+          chartsDropdown.classList.remove('open');
+          chartsDropdown.style.display = 'none';
+        }
+        if (chartsChevron) {
+          chartsChevron.style.transform = 'rotate(0deg)';
+        }
+        // Initialize the Auto-Generated Dashboard on first visit
+        if (window.dashboardApp && !window.dashboardApp._initialized) {
+          window.dashboardApp.init().then(() => {
+            window.dashboardApp.showManagerView();
+          });
+        } else if (window.dashboardApp) {
+          window.dashboardApp.showManagerView();
         }
         break;
     }

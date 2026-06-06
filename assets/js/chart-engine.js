@@ -1,9 +1,5 @@
 const formatKValue = (value) => {
-  if (typeof value === 'number' && Math.abs(value) >= 1000) {
-    const kValue = value / 1000;
-    return (kValue % 1 === 0 ? kValue.toFixed(0) : kValue.toFixed(1)) + 'k';
-  }
-  return value;
+  return typeof NumberFormatter !== 'undefined' ? NumberFormatter.format(value) : value;
 };
 
 class ChartEngine {
@@ -150,6 +146,7 @@ class ChartEngine {
 
       // Dynamic Publication/Style Overrides
       const isPublication = config.publicationMode === true;
+      const isScatter = config.chartType === 'scatter';
       const fontStyle = isPublication ? 'Georgia, "Times New Roman", serif' : 'Inter, sans-serif';
       const animationEnabled = !isPublication;
 
@@ -217,13 +214,33 @@ class ChartEngine {
         },
         tooltip: {
           show: config.showTooltip !== false,
-          trigger: 'axis',
+          trigger: isScatter ? 'item' : 'axis',
           backgroundColor: isDarkMode ? '#1e1c19' : '#ffffff',
           borderColor: gridColor,
           textStyle: {
             color: isDarkMode ? '#ffffff' : '#000000'
           },
-          confine: true
+          confine: true,
+          formatter: (params) => {
+            if (!Array.isArray(params)) params = [params];
+            let html = '';
+            if (params[0].axisValueLabel) {
+              html += `<strong style="display:block;margin-bottom:4px;">${params[0].axisValueLabel}</strong>`;
+            }
+            params.forEach(item => {
+              if (item.value !== null && item.value !== undefined) {
+                const val = Array.isArray(item.value) ? Number(item.value[1]) : Number(item.value);
+                const compact = typeof NumberFormatter !== 'undefined' ? NumberFormatter.format(val) : val;
+                const exact = typeof NumberFormatter !== 'undefined' ? NumberFormatter.formatFull(val) : val;
+                const marker = item.marker || '';
+                html += `<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0;">
+                  <span>${marker}${item.seriesName}</span>
+                  <strong>${compact} <span style="font-size:10px;font-weight:normal;opacity:0.8;">(${exact})</span></strong>
+                </div>`;
+              }
+            });
+            return html;
+          }
         },
         grid: (function () {
           let leftVal = '8%';
@@ -292,7 +309,14 @@ class ChartEngine {
         }
 
         option.tooltip.trigger = 'item';
-        option.tooltip.formatter = '{b}: {c} ({d}%)';
+        option.tooltip.formatter = (params) => {
+          const val = Number(params.value);
+          const compact = typeof NumberFormatter !== 'undefined' ? NumberFormatter.format(val) : val;
+          const exact = typeof NumberFormatter !== 'undefined' ? NumberFormatter.formatFull(val) : val;
+          return `${params.marker}<strong>${params.name}</strong><br/>
+            Value: <strong>${compact} (${exact})</strong><br/>
+            Percentage: <strong>${params.percent}%</strong>`;
+        };
         option.grid = {};
         option.xAxis = { show: false };
         option.yAxis = { show: false };
@@ -361,7 +385,9 @@ class ChartEngine {
         for (let i = 0; i < binCount; i++) {
           const start = min + i * binWidth;
           const end = start + binWidth;
-          binLabels.push(`${start.toFixed(1)}–${end.toFixed(1)}`);
+          const startStr = typeof NumberFormatter !== 'undefined' ? NumberFormatter.format(start) : start.toFixed(1);
+          const endStr = typeof NumberFormatter !== 'undefined' ? NumberFormatter.format(end) : end.toFixed(1);
+          binLabels.push(`${startStr}–${endStr}`);
         }
 
         numericValues.forEach(val => {
@@ -370,6 +396,16 @@ class ChartEngine {
           if (binIdx < 0) binIdx = 0;
           binFrequencies[binIdx]++;
         });
+
+        option.tooltip.trigger = 'axis';
+        option.tooltip.axisPointer = { type: 'shadow' };
+        option.tooltip.formatter = (params) => {
+          const item = params[0];
+          const val = Number(item.value);
+          const compact = typeof NumberFormatter !== 'undefined' ? NumberFormatter.format(val) : val;
+          const exact = typeof NumberFormatter !== 'undefined' ? NumberFormatter.formatFull(val) : val;
+          return `${item.name}<br/>Count: <strong>${compact} (${exact})</strong>`;
+        };
 
         option.xAxis = {
           type: 'category',
@@ -654,13 +690,9 @@ class ChartEngine {
               }
 
               const val = isScatter ? item[1] : item;
-              let labelText = '';
-              if (typeof val === 'number' && Math.abs(val) >= 1000) {
-                const k = val / 1000;
-                labelText = (k % 1 === 0 ? k.toFixed(0) : k.toFixed(1)) + 'k';
-              } else {
-                labelText = val !== null && val !== undefined ? String(val) : '';
-              }
+              const labelText = typeof val === 'number'
+                ? (typeof NumberFormatter !== 'undefined' ? NumberFormatter.format(val) : formatKValue(val))
+                : (val !== null && val !== undefined ? String(val) : '');
 
               return {
                 value: item,
