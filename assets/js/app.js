@@ -424,6 +424,8 @@ function initApp() {
 
             if (urlType === 'cleaner') {
               switchView('cleaner');
+            } else if (urlType === 'dashboard') {
+              switchView('dashboard');
             }
             return;
           }
@@ -481,6 +483,8 @@ function initApp() {
 
     if (urlType === 'cleaner') {
       switchView('cleaner');
+    } else if (urlType === 'dashboard') {
+      switchView('dashboard');
     }
   }
 

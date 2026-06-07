@@ -50,7 +50,13 @@
   </url>
   <url>
     <loc>https://plotox.vercel.app/data-cleaner</loc>
-    <lastmod>2026-06-02</lastmod>
+    <lastmod>2026-06-07</lastmod>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://plotox.vercel.app/dashboard</loc>
+    <lastmod>2026-06-07</lastmod>
     <priority>0.8</priority>
     <changefreq>monthly</changefreq>
   </url>

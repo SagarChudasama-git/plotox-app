@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en"
+  data-seo-title="Free Dashboard Builder — Create Interactive Data Dashboards | Plotox"
+  data-seo-description="Build multi-chart dashboards from CSV and Excel data. Combine line, bar, pie, scatter, area charts and KPI widgets in one view. 100% client-side, private, and free."
+  data-seo-slug="dashboard"
+  data-seo-type="website"
+  data-seo-breadcrumb="Home: | Dashboard Builder:dashboard"
+  data-seo-app-category="Dashboard Builder">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PCZMCKSTFG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PCZMCKSTFG');
+  </script>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Dashboard Builder — Create Interactive Data Dashboards | Plotox</title>
+  <meta name="description"
+    content="Build multi-chart dashboards from CSV and Excel data. Combine line, bar, pie, scatter, area charts and KPI widgets in one view. 100% client-side, private, and free.">
+
+  <!-- Additional SEO meta tags -->
+  <meta name="keywords" content="dashboard builder, data dashboard, CSV dashboard, interactive dashboard, chart dashboard, KPI dashboard, free dashboard tool, data visualization dashboard">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Plotox">
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/favicon.ico">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="assets/css/design-system.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/seo-pages.css">
+
+  <style>
+    /* Dashboard Demo — Interactive Preview */
+    .dashboard-demo-widget {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .demo-db-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 12px;
+    }
+
+    .demo-db-badge {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-outline);
+      background-color: var(--color-surface-low);
+      padding: 4px 10px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+    }
+
+    .demo-db-title {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .demo-db-title .material-symbols-outlined {
+      font-size: 18px;
+      color: var(--color-indigo);
+    }
+
+    /* KPI Cards Row */
+    .demo-kpi-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+    }
+
+    .demo-kpi-card {
+      background: var(--color-surface-low);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-normal);
+    }
+
+    .demo-kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    }
+
+    .demo-kpi-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-outline);
+    }
+
+    .demo-kpi-value {
+      font-family: var(--font-heading);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--color-primary);
+      line-height: 1;
+    }
+
+    .demo-kpi-change {
+      font-size: 11px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .demo-kpi-change.positive {
+      color: #10b981;
+    }
+
+    .demo-kpi-change.negative {
+      color: #ef4444;
+    }
+
+    .demo-kpi-change .material-symbols-outlined {
+      font-size: 14px;
+    }
+
+    /* Mini Chart Grid */
+    .demo-chart-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 600px) {
+      .demo-chart-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .demo-chart-tile {
+      background: var(--color-surface-low);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-normal);
+    }
+
+    .demo-chart-tile:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    }
+
+    .demo-chart-tile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .demo-tile-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-primary);
+    }
+
+    .demo-tile-type {
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-outline);
+      background: var(--color-surface);
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-border);
+    }
+
+    .demo-chart-tile-body {
+      height: 130px;
+      padding: 8px;
+      position: relative;
+    }
+
+    /* Sparkline-like mini chart bar visualization */
+    .mini-bar-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      height: 100%;
+      padding: 0 4px;
+    }
+
+    .mini-bar {
+      flex: 1;
+      border-radius: 4px 4px 0 0;
+      transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      min-width: 8px;
+    }
+
+    .mini-line-chart {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .mini-line-chart svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .mini-line-chart .line-path {
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .mini-line-chart .area-fill {
+      opacity: 0.1;
+    }
+
+    .mini-donut-chart {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .mini-donut-chart svg {
+      width: 100px;
+      height: 100px;
+    }
+
+    .donut-label {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 700;
+      fill: var(--color-primary);
+    }
+
+    /* Features grid */
+    .dashboard-features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-top: 8px;
+    }
+
+    .dashboard-feature-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-normal);
+    }
+
+    .dashboard-feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    .feature-icon-box {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .feature-icon-box .material-symbols-outlined {
+      font-size: 20px;
+      color: white;
+    }
+
+    .feature-icon-box.indigo {
+      background: linear-gradient(135deg, #6366f1, #818cf8);
+    }
+
+    .feature-icon-box.emerald {
+      background: linear-gradient(135deg, #10b981, #34d399);
+    }
+
+    .feature-icon-box.orange {
+      background: linear-gradient(135deg, #ea580c, #f97316);
+    }
+
+    .feature-icon-box.blue {
+      background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    }
+
+    .feature-icon-box.pink {
+      background: linear-gradient(135deg, #ec4899, #f472b6);
+    }
+
+    .feature-icon-box.violet {
+      background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+    }
+
+    .feature-card-title {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-primary);
+    }
+
+    .feature-card-desc {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--color-secondary-text);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       TOP NAVIGATION
+  ════════════════════════════════════════════ -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <div class="nav-left">
+        <a class="nav-logo" href="index.html">plot<span class="logo-rising-o">o</span><span
+            class="logo-rising-x">x</span></a>
+      </div>
+      <div>
+        <a class="nav-cta" href="app.html?type=dashboard">Launch App</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════
+       SEO MAIN LAYOUT
+  ════════════════════════════════════════════ -->
+  <main class="seo-main container">
+
+    <!-- ── HERO SECTION WITH INTERACTIVE DEMO ── -->
+    <section class="seo-hero">
+      <div class="seo-hero-content">
+        <span class="section-badge">Dashboard Builder</span>
+        <h1 class="seo-hero-title">Build interactive data dashboards from CSV instantly</h1>
+        <p class="seo-hero-desc">Combine multiple charts, KPI widgets, and data tables into a unified dashboard view.
+          Upload your CSV or Excel data and create publication-ready dashboards without code.</p>
+        <div>
+          <a class="btn-primary" href="app.html?type=dashboard">Create Dashboard Now</a>
+        </div>
+      </div>
+
+      <!-- Live Demo Widget -->
+      <div class="seo-demo-box dashboard-demo-widget">
+        <div class="demo-db-header">
+          <div class="demo-db-title">
+            <span class="material-symbols-outlined">dashboard</span>
+            SaaS Metrics Dashboard
+          </div>
+          <div class="demo-db-badge">Live Preview</div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="demo-kpi-row" id="demo-kpi-row">
+          <div class="demo-kpi-card">
+            <span class="demo-kpi-label">Revenue (MRR)</span>
+            <span class="demo-kpi-value" id="kpi-revenue">$134.2K</span>
+            <span class="demo-kpi-change positive">
+              <span class="material-symbols-outlined">trending_up</span> +12.4%
+            </span>
+          </div>
+          <div class="demo-kpi-card">
+            <span class="demo-kpi-label">Active Users</span>
+            <span class="demo-kpi-value" id="kpi-users">6,898</span>
+            <span class="demo-kpi-change positive">
+              <span class="material-symbols-outlined">trending_up</span> +11.0%
+            </span>
+          </div>
+          <div class="demo-kpi-card">
+            <span class="demo-kpi-label">New Signups</span>
+            <span class="demo-kpi-value" id="kpi-signups">742</span>
+            <span class="demo-kpi-change positive">
+              <span class="material-symbols-outlined">trending_up</span> +7.8%
+            </span>
+          </div>
+          <div class="demo-kpi-card">
+            <span class="demo-kpi-label">CAC ($)</span>
+            <span class="demo-kpi-value" id="kpi-cac">$19</span>
+            <span class="demo-kpi-change positive">
+              <span class="material-symbols-outlined">trending_down</span> -5.0%
+            </span>
+          </div>
+        </div>
+
+        <!-- Mini Chart Grid -->
+        <div class="demo-chart-grid">
+          <div class="demo-chart-tile">
+            <div class="demo-chart-tile-header">
+              <span class="demo-tile-title">Revenue Growth</span>
+              <span class="demo-tile-type">Line</span>
+            </div>
+            <div class="demo-chart-tile-body">
+              <div class="mini-line-chart" id="mini-line-1"></div>
+            </div>
+          </div>
+          <div class="demo-chart-tile">
+            <div class="demo-chart-tile-header">
+              <span class="demo-tile-title">Monthly Signups</span>
+              <span class="demo-tile-type">Bar</span>
+            </div>
+            <div class="demo-chart-tile-body">
+              <div class="mini-bar-chart" id="mini-bar-1"></div>
+            </div>
+          </div>
+          <div class="demo-chart-tile">
+            <div class="demo-chart-tile-header">
+              <span class="demo-tile-title">User Distribution</span>
+              <span class="demo-tile-type">Donut</span>
+            </div>
+            <div class="demo-chart-tile-body">
+              <div class="mini-donut-chart" id="mini-donut-1"></div>
+            </div>
+          </div>
+          <div class="demo-chart-tile">
+            <div class="demo-chart-tile-header">
+              <span class="demo-tile-title">Session Duration</span>
+              <span class="demo-tile-type">Area</span>
+            </div>
+            <div class="demo-chart-tile-body">
+              <div class="mini-line-chart" id="mini-area-1"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FEATURES SHOWCASE ─────────────────── -->
+    <section style="margin-bottom: 80px;">
+      <h2 style="font-family: var(--font-heading); font-size: 28px; font-weight: 600; color: var(--color-primary); margin-bottom: 8px; border-left: 4px solid var(--color-indigo); padding-left: 16px;">Dashboard Builder Features</h2>
+      <p style="font-size: 15px; color: var(--color-secondary-text); line-height: 1.7; margin-bottom: 24px;">Everything you need to create professional, multi-chart dashboards from your data.</p>
+
+      <div class="dashboard-features-grid">
+        <div class="dashboard-feature-card">
+          <div class="feature-icon-box indigo">
+            <span class="material-symbols-outlined">grid_view</span>
+          </div>
+          <span class="feature-card-title">Drag & Drop Grid Layout</span>
+          <span class="feature-card-desc">Arrange charts and widgets in a flexible grid. Resize and reposition elements
+            with intuitive drag-and-drop controls.</span>
+        </div>
+
+        <div class="dashboard-feature-card">
+          <div class="feature-icon-box emerald">
+            <span class="material-symbols-outlined">monitoring</span>
+          </div>
+          <span class="feature-card-title">KPI Stat Widgets</span>
+          <span class="feature-card-desc">Display key performance indicators with large formatted numbers, trend arrows,
+            and percentage change badges.</span>
+        </div>
+
+        <div class="dashboard-feature-card">
+          <div class="feature-icon-box orange">
+            <span class="material-symbols-outlined">stacked_bar_chart</span>
+          </div>
+          <span class="feature-card-title">Multiple Chart Types</span>
+          <span class="feature-card-desc">Embed line, bar, pie, scatter, area charts, and histograms side-by-side in a
+            single dashboard view.</span>
+        </div>
+
+        <div class="dashboard-feature-card">
+          <div class="feature-icon-box blue">
+            <span class="material-symbols-outlined">download</span>
+          </div>
+          <span class="feature-card-title">Export as PNG</span>
+          <span class="feature-card-desc">Download your entire dashboard as a high-resolution PNG image, ready for
+            presentations and reports.</span>
+        </div>
+
+        <div class="dashboard-feature-card">
+          <div class="feature-icon-box pink">
+            <span class="material-symbols-outlined">dark_mode</span>
+          </div>
+          <span class="feature-card-title">Light & Dark Themes</span>
+          <span class="feature-card-desc">Toggle between light and dark mode. All charts and widgets automatically adapt
+            their color schemes.</span>
+        </div>
+
+        <div class="dashboard-feature-card">
+          <div class="feature-icon-box violet">
+            <span class="material-symbols-outlined">security</span>
+          </div>
+          <span class="feature-card-title">100% Client-Side Privacy</span>
+          <span class="feature-card-desc">Your data never leaves the browser. All processing, chart rendering, and
+            exports happen locally on your device.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ARTICLE & SIDEBAR DEEP DIVE ───────── -->
+    <section class="seo-content-grid">
+
+      <!-- Article Content -->
+      <article class="seo-article">
+        <h2>What is a Data Dashboard?</h2>
+        <p>A <strong>data dashboard</strong> is a visual display that consolidates key performance indicators (KPIs),
+          charts, and metrics from a dataset into a single, unified view. Dashboards empower decision-makers to monitor
+          trends, spot anomalies, and extract actionable insights at a glance — without digging through raw
+          spreadsheets.</p>
+
+        <h2>Why build dashboards with Plotox?</h2>
+        <p>Traditional business intelligence tools require complex setup, cloud accounts, and database connections. Plotox
+          eliminates all of this complexity:</p>
+        <ul>
+          <li><strong>Zero infrastructure</strong>: No servers, databases, or API keys. Upload a CSV and start building
+            instantly.</li>
+          <li><strong>No signup required</strong>: Open the app and go. Your data stays on your device and is never
+            transmitted.</li>
+          <li><strong>Instant visualization</strong>: Combine line charts, bar charts, pie charts, scatter plots, and KPI
+            widgets in seconds.</li>
+          <li><strong>Export-ready</strong>: Download complete dashboards as high-resolution PNG images for stakeholder
+            presentations.</li>
+        </ul>
+
+        <h2>Dashboard vs. Individual Charts: When to Use What?</h2>
+        <p>Individual charts are perfect for focused analysis of a single metric or comparison. Dashboards, by contrast,
+          are ideal when you need:</p>
+        <ul>
+          <li><strong>Executive summaries</strong>: Give stakeholders a bird's-eye view of business health across
+            revenue, growth, engagement, and churn.</li>
+          <li><strong>Cross-metric correlation</strong>: See how signups relate to revenue, how CAC trends compare to
+            user growth, or how seasonal patterns emerge across metrics.</li>
+          <li><strong>Reporting & presentations</strong>: Export a single, cohesive image instead of assembling multiple
+            individual charts in a slide deck.</li>
+        </ul>
+
+        <h2>Data Privacy & Security</h2>
+        <p>Plotox's Dashboard Builder operates entirely within your browser. Your CSV and Excel files are parsed,
+          rendered, and exported using JavaScript running on your local machine. <strong>No data is ever uploaded to any
+            server</strong>. This makes Plotox suitable for sensitive financial, healthcare, HR, and proprietary business
+          datasets where privacy is paramount.</p>
+      </article>
+
+      <!-- Sidebar -->
+      <aside class="seo-sidebar">
+        <div class="seo-sidebar-widget">
+          <h4 class="widget-title">Other Generators & Tools</h4>
+          <div class="gallery-grid">
+            <a href="line-chart.html" class="gallery-link">
+              <span class="material-symbols-outlined">show_chart</span> Line Chart
+            </a>
+            <a href="bar-chart.html" class="gallery-link">
+              <span class="material-symbols-outlined">bar_chart</span> Bar Chart
+            </a>
+            <a href="pie-chart.html" class="gallery-link">
+              <span class="material-symbols-outlined">pie_chart</span> Pie Chart
+            </a>
+            <a href="scatter-plot.html" class="gallery-link">
+              <span class="material-symbols-outlined">scatter_plot</span> Scatter Plot
+            </a>
+            <a href="area-chart.html" class="gallery-link">
+              <span class="material-symbols-outlined">area_chart</span> Area Chart
+            </a>
+            <a href="histogram.html" class="gallery-link">
+              <span class="material-symbols-outlined">analytics</span> Histogram
+            </a>
+            <a href="data-cleaner.html" class="gallery-link">
+              <span class="material-symbols-outlined">cleaning_services</span> Data Cleaner
+            </a>
+            <a href="dashboard.html" class="gallery-link active">
+              <span class="material-symbols-outlined">dashboard</span> Dashboard Builder
+            </a>
+          </div>
+        </div>
+      </aside>
+
+    </section>
+
+    <!-- ── CTA SECTION ───────────────────────── -->
+    <section class="seo-cta-section">
+      <h3>Ready to build your own dashboard?</h3>
+      <p>Upload your CSV or Excel data and create interactive, multi-chart dashboards in seconds. 100% private, no
+        accounts required.</p>
+      <a class="btn-primary" href="app.html?type=dashboard">Launch Dashboard Builder</a>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="container" style="border-top: 1px solid var(--color-border); padding: 30px 0;">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 32px; margin-bottom: 24px;">
+        <div>
+          <h4 style="font-size: 13px; font-weight: 600; color: var(--color-primary); margin-bottom: 12px;">Chart Generators</h4>
+          <nav style="display: flex; flex-direction: column; gap: 6px; font-size: 13px;">
+            <a href="line-chart.html" style="color: var(--color-outline); text-decoration: none;">Line Chart Maker</a>
+            <a href="bar-chart.html" style="color: var(--color-outline); text-decoration: none;">Bar Chart Maker</a>
+            <a href="pie-chart.html" style="color: var(--color-outline); text-decoration: none;">Pie Chart Maker</a>
+            <a href="scatter-plot.html" style="color: var(--color-outline); text-decoration: none;">Scatter Plot Maker</a>
+            <a href="area-chart.html" style="color: var(--color-outline); text-decoration: none;">Area Chart Maker</a>
+            <a href="histogram.html" style="color: var(--color-outline); text-decoration: none;">Histogram Maker</a>
+          </nav>
+        </div>
+        <div>
+          <h4 style="font-size: 13px; font-weight: 600; color: var(--color-primary); margin-bottom: 12px;">Tools</h4>
+          <nav style="display: flex; flex-direction: column; gap: 6px; font-size: 13px;">
+            <a href="data-cleaner.html" style="color: var(--color-outline); text-decoration: none;">CSV Data Cleaner</a>
+            <a href="dashboard.html" style="color: var(--color-primary); text-decoration: none; font-weight: 600;">Dashboard Builder</a>
+            <a href="app.html" style="color: var(--color-outline); text-decoration: none;">Dashboard App</a>
+          </nav>
+        </div>
+        <div>
+          <h4 style="font-size: 13px; font-weight: 600; color: var(--color-primary); margin-bottom: 12px;">Legal</h4>
+          <nav style="display: flex; flex-direction: column; gap: 6px; font-size: 13px;">
+            <a href="privacy-policy.html" style="color: var(--color-outline); text-decoration: none;">Privacy Policy</a>
+            <a href="terms-of-service.html" style="color: var(--color-outline); text-decoration: none;">Terms of Service</a>
+          </nav>
+        </div>
+      </div>
+      <div class="footer-bottom" style="padding-top: 16px; border-top: 1px solid var(--color-border);">
+        <span style="font-size: 12px; color: var(--color-outline);">© 2026 Plotox. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/theme.js"></script>
+  <script src="assets/js/common.js"></script>
+  <script src="assets/js/seo-head.js" defer></script>
+  <script src="assets/js/analytics.js" defer></script>
+
+  <script>
+    // Interactive Dashboard Demo — SVG Mini Charts
+    (function () {
+      'use strict';
+
+      const isDark = () => document.documentElement.classList.contains('dark');
+
+      // ── Revenue Line Chart ───────────────────
+      function renderMiniLine() {
+        const container = document.getElementById('mini-line-1');
+        if (!container) return;
+
+        const data = [42.5, 46.2, 51.8, 58.3, 65.1, 71.4, 78.9, 88.2, 96.5, 107.3, 119.8, 134.2];
+        const w = container.clientWidth || 280;
+        const h = container.clientHeight || 120;
+        const padX = 8, padY = 12;
+
+        const maxV = Math.max(...data);
+        const minV = Math.min(...data);
+        const rangeV = maxV - minV || 1;
+
+        const points = data.map((v, i) => ({
+          x: padX + (i / (data.length - 1)) * (w - 2 * padX),
+          y: padY + (1 - (v - minV) / rangeV) * (h - 2 * padY)
+        }));
+
+        const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x},${p.y}`).join(' ');
+        const areaPath = linePath + ` L ${points[points.length - 1].x},${h} L ${points[0].x},${h} Z`;
+
+        container.innerHTML = `
+          <svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="lineGrad1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#6366f1" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#6366f1" stop-opacity="0.02"/>
+              </linearGradient>
+            </defs>
+            <path d="${areaPath}" fill="url(#lineGrad1)" class="area-fill"/>
+            <path d="${linePath}" class="line-path" stroke="#6366f1"/>
+            <circle cx="${points[points.length - 1].x}" cy="${points[points.length - 1].y}" r="4" fill="#6366f1" stroke="white" stroke-width="2"/>
+          </svg>`;
+      }
+
+      // ── Session Duration Area Chart ──────────
+      function renderMiniArea() {
+        const container = document.getElementById('mini-area-1');
+        if (!container) return;
+
+        const data = [8.2, 8.7, 9.1, 9.4, 10.2, 10.8, 11.3, 12.1, 12.6, 13.4, 14.1, 14.9];
+        const w = container.clientWidth || 280;
+        const h = container.clientHeight || 120;
+        const padX = 8, padY = 12;
+
+        const maxV = Math.max(...data);
+        const minV = Math.min(...data);
+        const rangeV = maxV - minV || 1;
+
+        const points = data.map((v, i) => ({
+          x: padX + (i / (data.length - 1)) * (w - 2 * padX),
+          y: padY + (1 - (v - minV) / rangeV) * (h - 2 * padY)
+        }));
+
+        const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x},${p.y}`).join(' ');
+        const areaPath = linePath + ` L ${points[points.length - 1].x},${h} L ${points[0].x},${h} Z`;
+
+        container.innerHTML = `
+          <svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="areaGrad1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#10b981" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#10b981" stop-opacity="0.02"/>
+              </linearGradient>
+            </defs>
+            <path d="${areaPath}" fill="url(#areaGrad1)"/>
+            <path d="${linePath}" class="line-path" stroke="#10b981"/>
+            <circle cx="${points[points.length - 1].x}" cy="${points[points.length - 1].y}" r="4" fill="#10b981" stroke="white" stroke-width="2"/>
+          </svg>`;
+      }
+
+      // ── Monthly Signups Bar Chart ────────────
+      function renderMiniBar() {
+        const container = document.getElementById('mini-bar-1');
+        if (!container) return;
+
+        const data = [312, 341, 389, 412, 438, 461, 497, 534, 578, 621, 688, 742];
+        const maxV = Math.max(...data);
+        const colors = ['#818cf8', '#818cf8', '#818cf8', '#818cf8', '#818cf8', '#818cf8',
+          '#818cf8', '#818cf8', '#818cf8', '#818cf8', '#6366f1', '#4f46e5'];
+
+        container.innerHTML = '';
+        data.forEach((v, i) => {
+          const bar = document.createElement('div');
+          bar.className = 'mini-bar';
+          bar.style.height = '0%';
+          bar.style.backgroundColor = colors[i];
+          container.appendChild(bar);
+
+          // Animate in
+          setTimeout(() => {
+            bar.style.height = `${(v / maxV) * 100}%`;
+          }, 100 + i * 60);
+        });
+      }
+
+      // ── User Distribution Donut ──────────────
+      function renderMiniDonut() {
+        const container = document.getElementById('mini-donut-1');
+        if (!container) return;
+
+        const segments = [
+          { value: 45, color: '#6366f1', label: 'Direct' },
+          { value: 28, color: '#10b981', label: 'Organic' },
+          { value: 18, color: '#f59e0b', label: 'Referral' },
+          { value: 9, color: '#ec4899', label: 'Social' }
+        ];
+
+        const total = segments.reduce((s, seg) => s + seg.value, 0);
+        const r = 38, cx = 50, cy = 50, strokeWidth = 14;
+        const circumference = 2 * Math.PI * r;
+
+        let accOffset = 0;
+        let arcs = '';
+
+        segments.forEach(seg => {
+          const pct = seg.value / total;
+          const dashLen = pct * circumference;
+          const gapLen = circumference - dashLen;
+
+          arcs += `<circle cx="${cx}" cy="${cy}" r="${r}"
+            fill="none" stroke="${seg.color}" stroke-width="${strokeWidth}"
+            stroke-dasharray="${dashLen} ${gapLen}"
+            stroke-dashoffset="${-accOffset}"
+            stroke-linecap="round"
+            transform="rotate(-90 ${cx} ${cy})"
+            style="transition: stroke-dasharray 0.8s ease, stroke-dashoffset 0.8s ease;"/>`;
+
+          accOffset += dashLen;
+        });
+
+        container.innerHTML = `
+          <svg viewBox="0 0 100 100">
+            ${arcs}
+            <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" class="donut-label">${total}%</text>
+          </svg>`;
+      }
+
+      // ── KPI Counter Animation ────────────────
+      function animateKPIs() {
+        const kpis = [
+          { id: 'kpi-revenue', target: 134.2, prefix: '$', suffix: 'K', decimals: 1 },
+          { id: 'kpi-users', target: 6898, prefix: '', suffix: '', decimals: 0 },
+          { id: 'kpi-signups', target: 742, prefix: '', suffix: '', decimals: 0 },
+          { id: 'kpi-cac', target: 19, prefix: '$', suffix: '', decimals: 0 }
+        ];
+
+        kpis.forEach(kpi => {
+          const el = document.getElementById(kpi.id);
+          if (!el) return;
+
+          let current = 0;
+          const step = kpi.target / 40;
+          const interval = setInterval(() => {
+            current += step;
+            if (current >= kpi.target) {
+              current = kpi.target;
+              clearInterval(interval);
+            }
+
+            let formatted;
+            if (kpi.decimals > 0) {
+              formatted = current.toFixed(kpi.decimals);
+            } else {
+              formatted = Math.round(current).toLocaleString();
+            }
+
+            el.textContent = `${kpi.prefix}${formatted}${kpi.suffix}`;
+          }, 30);
+        });
+      }
+
+      // Render all on load
+      function init() {
+        renderMiniLine();
+        renderMiniArea();
+        renderMiniBar();
+        renderMiniDonut();
+        animateKPIs();
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+
+      // Re-render on theme change
+      window.addEventListener('themeChanged', () => {
+        renderMiniLine();
+        renderMiniArea();
+      });
+
+      // Re-render on resize (debounced)
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          renderMiniLine();
+          renderMiniArea();
+        }, 200);
+      });
+    })();
+  </script>
+
+</body>
+
+</html>
