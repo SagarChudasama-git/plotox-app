@@ -42,6 +42,7 @@
   // Helper to create and append a meta tag
   function addMeta(attr, attrVal, content) {
     if (!content) return;
+    if (document.querySelector(`meta[${attr}="${attrVal}"]`)) return;
     const el = document.createElement('meta');
     el.setAttribute(attr, attrVal);
     el.setAttribute('content', content);
