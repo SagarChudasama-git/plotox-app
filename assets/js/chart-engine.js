@@ -224,6 +224,26 @@ class ChartEngine {
           formatter: (params) => {
             if (!Array.isArray(params)) params = [params];
             let html = '';
+            // For scatter plots (item trigger), show X and Y values
+            if (params[0] && Array.isArray(params[0].value) && params[0].value.length >= 2) {
+              const xVal = Number(params[0].value[0]);
+              const yVal = Number(params[0].value[1]);
+              const xCompact = typeof NumberFormatter !== 'undefined' ? NumberFormatter.format(xVal) : xVal;
+              const xExact = typeof NumberFormatter !== 'undefined' ? NumberFormatter.formatFull(xVal) : xVal;
+              const yCompact = typeof NumberFormatter !== 'undefined' ? NumberFormatter.format(yVal) : yVal;
+              const yExact = typeof NumberFormatter !== 'undefined' ? NumberFormatter.formatFull(yVal) : yVal;
+              const marker = params[0].marker || '';
+              html += `<strong style="display:block;margin-bottom:4px;">${marker}${params[0].seriesName}</strong>`;
+              html += `<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0;">
+                <span>X</span>
+                <strong>${xCompact} <span style="font-size:10px;font-weight:normal;opacity:0.8;">(${xExact})</span></strong>
+              </div>`;
+              html += `<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0;">
+                <span>Y</span>
+                <strong>${yCompact} <span style="font-size:10px;font-weight:normal;opacity:0.8;">(${yExact})</span></strong>
+              </div>`;
+              return html;
+            }
             if (params[0].axisValueLabel) {
               html += `<strong style="display:block;margin-bottom:4px;">${params[0].axisValueLabel}</strong>`;
             }
@@ -540,6 +560,7 @@ class ChartEngine {
           },
           data: isScatter ? undefined : xValues,
           boundaryGap: (config.chartType === 'line' || config.chartType === 'area') ? false : true,
+          scale: isScatter ? true : undefined,
           axisLabel: {
             color: fontColor,
             rotate: config.xAxisLabelRotate !== undefined ? Number(config.xAxisLabelRotate) : 0,
@@ -568,6 +589,7 @@ class ChartEngine {
             fontStyle: config.titleStyle || 'normal'
           },
           boundaryGap: ['0%', '10%'],
+          scale: isScatter ? true : undefined,
           axisLabel: {
             color: fontColor,
             formatter: formatKValue,

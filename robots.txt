@@ -3,7 +3,6 @@
 
 User-agent: *
 Allow: /
-Disallow: /assets/data/
 
 # Sitemap
 Sitemap: https://plotox.vercel.app/sitemap.xml

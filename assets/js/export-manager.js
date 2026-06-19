@@ -273,11 +273,166 @@ class ExportManager {
   }
 
   /**
+   * Helper: Re-attaches formatter functions to the export option.
+   * ECharts getOption() may lose function references during serialization,
+   * and JSON.stringify always drops them. This method ensures all axis labels,
+   * tooltips, and series labels have proper large-value formatting.
+   */
+  static _reattachFormatters(option) {
+    // NumberFormatter-aware axis label formatter
+    const formatKValue = (value) => {
+      if (value === null || value === undefined || value === '') return '';
+      if (typeof NumberFormatter !== 'undefined') return NumberFormatter.format(value);
+      return value;
+    };
+
+    // Re-attach xAxis label formatters
+    if (option.xAxis) {
+      const xAxes = Array.isArray(option.xAxis) ? option.xAxis : [option.xAxis];
+      xAxes.forEach(axis => {
+        if (axis && axis.axisLabel) {
+          axis.axisLabel.formatter = formatKValue;
+        }
+      });
+    }
+
+    // Re-attach yAxis label formatters
+    if (option.yAxis) {
+      const yAxes = Array.isArray(option.yAxis) ? option.yAxis : [option.yAxis];
+      yAxes.forEach(axis => {
+        if (axis && axis.axisLabel) {
+          axis.axisLabel.formatter = formatKValue;
+        }
+      });
+    }
+
+    // Detect if scatter chart (xAxis type is 'value' with series type 'scatter')
+    let isScatterChart = false;
+    if (option.series) {
+      const seriesList = Array.isArray(option.series) ? option.series : [option.series];
+      isScatterChart = seriesList.some(s => s && s.type === 'scatter');
+    }
+
+    // Re-attach tooltip formatter with large value handling
+    if (option.tooltip) {
+      const tooltips = Array.isArray(option.tooltip) ? option.tooltip : [option.tooltip];
+      tooltips.forEach(tooltip => {
+        if (!tooltip) return;
+        if (isScatterChart) {
+          tooltip.formatter = (params) => {
+            if (!Array.isArray(params)) params = [params];
+            let html = '';
+            if (params[0] && Array.isArray(params[0].value) && params[0].value.length >= 2) {
+              const xVal = Number(params[0].value[0]);
+              const yVal = Number(params[0].value[1]);
+              const xCompact = typeof NumberFormatter !== 'undefined' ? NumberFormatter.format(xVal) : xVal;
+              const xExact = typeof NumberFormatter !== 'undefined' ? NumberFormatter.formatFull(xVal) : xVal;
+              const yCompact = typeof NumberFormatter !== 'undefined' ? NumberFormatter.format(yVal) : yVal;
+              const yExact = typeof NumberFormatter !== 'undefined' ? NumberFormatter.formatFull(yVal) : yVal;
+              const marker = params[0].marker || '';
+              html += `<strong style="display:block;margin-bottom:4px;">${marker}${params[0].seriesName}</strong>`;
+              html += `<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0;">
+                <span>X</span>
+                <strong>${xCompact} <span style="font-size:10px;font-weight:normal;opacity:0.8;">(${xExact})</span></strong>
+              </div>`;
+              html += `<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0;">
+                <span>Y</span>
+                <strong>${yCompact} <span style="font-size:10px;font-weight:normal;opacity:0.8;">(${yExact})</span></strong>
+              </div>`;
+              return html;
+            }
+            if (params[0] && params[0].axisValueLabel) {
+              html += `<strong style="display:block;margin-bottom:4px;">${params[0].axisValueLabel}</strong>`;
+            }
+            params.forEach(item => {
+              if (item.value !== null && item.value !== undefined) {
+                const val = Array.isArray(item.value) ? Number(item.value[1]) : Number(item.value);
+                const compact = typeof NumberFormatter !== 'undefined' ? NumberFormatter.format(val) : val;
+                const exact = typeof NumberFormatter !== 'undefined' ? NumberFormatter.formatFull(val) : val;
+                const marker = item.marker || '';
+                html += `<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0;">
+                  <span>${marker}${item.seriesName}</span>
+                  <strong>${compact} <span style="font-size:10px;font-weight:normal;opacity:0.8;">(${exact})</span></strong>
+                </div>`;
+              }
+            });
+            return html;
+          };
+        } else if (tooltip.trigger === 'item') {
+          // Pie/donut chart tooltip
+          tooltip.formatter = (params) => {
+            const val = Number(params.value);
+            const compact = typeof NumberFormatter !== 'undefined' ? NumberFormatter.format(val) : val;
+            const exact = typeof NumberFormatter !== 'undefined' ? NumberFormatter.formatFull(val) : val;
+            return `${params.marker}<strong>${params.name}</strong><br/>
+              Value: <strong>${compact} (${exact})</strong><br/>
+              Percentage: <strong>${params.percent}%</strong>`;
+          };
+        } else {
+          // Axis-triggered tooltip (line, bar, area, histogram)
+          tooltip.formatter = (params) => {
+            if (!Array.isArray(params)) params = [params];
+            let html = '';
+            if (params[0] && params[0].axisValueLabel) {
+              html += `<strong style="display:block;margin-bottom:4px;">${params[0].axisValueLabel}</strong>`;
+            }
+            params.forEach(item => {
+              if (item.value !== null && item.value !== undefined) {
+                const val = Array.isArray(item.value) ? Number(item.value[1]) : Number(item.value);
+                const compact = typeof NumberFormatter !== 'undefined' ? NumberFormatter.format(val) : val;
+                const exact = typeof NumberFormatter !== 'undefined' ? NumberFormatter.formatFull(val) : val;
+                const marker = item.marker || '';
+                html += `<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0;">
+                  <span>${marker}${item.seriesName}</span>
+                  <strong>${compact} <span style="font-size:10px;font-weight:normal;opacity:0.8;">(${exact})</span></strong>
+                </div>`;
+              }
+            });
+            return html;
+          };
+        }
+      });
+    }
+
+    // Re-attach series label formatters (for bar labels, min/max labels)
+    if (option.series) {
+      const seriesList = Array.isArray(option.series) ? option.series : [option.series];
+      seriesList.forEach(s => {
+        if (!s) return;
+        // Bar chart data labels
+        if (s.type === 'bar' && s.label && s.label.show) {
+          s.label.formatter = (params) => formatKValue(params.value);
+        }
+        // Min/max annotated data points
+        if (s.data && Array.isArray(s.data)) {
+          s.data.forEach(item => {
+            if (item && typeof item === 'object' && item.label && item.label.show) {
+              const origFormatter = item.label.formatter;
+              // Only re-attach if it was lost (became null/undefined from serialization)
+              if (typeof origFormatter !== 'function') {
+                item.label.formatter = (params) => {
+                  const val = Array.isArray(params.value) ? params.value[1] : params.value;
+                  return typeof val === 'number' ? formatKValue(val) : (val != null ? String(val) : '');
+                };
+              }
+            }
+          });
+        }
+      });
+    }
+
+    return option;
+  }
+
+  /**
    * Helper: Temporarily show the ECharts title and adjust the grid for export, run callback, then restore.
    */
   static _withTitleShown(chart, callback) {
     const currentOption = chart.getOption();
     const exportOption = this._getExportOption(chart);
+
+    // Re-attach formatters that may have been lost during getOption() serialization
+    this._reattachFormatters(exportOption);
 
     // Set modified option with lazyUpdate=false to force instant synchronous redraw
     chart.setOption(exportOption, { notMerge: true, lazyUpdate: false });
@@ -285,7 +440,8 @@ class ExportManager {
     try {
       return callback();
     } finally {
-      // Restore original option with lazyUpdate=false
+      // Restore original option with formatters re-attached
+      this._reattachFormatters(currentOption);
       chart.setOption(currentOption, { notMerge: true, lazyUpdate: false });
     }
   }
@@ -358,6 +514,9 @@ class ExportManager {
     try {
       const option = this._getExportOption(chart);
 
+      // Re-attach formatters that are lost during getOption() serialization
+      this._reattachFormatters(option);
+
       const tempDiv = document.createElement('div');
       tempDiv.style.width = (container.clientWidth || 800) + 'px';
       tempDiv.style.height = (container.clientHeight || 500) + 'px';
@@ -400,6 +559,22 @@ class ExportManager {
     if (!chart) return;
 
     const option = this._getExportOption(chart);
+
+    // Detect chart type for formatter generation
+    let isScatterChart = false;
+    let isPieChart = false;
+    let hasBarLabels = false;
+    if (option.series) {
+      const seriesList = Array.isArray(option.series) ? option.series : [option.series];
+      isScatterChart = seriesList.some(s => s && s.type === 'scatter');
+      isPieChart = seriesList.some(s => s && s.type === 'pie');
+      hasBarLabels = seriesList.some(s => s && s.type === 'bar' && s.label && s.label.show);
+    }
+
+    // Detect number system from current localStorage
+    const numberSystem = (typeof NumberFormatter !== 'undefined') ?
+      NumberFormatter.getSystem() : 'international';
+
     const optionJSON = JSON.stringify(option, null, 2);
 
     const bgColor = (option.backgroundColor && option.backgroundColor[0]) || option.backgroundColor || '#FEFCF8';
@@ -420,7 +595,7 @@ class ExportManager {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
   <!-- Load Apache ECharts from CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"><\/script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"><\\/script>
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -490,7 +665,137 @@ class ExportManager {
 
   <div id="chart"></div>
   <script>
+    // ── Embedded NumberFormatter for large value handling ──
+    const NumberFormatter = {
+      _system: '${numberSystem}',
+      getSystem() { return this._system; },
+      format(value, type) {
+        if (value === null || value === undefined || value === '') return '';
+        let num = Number(value);
+        if (isNaN(num)) {
+          const cleaned = String(value).replace(/[\\$,%\\s]/g, '');
+          const parsed = Number(cleaned);
+          if (!isNaN(parsed) && cleaned !== '') { num = parsed; } else { return value; }
+        }
+        if (type === 'growth') return (num >= 0 ? '+' : '') + num.toFixed(1) + '%';
+        const sys = this.getSystem();
+        const absVal = Math.abs(num);
+        if (sys === 'full') return this.formatFull(num);
+        if (sys === 'indian') {
+          if (absVal >= 10000000) return (num / 10000000).toFixed(1).replace(/\\.0$/, '') + ' Cr';
+          if (absVal >= 100000) return (num / 100000).toFixed(1).replace(/\\.0$/, '') + ' L';
+          if (absVal >= 1000) return (num / 1000).toFixed(1).replace(/\\.0$/, '') + ' K';
+        } else {
+          if (absVal >= 1e12) return (num / 1e12).toFixed(1).replace(/\\.0$/, '') + 'T';
+          if (absVal >= 1e9) return (num / 1e9).toFixed(1).replace(/\\.0$/, '') + 'B';
+          if (absVal >= 1e6) return (num / 1e6).toFixed(1).replace(/\\.0$/, '') + 'M';
+          if (absVal >= 1e3) return (num / 1e3).toFixed(1).replace(/\\.0$/, '') + 'K';
+        }
+        if (Number.isInteger(num)) return num.toLocaleString();
+        return num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      },
+      formatFull(value) {
+        if (value === null || value === undefined || value === '') return '';
+        let num = Number(value);
+        if (isNaN(num)) {
+          const cleaned = String(value).replace(/[\\$,%\\s]/g, '');
+          const parsed = Number(cleaned);
+          if (!isNaN(parsed) && cleaned !== '') { num = parsed; } else { return value; }
+        }
+        if (Number.isInteger(num)) return num.toLocaleString();
+        return num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+    };
+
+    const formatKValue = (value) => {
+      if (value === null || value === undefined || value === '') return '';
+      return NumberFormatter.format(value);
+    };
+
     const option = ${optionJSON};
+
+    // ── Re-attach formatter functions lost during JSON serialization ──
+    // Axis label formatters
+    if (option.xAxis) {
+      const xAxes = Array.isArray(option.xAxis) ? option.xAxis : [option.xAxis];
+      xAxes.forEach(axis => { if (axis && axis.axisLabel) axis.axisLabel.formatter = formatKValue; });
+    }
+    if (option.yAxis) {
+      const yAxes = Array.isArray(option.yAxis) ? option.yAxis : [option.yAxis];
+      yAxes.forEach(axis => { if (axis && axis.axisLabel) axis.axisLabel.formatter = formatKValue; });
+    }
+
+    // Tooltip formatter
+    if (option.tooltip) {
+      const tooltips = Array.isArray(option.tooltip) ? option.tooltip : [option.tooltip];
+      tooltips.forEach(tooltip => {
+        if (!tooltip) return;
+        ${isScatterChart ? `
+        tooltip.formatter = (params) => {
+          if (!Array.isArray(params)) params = [params];
+          let html = '';
+          if (params[0] && Array.isArray(params[0].value) && params[0].value.length >= 2) {
+            const xVal = Number(params[0].value[0]);
+            const yVal = Number(params[0].value[1]);
+            const xC = NumberFormatter.format(xVal), xE = NumberFormatter.formatFull(xVal);
+            const yC = NumberFormatter.format(yVal), yE = NumberFormatter.formatFull(yVal);
+            const m = params[0].marker || '';
+            html += '<strong style="display:block;margin-bottom:4px;">' + m + params[0].seriesName + '</strong>';
+            html += '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0;"><span>X</span><strong>' + xC + ' <span style="font-size:10px;font-weight:normal;opacity:0.8;">(' + xE + ')</span></strong></div>';
+            html += '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0;"><span>Y</span><strong>' + yC + ' <span style="font-size:10px;font-weight:normal;opacity:0.8;">(' + yE + ')</span></strong></div>';
+            return html;
+          }
+          if (params[0] && params[0].axisValueLabel) html += '<strong style="display:block;margin-bottom:4px;">' + params[0].axisValueLabel + '</strong>';
+          params.forEach(item => {
+            if (item.value !== null && item.value !== undefined) {
+              const val = Array.isArray(item.value) ? Number(item.value[1]) : Number(item.value);
+              const c = NumberFormatter.format(val), e = NumberFormatter.formatFull(val);
+              html += '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0;"><span>' + (item.marker||'') + item.seriesName + '</span><strong>' + c + ' <span style="font-size:10px;font-weight:normal;opacity:0.8;">(' + e + ')</span></strong></div>';
+            }
+          });
+          return html;
+        };` : isPieChart ? `
+        tooltip.formatter = (params) => {
+          const val = Number(params.value);
+          const c = NumberFormatter.format(val), e = NumberFormatter.formatFull(val);
+          return params.marker + '<strong>' + params.name + '</strong><br/>Value: <strong>' + c + ' (' + e + ')</strong><br/>Percentage: <strong>' + params.percent + '%</strong>';
+        };` : `
+        tooltip.formatter = (params) => {
+          if (!Array.isArray(params)) params = [params];
+          let html = '';
+          if (params[0] && params[0].axisValueLabel) html += '<strong style="display:block;margin-bottom:4px;">' + params[0].axisValueLabel + '</strong>';
+          params.forEach(item => {
+            if (item.value !== null && item.value !== undefined) {
+              const val = Array.isArray(item.value) ? Number(item.value[1]) : Number(item.value);
+              const c = NumberFormatter.format(val), e = NumberFormatter.formatFull(val);
+              html += '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0;"><span>' + (item.marker||'') + item.seriesName + '</span><strong>' + c + ' <span style="font-size:10px;font-weight:normal;opacity:0.8;">(' + e + ')</span></strong></div>';
+            }
+          });
+          return html;
+        };`}
+      });
+    }
+
+    // Series label formatters (bar labels, min/max labels)
+    if (option.series) {
+      const seriesList = Array.isArray(option.series) ? option.series : [option.series];
+      seriesList.forEach(s => {
+        if (!s) return;
+        if (s.type === 'bar' && s.label && s.label.show) {
+          s.label.formatter = (params) => formatKValue(params.value);
+        }
+        if (s.data && Array.isArray(s.data)) {
+          s.data.forEach(item => {
+            if (item && typeof item === 'object' && item.label && item.label.show) {
+              item.label.formatter = (params) => {
+                const val = Array.isArray(params.value) ? params.value[1] : params.value;
+                return typeof val === 'number' ? formatKValue(val) : (val != null ? String(val) : '');
+              };
+            }
+          });
+        }
+      });
+    }
     
     // Initialize chart
     const container = document.getElementById('chart');
@@ -545,7 +850,7 @@ class ExportManager {
         </svg>\`;
       }
     });
-  <\/script>
+  <\\/script>
 </body>
 </html>`;
 
