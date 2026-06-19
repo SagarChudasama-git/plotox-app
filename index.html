@@ -322,49 +322,7 @@ Dec,134200,742,48,6898,19,14.9</code></pre>
       <p class="trust-label">Trusted by companies simplifying their analytical workflows</p>
     </section> -->
 
-    <!-- ── FEATURED BADGES ──────────────────── -->
-    <section class="featured-section" style="display: flex; justify-content: center; align-items: center; gap: 40px; flex-wrap: wrap; padding: 48px 0; margin-bottom: var(--section-gap);">
-      <a href="https://twelve.tools" target="_blank" class="featured-badge-link">
-        <!-- Light Badge (shown in light mode) -->
-        <img src="https://twelve.tools/badge0-light.svg" alt="Featured on Twelve Tools" width="300" height="81" class="badge-img badge-light">
-        <!-- Dark Badge (shown in dark mode) -->
-        <img src="https://twelve.tools/badge0-dark.svg" alt="Featured on Twelve Tools" width="300" height="81" class="badge-img badge-dark">
-      </a>
-      <a href="https://ufind.best/products/plotox?utm_source=ufind.best" target="_blank" rel="noopener" class="featured-badge-link">
-        <!-- Light Badge (shown in light mode) -->
-        <img src="https://ufind.best/badges/ufind-best-badge-light.svg" alt="Featured on ufind.best" width="200" height="64" class="badge-img badge-light">
-        <!-- Dark Badge (shown in dark mode) -->
-        <img src="https://ufind.best/badges/ufind-best-badge-dark.svg" alt="Featured on ufind.best" width="200" height="64" class="badge-img badge-dark">
-      </a>
-      <a href="https://findly.tools/plotox?utm_source=plotox" target="_blank" rel="noopener noreferrer" class="featured-badge-link">
-        <!-- Light Badge (shown in light mode) -->
-        <img src="https://findly.tools/badges/findly-tools-badge-light.svg" alt="Featured on Findly.tools" width="200" height="64" class="badge-img badge-light">
-        <!-- Dark Badge (shown in dark mode) -->
-        <img src="https://findly.tools/badges/findly-tools-badge-dark.svg" alt="Featured on Findly.tools" width="200" height="64" class="badge-img badge-dark">
-      </a>
-      <style>
-        .featured-badge-link {
-          display: inline-block;
-          transition: transform var(--transition-fast) ease;
-        }
-        .badge-img {
-          display: block;
-          max-width: 100%;
-          height: auto;
-          filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.05));
-        }
-        .badge-dark {
-          display: none;
-        }
-        html.dark .badge-light {
-          display: none;
-        }
-        html.dark .badge-dark {
-          display: block;
-          filter: drop-shadow(0 4px 16px rgba(255, 255, 255, 0.05));
-        }
-      </style>
-    </section>
+
 
     <!-- ── PLATFORM OVERVIEW ─────────────────── -->
     <section class="platform-section container" id="features">
@@ -535,7 +493,7 @@ Dec,134200,742,48,6898,19,14.9</code></pre>
        FOOTER
   ════════════════════════════════════════════ -->
   <footer class="footer">
-    <div class="container" style="border-top: 1px solid var(--color-border); padding: 30px 0;">
+    <div class="container" style="border-top: 1px solid var(--color-border); padding: 20px 20px;">
       <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 32px; margin-bottom: 24px;">
         <div>
           <h4 style="font-size: 13px; font-weight: 600; color: var(--color-primary); margin-bottom: 12px;">Chart Generators</h4>
@@ -567,10 +525,48 @@ Dec,134200,742,48,6898,19,14.9</code></pre>
       <div class="footer-bottom" style="padding-top: 16px; border-top: 1px solid var(--color-border); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;">
         <span style="font-size: 12px; color: var(--color-outline);">© 2026 Plotox. All rights reserved.</span>
         <div class="footer-verification-badges" style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+          <a href="https://twelve.tools" target="_blank"><img src="https://twelve.tools/badge0-light.svg" alt="Featured on Twelve Tools" width="200" height="54"></a>
           <a href="https://ufind.best/products/plotox?utm_source=ufind.best" target="_blank" rel="noopener"><img src="https://ufind.best/badges/ufind-best-badge-light.svg" alt="Featured on ufind.best" width="150" /></a>
           <a href="https://findly.tools/plotox?utm_source=plotox" target="_blank" rel="noopener noreferrer"><img src="https://findly.tools/badges/findly-tools-badge-light.svg" alt="Featured on Findly.tools" width="175" height="55" /></a>
+          <a href="https://leanvibe.io/vibe/plotox" target="_blank" rel="noopener noreferrer"><img src="https://leanvibe.io/api/badge/plotox?type=featured&view=light" alt="Featured on LeanVibe.io" height="42" style="display:block;height:42px;width:auto;border:0;" /></a>
+          <a href="https://wired.business" target="_blank"><img src="https://wired.business/badge0-light.svg" alt="Featured on Wired Business" width="200" height="54"></a>
         </div>
       </div>
+      <style>
+        .footer-verification-badges {
+          display: flex;
+          gap: 16px;
+          align-items: center;
+          flex-wrap: wrap;
+        }
+        .footer-verification-badges a {
+          display: inline-flex;
+          align-items: center;
+        }
+        .footer-verification-badges a img {
+          height: 42px !important;
+          width: auto !important;
+          max-height: 42px !important;
+          display: inline-block !important;
+          border: 0 !important;
+          filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.05));
+        }
+        html.dark .footer-verification-badges img[src="https://twelve.tools/badge0-light.svg"] {
+          content: url("https://twelve.tools/badge0-dark.svg");
+        }
+        html.dark .footer-verification-badges img[src="https://ufind.best/badges/ufind-best-badge-light.svg"] {
+          content: url("https://ufind.best/badges/ufind-best-badge-dark.svg");
+        }
+        html.dark .footer-verification-badges img[src="https://findly.tools/badges/findly-tools-badge-light.svg"] {
+          content: url("https://findly.tools/badges/findly-tools-badge-dark.svg");
+        }
+        html.dark .footer-verification-badges img[src="https://leanvibe.io/api/badge/plotox?type=featured&view=light"] {
+          content: url("https://leanvibe.io/api/badge/plotox?type=featured&view=dark");
+        }
+        html.dark .footer-verification-badges img[src="https://wired.business/badge0-light.svg"] {
+          content: url("https://wired.business/badge0-dark.svg");
+        }
+      </style>
     </div>
   </footer>
 
