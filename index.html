@@ -322,29 +322,43 @@ Dec,134200,742,48,6898,19,14.9</code></pre>
       <p class="trust-label">Trusted by companies simplifying their analytical workflows</p>
     </section> -->
 
-    <!-- ── LOGO MARQUEE ─────────────────────── -->
-    <!-- <section class="marquee-section">
-      <div class="marquee-wrapper">
-        <div class="marquee-track">
-          <div class="logo-item"><span class="material-symbols-outlined">bolt</span>Velocity</div>
-          <div class="logo-item"><span class="material-symbols-outlined">deployed_code</span>Nexus</div>
-          <div class="logo-item"><span class="material-symbols-outlined">auto_awesome</span>Lumina</div>
-          <div class="logo-item"><span class="material-symbols-outlined">layers</span>Stack</div>
-          <div class="logo-item"><span class="material-symbols-outlined">token</span>Quanta</div>
-          <div class="logo-item"><span class="material-symbols-outlined">hub</span>Orbital</div>
-          <div class="logo-item"><span class="material-symbols-outlined">data_exploration</span>Scalar</div>
-        </div>
-        <div class="marquee-track" aria-hidden="true">
-          <div class="logo-item"><span class="material-symbols-outlined">bolt</span>Velocity</div>
-          <div class="logo-item"><span class="material-symbols-outlined">deployed_code</span>Nexus</div>
-          <div class="logo-item"><span class="material-symbols-outlined">auto_awesome</span>Lumina</div>
-          <div class="logo-item"><span class="material-symbols-outlined">layers</span>Stack</div>
-          <div class="logo-item"><span class="material-symbols-outlined">token</span>Quanta</div>
-          <div class="logo-item"><span class="material-symbols-outlined">hub</span>Orbital</div>
-          <div class="logo-item"><span class="material-symbols-outlined">data_exploration</span>Scalar</div>
-        </div>
-      </div>
-    </section> -->
+    <!-- ── FEATURED BADGES ──────────────────── -->
+    <section class="featured-section" style="display: flex; justify-content: center; align-items: center; gap: 40px; flex-wrap: wrap; padding: 48px 0; margin-bottom: var(--section-gap);">
+      <a href="https://twelve.tools" target="_blank" class="featured-badge-link">
+        <!-- Light Badge (shown in light mode) -->
+        <img src="https://twelve.tools/badge0-light.svg" alt="Featured on Twelve Tools" width="300" height="81" class="badge-img badge-light">
+        <!-- Dark Badge (shown in dark mode) -->
+        <img src="https://twelve.tools/badge0-dark.svg" alt="Featured on Twelve Tools" width="300" height="81" class="badge-img badge-dark">
+      </a>
+      <a href="https://ufind.best/products/plotox?utm_source=ufind.best" target="_blank" rel="noopener" class="featured-badge-link">
+        <!-- Light Badge (shown in light mode) -->
+        <img src="https://ufind.best/badges/ufind-best-badge-light.svg" alt="Featured on ufind.best" width="200" height="64" class="badge-img badge-light">
+        <!-- Dark Badge (shown in dark mode) -->
+        <img src="https://ufind.best/badges/ufind-best-badge-dark.svg" alt="Featured on ufind.best" width="200" height="64" class="badge-img badge-dark">
+      </a>
+      <style>
+        .featured-badge-link {
+          display: inline-block;
+          transition: transform var(--transition-fast) ease;
+        }
+        .badge-img {
+          display: block;
+          max-width: 100%;
+          height: auto;
+          filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.05));
+        }
+        .badge-dark {
+          display: none;
+        }
+        html.dark .badge-light {
+          display: none;
+        }
+        html.dark .badge-dark {
+          display: block;
+          filter: drop-shadow(0 4px 16px rgba(255, 255, 255, 0.05));
+        }
+      </style>
+    </section>
 
     <!-- ── PLATFORM OVERVIEW ─────────────────── -->
     <section class="platform-section container" id="features">
