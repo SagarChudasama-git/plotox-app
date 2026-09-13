@@ -873,11 +873,35 @@ class ChartEngine {
         };
       }
 
+      // Apply AutoScaleEngine for professional axis scaling
+      if (typeof AutoScaleEngine !== 'undefined') {
+        try {
+          AutoScaleEngine.applyScaling(option, dataset, config, container);
+        } catch (scaleErr) {
+          console.warn('AutoScaleEngine.applyScaling warning:', scaleErr);
+        }
+      }
+
       chart.setOption(option, { notMerge: true, lazyUpdate: false });
 
       if (!container.__resizeObserver) {
+        let _resizeTimer = null;
         const resizeObserver = new ResizeObserver(() => {
-          chart.resize();
+          // Debounce resize to avoid excessive recalculations
+          clearTimeout(_resizeTimer);
+          _resizeTimer = setTimeout(() => {
+            // Re-apply responsive scaling (tick counts, labels, margins)
+            if (typeof AutoScaleEngine !== 'undefined') {
+              try {
+                const currentOption = chart.getOption();
+                AutoScaleEngine.applyResponsiveScaling(currentOption, container, dataset, config);
+                chart.setOption(currentOption);
+              } catch (e) {
+                // Silently ignore responsive scaling errors
+              }
+            }
+            chart.resize();
+          }, 150);
         });
         resizeObserver.observe(container);
         container.__resizeObserver = resizeObserver;
