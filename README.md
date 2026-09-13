@@ -1,7 +1,7 @@
 <div align="center">
   <img width="980" height="261" alt="Image" src="https://github.com/user-attachments/assets/3933a504-0b17-4303-be9b-80586248743d" />
   
-  # Plotox — Experience Data Visulization
+  # Plotox - Experience Data Visulization
   
   **Convert your data into stunning visualizations with ease**
   
