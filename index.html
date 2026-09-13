@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"
-  data-seo-title="Plotox — Free Online Chart Generator & Data Visualization Tool"
+  data-seo-title="Plotox - Free Online Chart Generator & Data Visualization Tool"
   data-seo-description="Create interactive charts from CSV data instantly. Free online chart generator with line, bar, pie, scatter, area charts & histograms. 100% private, no signup."
   data-seo-slug=""
   data-seo-type="website"
@@ -20,9 +20,9 @@
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plotox — Free Online Chart Generator & Data Visualization Tool</title>
+  <title>Plotox - Free CSV to Chart &amp; Dashboard Maker, No Signup</title>
   <meta name="description"
-    content="Create interactive charts from CSV data instantly. Free online chart generator with line, bar, pie, scatter, area charts & histograms. 100% private, no signup.">
+    content="Turn CSV or Excel data into interactive charts and dashboards in seconds. Runs 100% in your browser - no uploads, no signup, completely free." />
   <meta name="google-site-verification" content="xWNYXdNmpxJQD4cBENmnTXIVAGlsFKWFRoss8uYAMvs" />
 
   <!-- Static Canonical Tag -->
@@ -31,19 +31,21 @@
   <!-- Static Open Graph Tags -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Plotox">
-  <meta property="og:title" content="Plotox — Free Online Chart Generator & Data Visualization Tool">
-  <meta property="og:description" content="Create interactive charts from CSV data instantly. Free online chart generator with line, bar, pie, scatter, area charts & histograms. 100% private, no signup.">
+  <meta property="og:title" content="Plotox - Free CSV to Chart &amp; Dashboard Maker, No Signup">
+  <meta property="og:description" content="Turn CSV or Excel data into interactive charts and dashboards in seconds. Runs 100% in your browser - no uploads, no signup, completely free.">
   <meta property="og:url" content="https://plotox.vercel.app/">
   <meta property="og:image" content="https://plotox.vercel.app/assets/images/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Plotox dashboard interface showing a CSV data table converted into a line chart">
   <meta property="og:locale" content="en_US">
 
   <!-- Static Twitter Card Tags -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Plotox — Free Online Chart Generator & Data Visualization Tool">
-  <meta name="twitter:description" content="Create interactive charts from CSV data instantly. Free online chart generator with line, bar, pie, scatter, area charts & histograms. 100% private, no signup.">
+  <meta name="twitter:title" content="Plotox - Free CSV to Chart &amp; Dashboard Maker, No Signup">
+  <meta name="twitter:description" content="Turn CSV or Excel data into interactive charts and dashboards in seconds. Runs 100% in your browser - no uploads, no signup, completely free.">
   <meta name="twitter:image" content="https://plotox.vercel.app/assets/images/og-image.png">
+  <meta name="twitter:image:alt" content="Plotox dashboard interface showing a CSV data table converted into a line chart">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -66,6 +68,95 @@
 
   <!-- Apache ECharts CDN for showcase chart (deferred for performance) -->
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js" defer></script>
+
+  <!-- Structured Data: WebApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Plotox",
+    "url": "https://plotox.vercel.app/",
+    "description": "Turn CSV or Excel data into interactive charts and dashboards in seconds. Runs 100% in your browser - no uploads, no signup, completely free.",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Any (runs in web browser)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "featureList": [
+      "CSV, TSV, and Excel file import",
+      "Line, bar, pie, scatter, area, and histogram charts",
+      "Automatic data cleaning and normalization",
+      "Export as PNG, SVG, HTML, or JSON",
+      "Multi-chart dashboard builder with KPI widgets"
+    ],
+    "browserRequirements": "Requires JavaScript. Works in any modern browser.",
+    "isAccessibleForFree": true
+  }
+  </script>
+
+  <!-- Structured Data: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is my data safe with plotox?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, 100%. plotox runs entirely client-side. Your uploaded CSV/TSV data is parsed, calculated, and visualized directly in your browser. No files are ever sent to a server."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What chart types are supported?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We support Line charts, Grouped and Stacked Bar charts, Area charts, Pie and Donut charts, Scatter plots, and Histograms out of the box."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I edit my data in the app?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes! In the Data Inspector table, you can double-click any column header to rename it. The renamed keys will instantly apply across all labels, axes selectors, and active legends."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does the automatic data cleaning work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "When you upload your dataset, our smart pipeline automatically strips symbols (like $, %, or commas), standardizes date columns to a unified timeline, ignores null or empty entries, and lets you rename columns dynamically."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I export charts in high-resolution vector formats?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes! You can export your charts as high-fidelity PNG images, scalable SVG vector graphics (perfect for publications), standalone interactive HTML files, or clean JSON option structures."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is there a file size limit for CSV uploads?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Since plotox parses and renders data using high-speed client-side Javascript, it can comfortably handle files with tens of thousands of rows. The only limit is your local computer's memory."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I customize chart colors and themes?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Absolutely! plotox features a sleek, global dark mode toggle that instantly translates your color choices, chart backgrounds, axes lines, labels, legends, and tooltip panels between light and dark modes."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 
 <body>
@@ -128,7 +219,7 @@
             <!-- Tab 1: Data Ingestion -->
             <div class="showcase-panel panel-card active" id="pane-integration">
               <div class="ingestion-container">
-                <p class="ingestion-title">Upload your dataset — zero setup needed</p>
+                <p class="ingestion-title">Upload your dataset - zero setup needed</p>
                 <p class="ingestion-desc">Paste or upload your <span class="highlight-black">CSV / TSV / Excel
                     file</span> and plotox instantly detects schema, column types, and <span
                     class="highlight-black">data quality issues</span> - no code required.</p>
@@ -301,7 +392,7 @@ Dec,134200,742,48,6898,19,14.9</code></pre>
             <div class="showcase-panel panel-card" id="pane-visualization">
               <div class="chart-display">
                 <div class="chart-header-row">
-                  <div class="chart-title">MRR Growth vs New Signups — 2024</div>
+                  <div class="chart-title">MRR Growth vs New Signups - 2024</div>
                   <div class="chart-legend">
                     <span class="chart-legend-item"><span class="legend-dot legend-dot-blue"></span>MRR ($)</span>
                     <span class="chart-legend-item"><span class="legend-dot legend-dot-green"></span>Signups</span>
@@ -333,8 +424,6 @@ Dec,134200,742,48,6898,19,14.9</code></pre>
 
       <!-- Dashboard panel with glassmorphic widget -->
       <div class="dashboard-panel">
-        <img src="https://images.unsplash.com/photo-1604076913837-52ab5629fba9?q=80&w=987&auto=format&fit=crop"
-          alt="Dashboard Preview">
         <div class="dashboard-overlay">
           <div class="glow-blob glow-blue"></div>
           <div class="glow-blob glow-purple"></div>
@@ -346,27 +435,27 @@ Dec,134200,742,48,6898,19,14.9</code></pre>
             <div class="chart-selector-pills chart-selector-scroll">
               <button class="selector-pill active" data-chart="line">
                 <span class="material-symbols-outlined pill-icon">show_chart</span>
-                <span>Line Chart</span>
+                <h3 class="pill-label">Line Chart</h3>
               </button>
               <button class="selector-pill" data-chart="bar">
                 <span class="material-symbols-outlined pill-icon">bar_chart</span>
-                <span>Bar Chart</span>
+                <h3 class="pill-label">Bar Chart</h3>
               </button>
               <button class="selector-pill" data-chart="scatter">
                 <span class="material-symbols-outlined pill-icon">scatter_plot</span>
-                <span>Scatter Plot</span>
+                <h3 class="pill-label">Scatter Plot</h3>
               </button>
               <button class="selector-pill" data-chart="area">
                 <span class="material-symbols-outlined pill-icon">insights</span>
-                <span>Area Chart</span>
+                <h3 class="pill-label">Area Chart</h3>
               </button>
               <button class="selector-pill" data-chart="pie">
                 <span class="material-symbols-outlined pill-icon">pie_chart</span>
-                <span>Pie Chart</span>
+                <h3 class="pill-label">Pie Chart</h3>
               </button>
               <button class="selector-pill" data-chart="histogram">
                 <span class="material-symbols-outlined pill-icon">equalizer</span>
-                <span>Histogram</span>
+                <h3 class="pill-label">Histogram</h3>
               </button>
             </div>
 
@@ -389,7 +478,7 @@ Dec,134200,742,48,6898,19,14.9</code></pre>
       <div class="faq-grid">
         <div class="faq-item">
           <div class="faq-question">
-            <span>Is my data safe with plotox?</span>
+            <h3 class="faq-question-text">Is my data safe with plotox?</h3>
             <span class="material-symbols-outlined faq-icon">expand_more</span>
           </div>
           <div class="faq-answer">
@@ -400,7 +489,7 @@ Dec,134200,742,48,6898,19,14.9</code></pre>
 
         <div class="faq-item">
           <div class="faq-question">
-            <span>What chart types are supported?</span>
+            <h3 class="faq-question-text">What chart types are supported?</h3>
             <span class="material-symbols-outlined faq-icon">expand_more</span>
           </div>
           <div class="faq-answer">
@@ -411,7 +500,7 @@ Dec,134200,742,48,6898,19,14.9</code></pre>
 
         <div class="faq-item">
           <div class="faq-question">
-            <span>Can I edit my data in the app?</span>
+            <h3 class="faq-question-text">Can I edit my data in the app?</h3>
             <span class="material-symbols-outlined faq-icon">expand_more</span>
           </div>
           <div class="faq-answer">
@@ -422,11 +511,11 @@ Dec,134200,742,48,6898,19,14.9</code></pre>
 
         <div class="faq-item">
           <div class="faq-question">
-            <span>How does the automatic data cleaning work?</span>
+            <h3 class="faq-question-text">How does the automatic data cleaning work?</h3>
             <span class="material-symbols-outlined faq-icon">expand_more</span>
           </div>
           <div class="faq-answer">
-            When you upload your dataset, our smart pipeline automatically strips symbols (like $, %, or commas),
+            When you upload your dataset, our <a href="data-cleaner.html">smart data cleaning pipeline</a> automatically strips symbols (like $, %, or commas),
             standardizes date columns to a unified timeline, ignores null or empty entries, and lets you rename columns
             dynamically.
           </div>
@@ -434,7 +523,7 @@ Dec,134200,742,48,6898,19,14.9</code></pre>
 
         <div class="faq-item">
           <div class="faq-question">
-            <span>Can I export charts in high-resolution vector formats?</span>
+            <h3 class="faq-question-text">Can I export charts in high-resolution vector formats?</h3>
             <span class="material-symbols-outlined faq-icon">expand_more</span>
           </div>
           <div class="faq-answer">
@@ -445,7 +534,7 @@ Dec,134200,742,48,6898,19,14.9</code></pre>
 
         <div class="faq-item">
           <div class="faq-question">
-            <span>Is there a file size limit for CSV uploads?</span>
+            <h3 class="faq-question-text">Is there a file size limit for CSV uploads?</h3>
             <span class="material-symbols-outlined faq-icon">expand_more</span>
           </div>
           <div class="faq-answer">
@@ -456,7 +545,7 @@ Dec,134200,742,48,6898,19,14.9</code></pre>
 
         <div class="faq-item">
           <div class="faq-question">
-            <span>Can I customize chart colors and themes?</span>
+            <h3 class="faq-question-text">Can I customize chart colors and themes?</h3>
             <span class="material-symbols-outlined faq-icon">expand_more</span>
           </div>
           <div class="faq-answer">

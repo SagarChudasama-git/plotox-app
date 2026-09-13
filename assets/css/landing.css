@@ -1775,6 +1775,12 @@ html.dark .cleaning-card:hover .cleaning-card-icon {
     cursor: pointer;
     user-select: none;
 }
+.faq-question .faq-question-text {
+    font: inherit;
+    margin: 0;
+    padding: 0;
+    color: inherit;
+}
 .faq-answer {
     max-height: 0;
     overflow: hidden;

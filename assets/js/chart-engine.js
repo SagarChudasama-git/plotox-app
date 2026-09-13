@@ -18,10 +18,14 @@ class ChartEngine {
       return;
     }
 
-    // Guard: must have at least one Y-axis column selected
+    // Guard: must have at least one Y-axis column selected (or xAxis for histogram)
     if (!config.yAxes || config.yAxes.length === 0) {
-      ChartEngine._showError(container, 'Select at least one Y-Axis column', 'Go to the Columns tab to configure axes.');
-      return;
+      if (config.chartType === 'histogram' && config.xAxis) {
+        config.yAxes = [config.xAxis];
+      } else {
+        ChartEngine._showError(container, 'Select at least one Y-Axis column', 'Go to the Columns tab to configure axes.');
+        return;
+      }
     }
 
     try {
@@ -402,11 +406,19 @@ class ChartEngine {
         const binFrequencies = Array(binCount).fill(0);
         const binLabels = [];
 
+        const formatBinNum = (n) => {
+          if (typeof NumberFormatter !== 'undefined') return NumberFormatter.format(n);
+          const abs = Math.abs(n);
+          if (abs >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+          if (abs >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+          return Number.isInteger(n) ? String(n) : n.toFixed(1);
+        };
+
         for (let i = 0; i < binCount; i++) {
           const start = min + i * binWidth;
           const end = start + binWidth;
-          const startStr = typeof NumberFormatter !== 'undefined' ? NumberFormatter.format(start) : start.toFixed(1);
-          const endStr = typeof NumberFormatter !== 'undefined' ? NumberFormatter.format(end) : end.toFixed(1);
+          const startStr = formatBinNum(start);
+          const endStr = formatBinNum(end);
           binLabels.push(`${startStr}–${endStr}`);
         }
 
@@ -422,14 +434,14 @@ class ChartEngine {
         option.tooltip.formatter = (params) => {
           const item = params[0];
           const val = Number(item.value);
-          const compact = typeof NumberFormatter !== 'undefined' ? NumberFormatter.format(val) : val;
-          const exact = typeof NumberFormatter !== 'undefined' ? NumberFormatter.formatFull(val) : val;
-          return `${item.name}<br/>Count: <strong>${compact} (${exact})</strong>`;
+          const countStr = typeof NumberFormatter !== 'undefined' ? NumberFormatter.format(val) : val;
+          return `${item.name}<br/>Count: <strong>${countStr}</strong>`;
         };
 
         option.xAxis = {
           type: 'category',
           data: binLabels,
+          boundaryGap: true,
           name: config.xAxisLabel !== undefined ? config.xAxisLabel : (col || ''),
           nameLocation: 'center',
           nameGap: 30,
@@ -442,8 +454,8 @@ class ChartEngine {
           },
           axisLabel: {
             color: fontColor,
-            rotate: config.xAxisLabelRotate !== undefined ? Number(config.xAxisLabelRotate) : 15,
-            formatter: formatKValue,
+            rotate: config.xAxisLabelRotate !== undefined ? Number(config.xAxisLabelRotate) : (binLabels.length > 6 ? 15 : 0),
+            interval: 0,
             fontFamily: fontStyle,
             fontSize: globalFontSize,
             fontWeight: config.titleWeight || '500',
@@ -466,10 +478,12 @@ class ChartEngine {
             fontWeight: config.titleWeight || '600',
             fontStyle: config.titleStyle || 'normal'
           },
+          min: 0,
+          minInterval: 1,
           boundaryGap: ['0%', '10%'],
           axisLabel: {
             color: fontColor,
-            formatter: formatKValue,
+            formatter: (v) => Number.isInteger(v) ? String(v) : '',
             fontFamily: fontStyle,
             fontSize: globalFontSize,
             fontWeight: config.titleWeight || '500',

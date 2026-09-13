@@ -15,6 +15,8 @@ function initSeoHelper() {
     yAxes: [],
     title: container.getAttribute('data-title') || 'Interactive Demo',
     showGrid: true,
+    showXGrid: true,
+    showYGrid: true,
     showLegend: true,
     lineSmooth: false,
     barmode: 'group',
@@ -32,6 +34,8 @@ function initSeoHelper() {
   if (gridCheck) {
     gridCheck.addEventListener('change', (e) => {
       config.showGrid = e.target.checked;
+      config.showXGrid = e.target.checked;
+      config.showYGrid = e.target.checked;
       renderChart();
     });
   }

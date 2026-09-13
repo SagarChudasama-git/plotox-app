@@ -1075,10 +1075,14 @@ class AutoScaleEngine {
     }
   }
 
-  /** Histogram: ensure Y starts at 0 */
+  /** Histogram: ensure Y starts at 0 and proper axis settings */
   static _optimizeHistogram(option) {
+    if (option.xAxis && option.xAxis.type === 'category') {
+      option.xAxis.boundaryGap = true;
+    }
     if (option.yAxis) {
       option.yAxis.min = 0;
+      option.yAxis.minInterval = 1;
     }
   }
 
@@ -1107,6 +1111,42 @@ class AutoScaleEngine {
    */
   static _applyYAxisScaling(option, dataset, config, containerHeight) {
     if (!option.yAxis || option.yAxis.type === 'log') return;
+
+    const chartType = config ? config.chartType : 'line';
+
+    // For histograms, Y-axis represents bin frequencies (counts), NOT raw column values!
+    if (chartType === 'histogram') {
+      let maxFreq = 0;
+      if (option.series) {
+        option.series.forEach(s => {
+          if (Array.isArray(s.data)) {
+            s.data.forEach(item => {
+              let val;
+              if (Array.isArray(item)) val = item[1];
+              else if (item !== null && typeof item === 'object' && 'value' in item) {
+                val = Array.isArray(item.value) ? item.value[1] : item.value;
+              } else {
+                val = item;
+              }
+              const num = Number(val);
+              if (isFinite(num)) {
+                maxFreq = Math.max(maxFreq, num);
+              }
+            });
+          }
+        });
+      }
+
+      const targetTicks = Math.min(6, Math.max(3, Math.ceil(maxFreq) + 1));
+      const nice = this.calculateNiceRange(0, Math.max(1, maxFreq), targetTicks);
+      option.yAxis.min = 0;
+      option.yAxis.max = Math.max(nice.max, Math.ceil(maxFreq * 1.15) || 1);
+      option.yAxis.minInterval = 1;
+      if (nice.tickInterval >= 1) {
+        option.yAxis.interval = Math.ceil(nice.tickInterval);
+      }
+      return;
+    }
 
     // Collect all numeric Y values across all series
     let globalMin = Infinity;
@@ -1248,8 +1288,10 @@ class AutoScaleEngine {
       option.xAxis.axisLabel.rotate = labelConfig.rotate;
     }
 
-    // Apply interval skipping
-    if (labelConfig.interval !== 'auto') {
+    // Apply interval skipping (histograms with 8 or fewer bins show all bin labels)
+    if (config && config.chartType === 'histogram' && categories.length <= 8) {
+      option.xAxis.axisLabel.interval = 0;
+    } else if (labelConfig.interval !== 'auto') {
       option.xAxis.axisLabel.interval = labelConfig.interval;
     }
 

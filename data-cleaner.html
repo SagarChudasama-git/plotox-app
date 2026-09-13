@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
-  data-seo-title="Free CSV Data Cleaner — Clean & Transform Datasets | Plotox"
-  data-seo-description="Clean, normalize, and transform CSV and Excel datasets in your browser. Remove duplicates, fix empty cells, trim spaces. 100% private data cleaner tool."
+  data-seo-title="Free CSV Data Cleaner Online - Plotox"
+  data-seo-description="Clean and transform CSV or Excel datasets in your browser. Remove duplicates, trim spaces, fix empty cells. 100% private."
   data-seo-slug="data-cleaner"
   data-seo-type="website"
   data-seo-breadcrumb="Home: | Data Cleaner:data-cleaner"
@@ -19,9 +19,9 @@
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free CSV Data Cleaner — Clean & Transform Datasets | Plotox</title>
+  <title>Free CSV Data Cleaner Online - Plotox</title>
   <meta name="description"
-    content="Clean, normalize, and transform CSV and Excel datasets in your browser. Remove duplicates, fix empty cells, trim spaces. 100% private data cleaner tool.">
+    content="Clean and transform CSV or Excel datasets in your browser. Remove duplicates, trim spaces, fix empty cells. 100% private.">
   <meta name="google-site-verification" content="xWNYXdNmpxJQD4cBENmnTXIVAGlsFKWFRoss8uYAMvs" />
 
   <!-- Static Canonical Tag -->
@@ -30,19 +30,21 @@
   <!-- Static Open Graph Tags -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Plotox">
-  <meta property="og:title" content="Free CSV Data Cleaner — Clean & Transform Datasets | Plotox">
-  <meta property="og:description" content="Clean, normalize, and transform CSV and Excel datasets in your browser. Remove duplicates, fix empty cells, trim spaces. 100% private data cleaner tool.">
+  <meta property="og:title" content="Free CSV Data Cleaner Online - Plotox">
+  <meta property="og:description" content="Clean and transform CSV or Excel datasets in your browser. Remove duplicates, trim spaces, fix empty cells. 100% private.">
   <meta property="og:url" content="https://plotox.vercel.app/data-cleaner">
   <meta property="og:image" content="https://plotox.vercel.app/assets/images/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:locale" content="en_US">
+  <meta property="og:image:alt" content="Plotox CSV data cleaner interface showing a dataset being cleaned with duplicate removal and space trimming">
 
   <!-- Static Twitter Card Tags -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Free CSV Data Cleaner — Clean & Transform Datasets | Plotox">
-  <meta name="twitter:description" content="Clean, normalize, and transform CSV and Excel datasets in your browser. Remove duplicates, fix empty cells, trim spaces. 100% private data cleaner tool.">
+  <meta name="twitter:title" content="Free CSV Data Cleaner Online - Plotox">
+  <meta name="twitter:description" content="Clean and transform CSV or Excel datasets in your browser. Remove duplicates, trim spaces, fix empty cells. 100% private.">
   <meta name="twitter:image" content="https://plotox.vercel.app/assets/images/og-image.png">
+  <meta name="twitter:image:alt" content="Plotox CSV data cleaner interface showing a dataset being cleaned with duplicate removal and space trimming">
 
   <!-- Favicon -->
   <link rel="icon" href="assets/favicon.ico">
@@ -170,6 +172,19 @@
       font-weight: 600;
     }
   </style>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Plotox CSV Data Cleaner",
+    "url": "https://plotox.vercel.app/data-cleaner",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Any (runs in web browser)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
 </head>
 
 <body>
@@ -342,7 +357,6 @@
         registration required.</p>
       <a class="btn-primary" href="app.html?type=cleaner">Launch Data Cleaner Dashboard</a>
     </section>
-
   </main>
 
   <!-- ═══════════════════════════════════════════
@@ -460,9 +474,9 @@
 
           tr.innerHTML = `
             <td>${row.id}</td>
-            <td class="${cellClass}">${row.name || '—'}</td>
-            <td>${row.age || '—'}</td>
-            <td>${row.salary || '—'}</td>
+            <td class="${cellClass}">${row.name || '-'}</td>
+            <td>${row.age || '-'}</td>
+            <td>${row.salary || '-'}</td>
           `;
           tableBody.appendChild(tr);
         });

@@ -1954,7 +1954,7 @@ Dec,70000,40000,7000,5000`
 
     if (pageDescEl) {
       if (type === 'scatter') {
-        pageDescEl.textContent = "Upload a CSV with numeric X and Y columns and plotox renders a scatter plot with optional regression overlay. Every point stays visible — nothing aggregated.";
+        pageDescEl.textContent = "Upload a CSV with numeric X and Y columns and plotox renders a scatter plot with optional regression overlay.";
       } else if (type === 'line') {
         pageDescEl.textContent = "Simply upload your CSV dataset, configure your X and Y parameters, and allow plotox to automatically generate a dynamic line chart, export it on excellent quality.";
       } else if (type === 'bar') {
